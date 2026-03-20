@@ -1,12 +1,9 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from typing import AsyncGenerator
-
-# Database URL (will be configured via environment variable in Plan 02)
-DATABASE_URL = "postgresql+psycopg://logs_user:changeme@postgres:5432/logs_db"
+from .config import settings
 
 # Create async engine with connection pooling
 engine = create_async_engine(
-    DATABASE_URL,
+    settings.database_url,
     echo=True,  # SQL logging for development
     pool_size=20,  # Persistent connections
     max_overflow=10,  # Additional temporary connections
@@ -20,9 +17,3 @@ AsyncSessionLocal = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False  # Prevents attribute expiration after commit
 )
-
-
-# FastAPI dependency for session injection
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    async with AsyncSessionLocal() as session:
-        yield session
