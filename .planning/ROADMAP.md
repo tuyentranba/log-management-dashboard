@@ -20,7 +20,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Database | 5/5 | Complete   | 2026-03-20 |
-| 2. Core API Layer | 0/? | Not started | - |
+| 2. Core API Layer | 0/3 | Planning complete | - |
 | 3. Log Management UI | 0/? | Not started | - |
 | 4. Data Export | 0/? | Not started | - |
 | 5. Analytics Dashboard | 0/? | Not started | - |
@@ -71,7 +71,12 @@ Plans:
 6. User can sort logs by timestamp, severity, or source in ascending or descending order
 7. Pagination works correctly with 100k+ logs without performance degradation (page 100+ loads in under 500ms)
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Pydantic schemas and cursor utilities (data contracts, pagination primitives)
+- [ ] 02-02-PLAN.md — POST and GET-by-ID endpoints (basic CRUD operations)
+- [ ] 02-03-PLAN.md — List endpoint with pagination, filtering, sorting (complex queries)
 
 ---
 
