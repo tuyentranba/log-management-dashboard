@@ -76,10 +76,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Infrastructure & Deployment
 
-- [ ] **INFRA-01**: Application runs via docker-compose with all services
-- [ ] **INFRA-02**: Docker setup includes backend, database, and frontend services
-- [ ] **INFRA-03**: Services can be started with single command
-- [ ] **INFRA-04**: Environment variables used for configuration
+- [x] **INFRA-01**: Application runs via docker-compose with all services
+- [x] **INFRA-02**: Docker setup includes backend, database, and frontend services
+- [x] **INFRA-03**: Services can be started with single command
+- [x] **INFRA-04**: Environment variables used for configuration
 
 ### Testing
 
@@ -150,10 +150,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DB-04 | Phase 1 | Pending |
 | DB-05 | Phase 1 | Pending |
 | DB-06 | Phase 1 | Pending |
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
-| INFRA-03 | Phase 1 | Pending |
-| INFRA-04 | Phase 1 | Pending |
+| INFRA-01 | Phase 1 | Complete |
+| INFRA-02 | Phase 1 | Complete |
+| INFRA-03 | Phase 1 | Complete |
+| INFRA-04 | Phase 1 | Complete |
 | API-07 | Phase 1 | Pending |
 | API-08 | Phase 1 | Pending |
 | API-09 | Phase 1 | Pending |
