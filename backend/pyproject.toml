@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "logs-dashboard-backend"
+version = "1.0.0"
+description = "Log management and analytics REST API"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+# Pytest configuration
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"  # Enable pytest-asyncio auto mode
+asyncio_default_fixture_loop_scope = "function"  # Isolate async fixtures
+addopts = [
+    "-v",  # Verbose output
+    "--strict-markers",  # Strict marker usage
+    "--tb=short",  # Short traceback format
+    "--disable-warnings",  # Disable warnings in output
+]
+markers = [
+    "unit: Unit tests that don't require database",
+    "integration: Integration tests with database",
+    "slow: Tests that take >1 second",
+]
+
+[tool.ruff]
+# Ruff linter and formatter configuration
+line-length = 100
+target-version = "py312"
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.mypy]
+# MyPy type checking configuration
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false  # Gradual typing
+ignore_missing_imports = true  # Ignore missing stubs for now
