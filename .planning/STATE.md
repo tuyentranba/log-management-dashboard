@@ -3,22 +3,22 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 1 - Foundation & Database
-current_plan: Not started
-status: Not started
-last_updated: "2026-03-20T06:53:22.517Z"
+current_plan: 01-03 (FastAPI Skeleton with Health Check) - Pending
+status: in-progress
+last_updated: "2026-03-20T06:55:41.808Z"
 progress:
   total_phases: 7
   completed_phases: 0
   total_plans: 5
-  completed_plans: 1
-  percent: 20
+  completed_plans: 2
+  percent: 40
 ---
 
 # Project State: Logs Dashboard
 
 **Last Updated:** 2026-03-20
 **Current Phase:** 1 - Foundation & Database
-**Current Plan:** 01-02 (Docker Compose Infrastructure) - Complete
+**Current Plan:** 01-03 (FastAPI Skeleton with Health Check) - Pending
 
 ## Project Reference
 
@@ -26,17 +26,17 @@ progress:
 Demonstrate technical excellence across all dimensions - clean architecture, performant database queries, accurate analytics, comprehensive error handling, thorough testing, and clear documentation.
 
 **Current Focus:**
-Phase 1 execution in progress. Docker Compose infrastructure complete (01-02). Database schema, FastAPI skeleton, seed script, and Next.js setup remaining.
+Phase 1 execution in progress. Database schema (01-01) and Docker Compose infrastructure (01-02) complete. FastAPI skeleton, seed script, and Next.js setup remaining.
 
 ## Current Position
 
 **Phase:** 1 - Foundation & Database
-**Plan:** 01-02 (Docker Compose Infrastructure)
-**Status:** Complete
+**Plan:** 01-03 (FastAPI Skeleton with Health Check)
+**Status:** Pending
 
 **Progress:**
-```
-Phase 1: [████░░░░░░░░░░░░] 20% (1/5 plans complete)
+[████░░░░░░] 40%
+Phase 1: [████████░░░░░░░░] 40% (2/5 plans complete)
 Phase 2: [..................] 0% (0/? plans complete)
 Phase 3: [..................] 0% (0/? plans complete)
 Phase 4: [..................] 0% (0/? plans complete)
@@ -50,18 +50,27 @@ Phase 7: [..................] 0% (0/? plans complete)
 ## Performance Metrics
 
 **Execution:**
-- Plans completed: 1
+- Plans completed: 2
 - Plans failed: 0
 - Phases completed: 0/7
 
 **Estimates:**
-- Average time per plan: 183 seconds (3 minutes)
-- Velocity: 1 plan completed
-- Phase 1 progress: 1/5 plans (20%)
+- Average time per plan: 211 seconds (3.5 minutes)
+- Velocity: 2 plans completed
+- Phase 1 progress: 2/5 plans (40%)
+- Plan 01-01 duration: 239 seconds
+- Plan 01-02 duration: 183 seconds
 
 ## Accumulated Context
 
 ### Key Decisions
+
+**Database schema (Plan 01-01):**
+- Used TIMESTAMP(timezone=True) for timestamptz column type to prevent timezone bugs
+- Configured expire_on_commit=False to prevent greenlet_spawn errors in async contexts
+- Set pool_pre_ping=True to validate connections and handle database restarts gracefully
+- Created BRIN index with pages_per_range=128 and autosummarize=on for time-series optimization
+- Used composite B-tree index (timestamp DESC, severity, source) instead of BRIN for multi-column filtering
 
 **Docker infrastructure (Plan 01-02):**
 - Use service_healthy condition to ensure postgres ready before backend starts (prevents race conditions)
@@ -90,8 +99,8 @@ Phase 7: [..................] 0% (0/? plans complete)
 
 ### Current TODOs
 
+- [x] Plan 01-01: Database Schema with Indexes (Complete)
 - [x] Plan 01-02: Docker Compose Infrastructure (Complete)
-- [ ] Plan 01-01: Database Schema with Indexes
 - [ ] Plan 01-03: FastAPI Skeleton with Health Check
 - [ ] Plan 01-04: Seed Script for 100k Logs
 - [ ] Plan 01-05: Next.js Frontend Setup
@@ -103,7 +112,12 @@ None. Roadmap approved and ready for planning.
 ### Recent Changes
 
 **2026-03-20:**
-- Completed Plan 01-02: Docker Compose Infrastructure (3 tasks, 7 files, 3 commits)
+- Completed Plan 01-01: Database Schema with Indexes (3 tasks, 7 files, 3 commits, 239 seconds)
+  - Created SQLAlchemy Log model with timestamptz column
+  - Configured async database engine with connection pooling
+  - Configured Alembic for async migrations
+  - Created initial migration with BRIN and B-tree composite indexes
+- Completed Plan 01-02: Docker Compose Infrastructure (3 tasks, 7 files, 3 commits, 183 seconds)
   - Created docker-compose.yml with 3 services and health checks
   - Created Dockerfiles and .dockerignore files for backend and frontend
   - Created Makefile with developer command shortcuts
@@ -116,18 +130,19 @@ None. Roadmap approved and ready for planning.
 ## Session Continuity
 
 **What just happened:**
-Plan 01-02 (Docker Compose Infrastructure) executed successfully. Created complete multi-service Docker orchestration with health checks, bind mounts for hot-reload, environment configuration, and developer ergonomics via Makefile. All 3 tasks completed, 7 files created, 3 commits made. Execution time: 183 seconds (3 minutes).
+Plan 01-01 (Database Schema with Indexes) executed successfully. Created production-ready PostgreSQL schema with SQLAlchemy async models, Alembic migrations, and optimized indexes (BRIN for time-series, B-tree composite for multi-column filtering). All 3 tasks completed, 7 files created, 3 commits made. Execution time: 239 seconds (4 minutes).
 
 **What's next:**
-Continue Phase 1 execution with remaining plans: database schema (01-01), FastAPI skeleton (01-03), seed script (01-04), Next.js setup (01-05).
+Continue Phase 1 execution with remaining plans: FastAPI skeleton (01-03), seed script (01-04), Next.js setup (01-05).
 
 **Context for next session:**
-- Docker infrastructure now in place - services can be started with `make start`
-- postgres service has health check (pg_isready), backend waits for service_healthy
-- .env.example shows required environment variables (DATABASE_URL, CORS_ORIGINS, etc.)
-- Bind mounts enable hot-reload for backend (./backend:/app:rw) and frontend (./frontend:/app:rw)
-- Makefile provides commands: start, stop, test, seed, migrate, logs
-- Next plans can now leverage docker-compose infrastructure
+- Database schema complete with Log model (id, timestamp, message, severity, source)
+- timestamptz column type prevents timezone bugs in analytics
+- BRIN index on timestamp (small footprint, fast for sequential data)
+- B-tree composite index on (timestamp DESC, severity, source) for multi-column queries
+- Alembic configured for async migrations with Base.metadata
+- Docker infrastructure ready to run migrations
+- Next plans can leverage database models and async session factory
 
 ---
 *State tracking started: 2026-03-20*

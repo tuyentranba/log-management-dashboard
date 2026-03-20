@@ -9,11 +9,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Database & Schema
 
-- [ ] **DB-01**: Database schema includes logs table with id, timestamp, message, severity, source columns
-- [ ] **DB-02**: Timestamp column uses timestamptz (timezone-aware) data type
-- [ ] **DB-03**: Database has BRIN index on timestamp column for time-series queries
-- [ ] **DB-04**: Database has B-tree indexes on severity and source columns
-- [ ] **DB-05**: Database has composite index on (timestamp, severity, source) for filtered queries
+- [x] **DB-01**: Database schema includes logs table with id, timestamp, message, severity, source columns
+- [x] **DB-02**: Timestamp column uses timestamptz (timezone-aware) data type
+- [x] **DB-03**: Database has BRIN index on timestamp column for time-series queries
+- [x] **DB-04**: Database has B-tree indexes on severity and source columns
+- [x] **DB-05**: Database has composite index on (timestamp, severity, source) for filtered queries
 - [ ] **DB-06**: Seed script populates database with realistic demo data (10k-100k logs)
 
 ### Log Management
@@ -144,11 +144,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DB-01 | Phase 1 | Pending |
-| DB-02 | Phase 1 | Pending |
-| DB-03 | Phase 1 | Pending |
-| DB-04 | Phase 1 | Pending |
-| DB-05 | Phase 1 | Pending |
+| DB-01 | Phase 1 | Complete |
+| DB-02 | Phase 1 | Complete |
+| DB-03 | Phase 1 | Complete |
+| DB-04 | Phase 1 | Complete |
+| DB-05 | Phase 1 | Complete |
 | DB-06 | Phase 1 | Pending |
 | INFRA-01 | Phase 1 | Complete |
 | INFRA-02 | Phase 1 | Complete |
