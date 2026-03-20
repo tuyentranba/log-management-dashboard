@@ -14,7 +14,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **DB-03**: Database has BRIN index on timestamp column for time-series queries
 - [x] **DB-04**: Database has B-tree indexes on severity and source columns
 - [x] **DB-05**: Database has composite index on (timestamp, severity, source) for filtered queries
-- [ ] **DB-06**: Seed script populates database with realistic demo data (10k-100k logs)
+- [x] **DB-06**: Seed script populates database with realistic demo data (10k-100k logs)
 
 ### Log Management
 
@@ -149,7 +149,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DB-03 | Phase 1 | Complete |
 | DB-04 | Phase 1 | Complete |
 | DB-05 | Phase 1 | Complete |
-| DB-06 | Phase 1 | Pending |
+| DB-06 | Phase 1 | Complete |
 | INFRA-01 | Phase 1 | Complete |
 | INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 1 | Complete |
