@@ -58,9 +58,9 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **API-04**: REST API provides query endpoints with filtering by date range, severity, source
 - [ ] **API-05**: REST API provides aggregated data endpoints for analytics
 - [ ] **API-06**: REST API provides CSV export endpoint
-- [ ] **API-07**: All API endpoints include input validation
-- [ ] **API-08**: API returns meaningful error messages with appropriate HTTP status codes
-- [ ] **API-09**: CORS is properly configured for frontend access
+- [x] **API-07**: All API endpoints include input validation
+- [x] **API-08**: API returns meaningful error messages with appropriate HTTP status codes
+- [x] **API-09**: CORS is properly configured for frontend access
 
 ### Frontend
 
@@ -154,9 +154,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 1 | Complete |
 | INFRA-04 | Phase 1 | Complete |
-| API-07 | Phase 1 | Pending |
-| API-08 | Phase 1 | Pending |
-| API-09 | Phase 1 | Pending |
+| API-07 | Phase 1 | Complete |
+| API-08 | Phase 1 | Complete |
+| API-09 | Phase 1 | Complete |
 | API-01 | Phase 2 | Pending |
 | API-02 | Phase 2 | Pending |
 | API-03 | Phase 2 | Pending |
