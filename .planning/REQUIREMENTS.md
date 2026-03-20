@@ -144,13 +144,74 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated during roadmap creation) | - | - |
+| DB-01 | Phase 1 | Pending |
+| DB-02 | Phase 1 | Pending |
+| DB-03 | Phase 1 | Pending |
+| DB-04 | Phase 1 | Pending |
+| DB-05 | Phase 1 | Pending |
+| DB-06 | Phase 1 | Pending |
+| INFRA-01 | Phase 1 | Pending |
+| INFRA-02 | Phase 1 | Pending |
+| INFRA-03 | Phase 1 | Pending |
+| INFRA-04 | Phase 1 | Pending |
+| API-07 | Phase 1 | Pending |
+| API-08 | Phase 1 | Pending |
+| API-09 | Phase 1 | Pending |
+| API-01 | Phase 2 | Pending |
+| API-02 | Phase 2 | Pending |
+| API-03 | Phase 2 | Pending |
+| API-04 | Phase 2 | Pending |
+| API-05 | Phase 2 | Pending |
+| API-06 | Phase 2 | Pending |
+| LOG-01 | Phase 2 | Pending |
+| LOG-02 | Phase 2 | Pending |
+| LOG-03 | Phase 2 | Pending |
+| LOG-04 | Phase 2 | Pending |
+| LOG-05 | Phase 2 | Pending |
+| UI-01 | Phase 3 | Pending |
+| UI-02 | Phase 3 | Pending |
+| UI-03 | Phase 3 | Pending |
+| UI-05 | Phase 3 | Pending |
+| UI-06 | Phase 3 | Pending |
+| UI-07 | Phase 3 | Pending |
+| UI-08 | Phase 3 | Pending |
+| UI-09 | Phase 3 | Pending |
+| FILTER-01 | Phase 3 | Pending |
+| FILTER-02 | Phase 3 | Pending |
+| FILTER-03 | Phase 3 | Pending |
+| FILTER-04 | Phase 3 | Pending |
+| FILTER-05 | Phase 3 | Pending |
+| FILTER-06 | Phase 3 | Pending |
+| FILTER-07 | Phase 3 | Pending |
+| EXPORT-01 | Phase 4 | Pending |
+| EXPORT-02 | Phase 4 | Pending |
+| EXPORT-03 | Phase 4 | Pending |
+| ANALYTICS-01 | Phase 5 | Pending |
+| ANALYTICS-02 | Phase 5 | Pending |
+| ANALYTICS-03 | Phase 5 | Pending |
+| ANALYTICS-04 | Phase 5 | Pending |
+| ANALYTICS-05 | Phase 5 | Pending |
+| ANALYTICS-06 | Phase 5 | Pending |
+| ANALYTICS-07 | Phase 5 | Pending |
+| UI-04 | Phase 5 | Pending |
+| TEST-01 | Phase 6 | Pending |
+| TEST-02 | Phase 6 | Pending |
+| TEST-03 | Phase 6 | Pending |
+| TEST-04 | Phase 6 | Pending |
+| TEST-05 | Phase 6 | Pending |
+| DOC-01 | Phase 7 | Pending |
+| DOC-02 | Phase 7 | Pending |
+| DOC-03 | Phase 7 | Pending |
+| DOC-04 | Phase 7 | Pending |
+| DOC-05 | Phase 7 | Pending |
 
 **Coverage:**
 - v1 requirements: 55 total
-- Mapped to phases: (pending roadmap)
-- Unmapped: (pending roadmap)
+- Mapped to phases: 55/55 (100%)
+- Unmapped: 0
+
+All v1 requirements mapped to phases. No orphaned requirements.
 
 ---
 *Requirements defined: 2025-03-20*
-*Last updated: 2025-03-20 after research synthesis*
+*Last updated: 2026-03-20 after roadmap creation*
