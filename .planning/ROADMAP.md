@@ -60,7 +60,7 @@ Plans:
 
 **Depends on:** Phase 1 (requires database schema and API structure)
 
-**Requirements:** API-01, API-02, API-03, API-04, API-05, API-06, LOG-01, LOG-02, LOG-03, LOG-04, LOG-05
+**Requirements:** API-01, API-02, API-03, API-04, LOG-01, LOG-02, LOG-03, LOG-04, LOG-05
 
 **Success Criteria** (what must be TRUE):
 1. User can POST to /api/logs with timestamp, message, severity, source and receive 201 response with created log
