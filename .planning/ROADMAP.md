@@ -19,7 +19,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Database | 0/? | Not started | - |
+| 1. Foundation & Database | 0/5 | Not started | - |
 | 2. Core API Layer | 0/? | Not started | - |
 | 3. Log Management UI | 0/? | Not started | - |
 | 4. Data Export | 0/? | Not started | - |
@@ -44,7 +44,14 @@
 5. API returns proper HTTP status codes (400 for validation errors, 500 for server errors) with JSON error messages
 6. CORS is configured with explicit allowed origins (not wildcard)
 
-**Plans:** TBD
+**Plans:** 5 plans in 3 waves
+
+Plans:
+- [ ] 01-01-PLAN.md — Database schema and migrations (SQLAlchemy models, Alembic, indexes)
+- [ ] 01-02-PLAN.md — Docker infrastructure (docker-compose, Dockerfiles, Makefile, .env)
+- [ ] 01-03-PLAN.md — FastAPI foundation (app structure, health endpoint, CORS, error handlers)
+- [ ] 01-04-PLAN.md — Seed script (100k log generation with realistic data)
+- [ ] 01-05-PLAN.md — Test infrastructure (pytest setup, fixtures, initial tests)
 
 ---
 
