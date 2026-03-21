@@ -1,7 +1,5 @@
-export default function Home() {
-  return (
-    <div>
-      <h1>Logs Dashboard</h1>
-    </div>
-  )
+import { redirect } from 'next/navigation'
+
+export default function HomePage() {
+  redirect('/logs')
 }
