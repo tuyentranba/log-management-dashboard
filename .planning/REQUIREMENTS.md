@@ -19,7 +19,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Log Management
 
 - [x] **LOG-01**: User can create new log entry with timestamp, message, severity, and source
-- [ ] **LOG-02**: User can view paginated list of all logs
+- [x] **LOG-02**: User can view paginated list of all logs
 - [x] **LOG-03**: User can view detailed information for a single log
 - [x] **LOG-04**: Log list uses cursor-based pagination for constant query time
 - [x] **LOG-05**: Logs are immutable (no edit or delete functionality)
@@ -53,9 +53,9 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Backend API
 
 - [x] **API-01**: REST API provides POST /api/logs endpoint to create logs
-- [ ] **API-02**: REST API provides GET /api/logs endpoint with pagination, filtering, sorting
+- [x] **API-02**: REST API provides GET /api/logs endpoint with pagination, filtering, sorting
 - [x] **API-03**: REST API provides GET /api/logs/{id} endpoint for single log detail
-- [ ] **API-04**: REST API provides query endpoints with filtering by date range, severity, source
+- [x] **API-04**: REST API provides query endpoints with filtering by date range, severity, source
 - [ ] **API-05**: REST API provides aggregated data endpoints for analytics
 - [ ] **API-06**: REST API provides CSV export endpoint
 - [x] **API-07**: All API endpoints include input validation
@@ -158,13 +158,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-08 | Phase 1 | Complete |
 | API-09 | Phase 1 | Complete |
 | API-01 | Phase 2 | Complete |
-| API-02 | Phase 2 | Pending |
+| API-02 | Phase 2 | Complete |
 | API-03 | Phase 2 | Complete |
-| API-04 | Phase 2 | Pending |
+| API-04 | Phase 2 | Complete |
 | API-05 | Phase 2 | Pending |
 | API-06 | Phase 2 | Pending |
 | LOG-01 | Phase 2 | Complete |
-| LOG-02 | Phase 2 | Pending |
+| LOG-02 | Phase 2 | Complete |
 | LOG-03 | Phase 2 | Complete |
 | LOG-04 | Phase 2 | Complete |
 | LOG-05 | Phase 2 | Complete |
