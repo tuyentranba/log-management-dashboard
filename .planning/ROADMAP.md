@@ -8,7 +8,7 @@
 ## Phases
 
 - [x] **Phase 1: Foundation & Database** - Database schema, indexes, Docker infrastructure, seed data (completed 2026-03-20)
-- [ ] **Phase 2: Core API Layer** - REST API endpoints with CRUD, pagination, filtering
+- [x] **Phase 2: Core API Layer** - REST API endpoints with CRUD, pagination, filtering (completed 2026-03-21)
 - [ ] **Phase 3: Log Management UI** - Frontend pages for log browsing, search, filter, detail views
 - [ ] **Phase 4: Data Export** - CSV streaming export with filtering
 - [ ] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations
@@ -20,8 +20,8 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Database | 5/5 | Complete   | 2026-03-20 |
-| 2. Core API Layer | 0/3 | Planning complete | - |
-| 3. Log Management UI | 0/? | Not started | - |
+| 2. Core API Layer | 3/3 | Complete | 2026-03-21 |
+| 3. Log Management UI | 0/4 | Planning complete | - |
 | 4. Data Export | 0/? | Not started | - |
 | 5. Analytics Dashboard | 0/? | Not started | - |
 | 6. Testing | 0/? | Not started | - |
@@ -47,11 +47,11 @@
 **Plans:** 5/5 plans complete
 
 Plans:
-- [ ] 01-01-PLAN.md — Database schema and migrations (SQLAlchemy models, Alembic, indexes)
-- [ ] 01-02-PLAN.md — Docker infrastructure (docker-compose, Dockerfiles, Makefile, .env)
-- [ ] 01-03-PLAN.md — FastAPI foundation (app structure, health endpoint, CORS, error handlers)
-- [ ] 01-04-PLAN.md — Seed script (100k log generation with realistic data)
-- [ ] 01-05-PLAN.md — Test infrastructure (pytest setup, fixtures, initial tests)
+- [x] 01-01-PLAN.md — Database schema and migrations (SQLAlchemy models, Alembic, indexes)
+- [x] 01-02-PLAN.md — Docker infrastructure (docker-compose, Dockerfiles, Makefile, .env)
+- [x] 01-03-PLAN.md — FastAPI foundation (app structure, health endpoint, CORS, error handlers)
+- [x] 01-04-PLAN.md — Seed script (100k log generation with realistic data)
+- [x] 01-05-PLAN.md — Test infrastructure (pytest setup, fixtures, initial tests)
 
 ---
 
@@ -71,12 +71,12 @@ Plans:
 6. User can sort logs by timestamp, severity, or source in ascending or descending order
 7. Pagination works correctly with 100k+ logs without performance degradation (page 100+ loads in under 500ms)
 
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 02-01-PLAN.md — Pydantic schemas and cursor utilities (data contracts, pagination primitives)
-- [ ] 02-02-PLAN.md — POST and GET-by-ID endpoints (basic CRUD operations)
-- [ ] 02-03-PLAN.md — List endpoint with pagination, filtering, sorting (complex queries)
+- [x] 02-01-PLAN.md — Pydantic schemas and cursor utilities (data contracts, pagination primitives)
+- [x] 02-02-PLAN.md — POST and GET-by-ID endpoints (basic CRUD operations)
+- [x] 02-03-PLAN.md — List endpoint with pagination, filtering, sorting (complex queries)
 
 ---
 
@@ -99,7 +99,13 @@ Plans:
 9. Frontend displays loading spinners during data fetch and error messages for failed requests
 10. Interface is responsive and usable on desktop (1920px), laptop (1440px), and tablet (768px) screens
 
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Next.js foundation with TypeScript, Tailwind, shadcn/ui setup
+- [ ] 03-02-PLAN.md — Log list with infinite scroll and virtual scrolling
+- [ ] 03-03-PLAN.md — Filter sidebar with URL state persistence and sorting
+- [ ] 03-04-PLAN.md — Log detail modal and create form with validation
 
 ---
 
@@ -188,4 +194,4 @@ All v1 requirements mapped to phases. No orphaned requirements.
 
 ---
 *Roadmap created: 2026-03-20*
-*Last updated: 2026-03-20*
+*Last updated: 2026-03-21*
