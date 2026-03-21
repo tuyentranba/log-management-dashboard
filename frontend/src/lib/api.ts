@@ -1,4 +1,4 @@
-import { LogFilters, LogListResponse, LogResponse } from './types'
+import { LogFilters, LogListResponse, LogResponse, LogCreate } from './types'
 import { API_URL } from './constants'
 
 export async function fetchLogs(
@@ -37,6 +37,24 @@ export async function fetchLogById(id: number): Promise<LogResponse> {
 
   if (!response.ok) {
     throw new Error(`Failed to fetch log ${id}: ${response.status}`)
+  }
+
+  return response.json()
+}
+
+export async function createLog(data: LogCreate): Promise<LogResponse> {
+  const url = `${API_URL}/api/logs`
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }))
+    throw new Error(error.detail || `Failed to create log: ${response.status}`)
   }
 
   return response.json()
