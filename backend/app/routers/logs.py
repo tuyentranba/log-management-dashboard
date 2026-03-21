@@ -4,6 +4,7 @@ Log CRUD endpoints.
 Provides POST /api/logs (create), GET /api/logs (list with pagination),
 and GET /api/logs/{id} (read single).
 """
+from datetime import datetime
 from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, status, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -53,46 +54,108 @@ async def create_log(
 
 @router.get("/logs", response_model=LogListResponse)
 async def list_logs(
+    # Filtering parameters
+    severity: Annotated[Optional[list[str]], Query()] = None,
+    source: Annotated[Optional[str], Query()] = None,
+    date_from: Annotated[Optional[datetime], Query()] = None,
+    date_to: Annotated[Optional[datetime], Query()] = None,
+    # Sorting parameters
+    sort: Annotated[str, Query(pattern="^(timestamp|severity|source)$")] = "timestamp",
+    order: Annotated[str, Query(pattern="^(asc|desc)$")] = "desc",
+    # Pagination parameters
     cursor: Annotated[Optional[str], Query()] = None,
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
     db: AsyncSession = Depends(get_db)
 ):
     """
-    List logs with cursor-based pagination.
+    List logs with cursor-based pagination, filtering, and sorting.
 
-    Args:
-        cursor: Opaque pagination cursor from previous response (optional)
+    Filters:
+        severity: One or more severity levels (repeat parameter: ?severity=ERROR&severity=WARNING)
+        source: Source identifier (case-insensitive partial match)
+        date_from: Start of date range (inclusive, ISO 8601 with timezone)
+        date_to: End of date range (inclusive, ISO 8601 with timezone)
+
+    Sorting:
+        sort: Field to sort by (timestamp, severity, or source)
+        order: Sort direction (asc or desc)
+
+    Pagination:
+        cursor: Opaque pagination cursor from previous response
         limit: Number of logs per page (1-200, default 50)
-        db: Database session (injected)
 
     Returns:
         Paginated list with data, next_cursor, and has_more
 
     Raises:
-        400: Invalid cursor format
-        422: Invalid limit (< 1 or > 200)
+        400: Invalid cursor format or invalid severity value
+        422: Invalid query parameters (limit, sort field, order)
     """
-    # Start with base query ordered by timestamp DESC, id DESC for stable sorting
-    query = select(Log).order_by(Log.timestamp.desc(), Log.id.desc())
+    # Start with base query
+    query = select(Log)
 
-    # Apply cursor filter if provided
+    # Apply filters
+    if severity:
+        # Validate severity values per CONTEXT.md specification
+        valid_severities = {"INFO", "WARNING", "ERROR", "CRITICAL"}
+        for sev in severity:
+            if sev not in valid_severities:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Invalid severity: {sev}. Must be one of: {', '.join(sorted(valid_severities))}"
+                )
+        query = query.where(Log.severity.in_(severity))
+
+    if source:
+        # Case-insensitive partial match using ILIKE
+        # Note: ILIKE bypasses indexes (acceptable for MVP, documented in RESEARCH.md Pitfall 3)
+        query = query.where(Log.source.ilike(f"%{source}%"))
+
+    if date_from:
+        query = query.where(Log.timestamp >= date_from)
+
+    if date_to:
+        query = query.where(Log.timestamp <= date_to)
+
+    # Apply sorting
+    sort_column = getattr(Log, sort)
+    if order == "desc":
+        sort_direction = sort_column.desc()
+    else:
+        sort_direction = sort_column.asc()
+
+    # Always include id as secondary sort for stable ordering (prevents cursor pagination issues)
+    query = query.order_by(
+        sort_direction,
+        Log.id.desc() if order == "desc" else Log.id.asc()
+    )
+
+    # Apply cursor pagination
     if cursor:
         try:
-            cursor_timestamp, cursor_id = decode_cursor(cursor)
+            cursor_value, cursor_id = decode_cursor(cursor)
         except ValueError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)
             )
 
-        # Composite cursor comparison: (timestamp, id) < (cursor_timestamp, cursor_id)
-        # Using OR for descending sort: timestamp < cursor OR (timestamp = cursor AND id < cursor_id)
-        query = query.where(
-            or_(
-                Log.timestamp < cursor_timestamp,
-                and_(Log.timestamp == cursor_timestamp, Log.id < cursor_id)
+        # Composite cursor comparison based on sort direction
+        # Note: cursor_value represents the sorted field (timestamp, severity, or source)
+        if order == "desc":
+            query = query.where(
+                or_(
+                    sort_column < cursor_value,
+                    and_(sort_column == cursor_value, Log.id < cursor_id)
+                )
             )
-        )
+        else:
+            query = query.where(
+                or_(
+                    sort_column > cursor_value,
+                    and_(sort_column == cursor_value, Log.id > cursor_id)
+                )
+            )
 
     # Fetch limit + 1 to determine if more pages exist
     query = query.limit(limit + 1)
@@ -102,13 +165,14 @@ async def list_logs(
     # Check if more pages exist
     has_more = len(logs) > limit
     if has_more:
-        logs = logs[:limit]  # Trim to actual page size
+        logs = logs[:limit]
 
-    # Generate next cursor from last item
+    # Generate next cursor from last item using sorted field value
     next_cursor = None
     if has_more and logs:
         last_log = logs[-1]
-        next_cursor = encode_cursor(last_log.timestamp, last_log.id)
+        cursor_value = getattr(last_log, sort)
+        next_cursor = encode_cursor(cursor_value, last_log.id)
 
     return LogListResponse(
         data=logs,
