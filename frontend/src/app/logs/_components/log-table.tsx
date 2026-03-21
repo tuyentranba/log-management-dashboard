@@ -7,6 +7,7 @@ import { LogResponse } from '@/lib/types'
 import { SeverityBadge } from '@/components/shared/severity-badge'
 import { format } from 'date-fns'
 import { ArrowUp, ArrowDown } from 'lucide-react'
+import { LogDetailModal } from './log-detail-modal'
 
 interface LogTableProps {
   logs: LogResponse[]
@@ -23,6 +24,7 @@ export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order }: 
     sort: parseAsString,
     order: parseAsString,
   })
+  const [, setSelectedLogId] = useQueryStates({ log: parseAsString })
 
   const handleSort = (field: string) => {
     if (sort === field) {
@@ -91,6 +93,7 @@ export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order }: 
               <div
                 key={virtualRow.key}
                 className="flex items-center gap-4 p-4 hover:bg-slate-100 cursor-pointer border-b"
+                onClick={() => setSelectedLogId({ log: log.id.toString() })}
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -114,6 +117,7 @@ export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order }: 
           })}
         </div>
       </div>
+      <LogDetailModal />
     </div>
   )
 }
