@@ -2,7 +2,7 @@
 phase: 03
 slug: log-management-ui
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-03-21
 ---
@@ -38,7 +38,21 @@ created: 2026-03-21
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| TBD | TBD | TBD | UI-01 | integration | `npm test` | ❌ W0 | ⬜ pending |
+| Task 1 | 03-00 | 0 | - | integration | `cd frontend && npm list jest @testing-library/react` | ✅ | ⬜ pending |
+| Task 2 | 03-00 | 0 | - | integration | `cd frontend && npm test -- --listTests 2>&1 \|\| echo "No tests found (expected)"` | ✅ | ⬜ pending |
+| Task 3 | 03-00 | 0 | - | integration | `cd frontend && npm test -- --testPathPattern=smoke` | ✅ | ⬜ pending |
+| Task 1 | 03-01 | 1 | UI-09 | integration | `cd frontend && npm run build` | ✅ | ⬜ pending |
+| Task 2 | 03-01 | 1 | UI-09 | integration | `cd frontend && npx tsc --noEmit` | ✅ | ⬜ pending |
+| Task 3 | 03-01 | 1 | UI-09 | integration | `cd frontend && npm run build` | ✅ | ⬜ pending |
+| Task 1 | 03-02 | 2 | UI-01, UI-05, UI-06, UI-07, UI-09 | integration | `cd frontend && npx tsc --noEmit` | ✅ | ⬜ pending |
+| Task 2 | 03-02 | 2 | UI-01, UI-05, UI-06, UI-07, UI-09 | integration | `cd frontend && npx tsc --noEmit` | ✅ | ⬜ pending |
+| Task 3 | 03-02 | 2 | UI-01, UI-05, UI-06, UI-07, UI-09 | integration | `cd frontend && npm run build` | ✅ | ⬜ pending |
+| Task 1 | 03-03 | 2 | FILTER-01, FILTER-02, FILTER-03, FILTER-04, FILTER-05, FILTER-06, FILTER-07 | integration | `cd frontend && npx tsc --noEmit` | ✅ | ⬜ pending |
+| Task 2 | 03-03 | 2 | FILTER-01, FILTER-02, FILTER-03, FILTER-04, FILTER-05, FILTER-06, FILTER-07 | integration | `cd frontend && npx tsc --noEmit` | ✅ | ⬜ pending |
+| Task 3 | 03-03 | 2 | FILTER-01, FILTER-02, FILTER-03, FILTER-04, FILTER-05, FILTER-06, FILTER-07 | integration | `cd frontend && npm run build` | ✅ | ⬜ pending |
+| Task 1 | 03-04 | 3 | UI-02, UI-03, UI-06, UI-08 | integration | `cd frontend && npx tsc --noEmit` | ✅ | ⬜ pending |
+| Task 2 | 03-04 | 3 | UI-02, UI-03, UI-06, UI-08 | integration | `cd frontend && npx tsc --noEmit` | ✅ | ⬜ pending |
+| Task 3 | 03-04 | 3 | UI-02, UI-03, UI-06, UI-08 | integration | `cd frontend && npm run build` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -46,12 +60,12 @@ created: 2026-03-21
 
 ## Wave 0 Requirements
 
-- [ ] `frontend/jest.config.js` — Jest configuration for Next.js
-- [ ] `frontend/__tests__/setup.ts` — Test setup and globals
-- [ ] `frontend/__tests__/utils/test-utils.tsx` — Custom render with providers
-- [ ] `npm install` — jest, @testing-library/react, @testing-library/jest-dom
+- [x] `frontend/jest.config.js` — Jest configuration for Next.js
+- [x] `frontend/__tests__/setup.ts` — Test setup and globals
+- [x] `frontend/__tests__/utils/test-utils.tsx` — Custom render with providers
+- [x] `npm install` — jest, @testing-library/react, @testing-library/jest-dom
 
-*If none: "Existing infrastructure covers all phase requirements."*
+*All Wave 0 requirements covered by Plan 03-00.*
 
 ---
 
@@ -69,11 +83,11 @@ created: 2026-03-21
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 15s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 15s
+- [x] `nyquist_compliant: true` set in frontmatter
 
 **Approval:** pending
