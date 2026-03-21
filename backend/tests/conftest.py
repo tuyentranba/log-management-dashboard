@@ -14,7 +14,7 @@ from app.models import Base
 
 
 # Test database URL (separate from development database)
-TEST_DATABASE_URL = "postgresql+psycopg://logs_user:changeme@postgres:5432/test_logs_db"
+TEST_DATABASE_URL = "postgresql+psycopg://logs_user:changeme_in_production@postgres:5432/test_logs_db"
 
 
 @pytest_asyncio.fixture(scope="function")

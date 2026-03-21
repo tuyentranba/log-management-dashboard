@@ -11,7 +11,7 @@ from sqlalchemy import text
 
 from .config import settings
 from .database import engine, AsyncSessionLocal
-from .routers import health
+from .routers import health, logs
 
 
 # Configure logging
@@ -84,10 +84,22 @@ async def validation_exception_handler(
         f"Validation error {request_id} on {request.method} {request.url.path}: "
         f"{exc.errors()}"
     )
+
+    # Sanitize error details to ensure JSON serializability
+    # Remove non-serializable objects from 'ctx' field (e.g., Exception instances)
+    errors = []
+    for error in exc.errors():
+        error_copy = dict(error)
+        if 'ctx' in error_copy and 'error' in error_copy['ctx']:
+            # Convert error object to string
+            error_copy['ctx'] = {k: str(v) if k == 'error' else v
+                                for k, v in error_copy['ctx'].items()}
+        errors.append(error_copy)
+
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={
-            "detail": exc.errors(),  # FastAPI default format with loc, msg, type
+            "detail": errors,  # Sanitized error details
             "request_id": request_id
         }
     )
@@ -122,6 +134,7 @@ async def generic_exception_handler(
 
 # Include routers
 app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(logs.router, prefix="/api", tags=["logs"])
 
 
 # Root endpoint
