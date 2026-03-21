@@ -5,20 +5,20 @@ milestone_name: milestone
 current_phase: 2
 current_plan: Not started
 status: planning
-last_updated: "2026-03-20T07:22:39.204Z"
+last_updated: "2026-03-21T06:33:00.351Z"
 progress:
   total_phases: 7
   completed_phases: 1
-  total_plans: 5
-  completed_plans: 5
-  percent: 100
+  total_plans: 8
+  completed_plans: 6
+  percent: 75
 ---
 
 # Project State: Logs Dashboard
 
 **Last Updated:** 2026-03-20
 **Current Phase:** 2
-**Current Plan:** Not started
+**Current Plan:** 02-01 (Complete)
 
 ## Project Reference
 
@@ -26,18 +26,18 @@ progress:
 Demonstrate technical excellence across all dimensions - clean architecture, performant database queries, accurate analytics, comprehensive error handling, thorough testing, and clear documentation.
 
 **Current Focus:**
-Phase 1 complete! All 5 plans executed: database schema (01-01), Docker Compose infrastructure (01-02), FastAPI skeleton (01-03), seed script (01-04), and test infrastructure (01-05). Ready to begin Phase 2 (Log Ingestion & Management API).
+Phase 2 in progress! Plan 02-01 complete: created Pydantic schemas with timezone validation and cursor utilities for pagination. Ready for Plan 02-02 (log ingestion endpoint).
 
 ## Current Position
 
-**Phase:** 1 - Foundation & Database
-**Plan:** 01-05 (Test Infrastructure with pytest)
-**Status:** Ready to plan
+**Phase:** 2 - Core API Layer
+**Plan:** 02-01 (Pydantic Schemas and Cursor Utilities)
+**Status:** Complete
 
 **Progress:**
-[██████████] 100%
+[████████░░] 75%
 Phase 1: [████████████████████] 100% (5/5 plans complete)
-Phase 2: [..................] 0% (0/? plans complete)
+Phase 2: [██████░░░░░░░░░░░░░░] 33% (1/3 plans complete)
 Phase 3: [..................] 0% (0/? plans complete)
 Phase 4: [..................] 0% (0/? plans complete)
 Phase 5: [..................] 0% (0/? plans complete)
@@ -50,19 +50,21 @@ Phase 7: [..................] 0% (0/? plans complete)
 ## Performance Metrics
 
 **Execution:**
-- Plans completed: 5
+- Plans completed: 6
 - Plans failed: 0
 - Phases completed: 1/7
 
 **Estimates:**
-- Average time per plan: 241 seconds (4.0 minutes)
-- Velocity: 5 plans completed
+- Average time per plan: 444 seconds (7.4 minutes)
+- Velocity: 6 plans completed
 - Phase 1 progress: 5/5 plans (100%)
+- Phase 2 progress: 1/3 plans (33%)
 - Plan 01-01 duration: 239 seconds
 - Plan 01-02 duration: 183 seconds
 - Plan 01-03 duration: 332 seconds
 - Plan 01-04 duration: 149 seconds
 - Plan 01-05 duration: 306 seconds
+- Plan 02-01 duration: 2950 seconds
 
 ## Accumulated Context
 
@@ -103,6 +105,12 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Used function scope for all test fixtures (test_engine, test_db, client) to ensure complete test isolation
 - Implemented app.dependency_overrides pattern to inject test database into FastAPI app
 
+**Pydantic schemas and cursor utilities (Plan 02-01):**
+- Use base64-encoded JSON for cursor tokens (opaque format allows changing pagination strategy without breaking clients)
+- Reject timezone-naive timestamps at schema level with Pydantic field validator (prevents timezone bugs)
+- Use pattern validation for severity enum (INFO|WARNING|ERROR|CRITICAL) instead of Python enum
+- Enable ORM compatibility with from_attributes=True for SQLAlchemy model validation
+
 **Roadmap structure:**
 - 7 phases derived from 55 v1 requirements
 - Fine granularity based on config.json setting
@@ -129,6 +137,9 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 01-03: FastAPI Skeleton with Health Check (Complete)
 - [x] Plan 01-04: Seed Script for 100k Logs (Complete)
 - [x] Plan 01-05: Test Infrastructure with pytest (Complete)
+- [x] Plan 02-01: Pydantic Schemas and Cursor Utilities (Complete)
+- [ ] Plan 02-02: Log Ingestion Endpoint (Next)
+- [ ] Plan 02-03: Log List and Detail Endpoints
 
 ### Active Blockers
 
@@ -164,10 +175,13 @@ None. Roadmap approved and ready for planning.
   - Created pyproject.toml with pytest, ruff, mypy configuration
   - Configured asyncio_mode='auto' for automatic async test detection
   - Created test fixtures: test_engine, test_db, client with function scope isolation
-  - Implemented dependency injection override for test database
-  - Created health endpoint tests (3 integration tests)
-  - Created configuration tests (4 unit tests)
-  - Added pytest markers: unit, integration, slow
+- Completed Plan 02-01: Pydantic Schemas and Cursor Utilities (2 tasks, 8 files, 2 commits, 2950 seconds)
+  - Created cursor utilities (encode_cursor, decode_cursor) with base64 encoding
+  - Created Pydantic schemas (LogCreate, LogResponse, LogListResponse) with timezone validation
+  - Added 7 unit tests for cursor utilities covering encoding/decoding/error handling
+  - Added 9 unit tests for schemas covering validation/ORM compatibility/timezone preservation
+  - Fixed psycopg binary module installation issue (added [binary] extra)
+  - Added dev dependencies to Dockerfile for test execution
 - Roadmap created with 7 phases
 - All 55 v1 requirements mapped to phases
 - STATE.md initialized
@@ -176,20 +190,20 @@ None. Roadmap approved and ready for planning.
 ## Session Continuity
 
 **What just happened:**
-Plan 01-05 (Test Infrastructure with pytest) executed successfully. Created comprehensive pytest testing infrastructure with async support, isolated test database fixtures, dependency injection, and initial test coverage for health endpoint and configuration. All 3 tasks completed, 5 files created, 3 commits made. Execution time: 306 seconds (5.1 minutes). Phase 1 is now complete!
+Plan 02-01 (Pydantic Schemas and Cursor Utilities) executed successfully. Created base64-encoded cursor utilities for pagination and Pydantic schemas with timezone validation for log CRUD operations. All 2 tasks completed using TDD approach (RED-GREEN phases), 8 files created/modified, 2 commits made. 16 unit tests passing (7 cursor + 9 schema). Execution time: 2950 seconds (49.2 minutes).
 
 **What's next:**
-Phase 1 (Foundation & Database) complete! Begin Phase 2 (Log Ingestion & Management API) with log ingestion endpoint, filtering, and pagination.
+Plan 02-02: Implement POST /api/logs endpoint for log ingestion using LogCreate schema for validation.
 
 **Context for next session:**
-- Complete foundation established: database schema, Docker infrastructure, FastAPI skeleton, seed script, test infrastructure
-- pytest configured with asyncio_mode='auto' for async test detection
-- Test fixtures provide isolated test database with automatic cleanup
-- Health endpoint tests and configuration tests demonstrate testing patterns
-- Can run tests with `make test` command
-- FastAPI app ready for log ingestion and management endpoints
-- Test patterns established for future endpoint testing
-- Phase 2 can now build log ingestion API with full test coverage
+- Cursor utilities available: encode_cursor(), decode_cursor() with comprehensive error handling
+- Pydantic schemas ready: LogCreate (request), LogResponse (single), LogListResponse (paginated)
+- Timezone validation enforced at schema level (rejects naive timestamps)
+- Severity validation uses pattern matching (INFO|WARNING|ERROR|CRITICAL)
+- ORM compatibility enabled with from_attributes=True
+- 16 new unit tests establish testing patterns for utilities and schemas
+- Docker environment has dev dependencies installed for testing
+- Ready to implement log ingestion endpoint with full validation
 
 ---
 *State tracking started: 2026-03-20*

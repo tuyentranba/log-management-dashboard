@@ -18,10 +18,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Log Management
 
-- [ ] **LOG-01**: User can create new log entry with timestamp, message, severity, and source
+- [x] **LOG-01**: User can create new log entry with timestamp, message, severity, and source
 - [ ] **LOG-02**: User can view paginated list of all logs
 - [ ] **LOG-03**: User can view detailed information for a single log
-- [ ] **LOG-04**: Log list uses cursor-based pagination for constant query time
+- [x] **LOG-04**: Log list uses cursor-based pagination for constant query time
 - [ ] **LOG-05**: Logs are immutable (no edit or delete functionality)
 
 ### Search & Filtering
@@ -163,10 +163,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-04 | Phase 2 | Pending |
 | API-05 | Phase 2 | Pending |
 | API-06 | Phase 2 | Pending |
-| LOG-01 | Phase 2 | Pending |
+| LOG-01 | Phase 2 | Complete |
 | LOG-02 | Phase 2 | Pending |
 | LOG-03 | Phase 2 | Pending |
-| LOG-04 | Phase 2 | Pending |
+| LOG-04 | Phase 2 | Complete |
 | LOG-05 | Phase 2 | Pending |
 | UI-01 | Phase 3 | Pending |
 | UI-02 | Phase 3 | Pending |
