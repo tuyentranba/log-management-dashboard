@@ -10,7 +10,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from app.models import Base
-from app.database import DATABASE_URL
+from app.config import settings
 
 # this is the Alembic Config object
 config = context.config
@@ -25,7 +25,7 @@ target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
-    url = DATABASE_URL
+    url = settings.database_url
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -40,7 +40,7 @@ def run_migrations_offline() -> None:
 
 async def run_migrations_online() -> None:
     """Run migrations in 'online' mode with async engine."""
-    connectable = create_async_engine(DATABASE_URL, poolclass=pool.NullPool)
+    connectable = create_async_engine(settings.database_url, poolclass=pool.NullPool)
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
