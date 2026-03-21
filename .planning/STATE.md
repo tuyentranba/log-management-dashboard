@@ -3,22 +3,22 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 2
-current_plan: Not started
-status: planning
-last_updated: "2026-03-21T06:33:00.351Z"
+current_plan: 02-01 (Complete)
+status: completed
+last_updated: "2026-03-21T06:44:03.196Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 8
-  completed_plans: 6
-  percent: 75
+  completed_plans: 7
+  percent: 88
 ---
 
 # Project State: Logs Dashboard
 
-**Last Updated:** 2026-03-20
+**Last Updated:** 2026-03-21
 **Current Phase:** 2
-**Current Plan:** 02-01 (Complete)
+**Current Plan:** 02-02 (Complete)
 
 ## Project Reference
 
@@ -26,18 +26,18 @@ progress:
 Demonstrate technical excellence across all dimensions - clean architecture, performant database queries, accurate analytics, comprehensive error handling, thorough testing, and clear documentation.
 
 **Current Focus:**
-Phase 2 in progress! Plan 02-01 complete: created Pydantic schemas with timezone validation and cursor utilities for pagination. Ready for Plan 02-02 (log ingestion endpoint).
+Phase 2 in progress! Plan 02-02 complete: implemented POST /api/logs and GET /api/logs/{id} endpoints with comprehensive validation. Ready for Plan 02-03 (list endpoint with pagination).
 
 ## Current Position
 
 **Phase:** 2 - Core API Layer
-**Plan:** 02-01 (Pydantic Schemas and Cursor Utilities)
+**Plan:** 02-02 (POST and GET-by-ID Endpoints)
 **Status:** Complete
 
 **Progress:**
-[████████░░] 75%
+[█████████░] 88%
 Phase 1: [████████████████████] 100% (5/5 plans complete)
-Phase 2: [██████░░░░░░░░░░░░░░] 33% (1/3 plans complete)
+Phase 2: [█████████████░░░░░░░] 67% (2/3 plans complete)
 Phase 3: [..................] 0% (0/? plans complete)
 Phase 4: [..................] 0% (0/? plans complete)
 Phase 5: [..................] 0% (0/? plans complete)
@@ -50,21 +50,22 @@ Phase 7: [..................] 0% (0/? plans complete)
 ## Performance Metrics
 
 **Execution:**
-- Plans completed: 6
+- Plans completed: 7
 - Plans failed: 0
 - Phases completed: 1/7
 
 **Estimates:**
-- Average time per plan: 444 seconds (7.4 minutes)
-- Velocity: 6 plans completed
+- Average time per plan: 508 seconds (8.5 minutes)
+- Velocity: 7 plans completed
 - Phase 1 progress: 5/5 plans (100%)
-- Phase 2 progress: 1/3 plans (33%)
+- Phase 2 progress: 2/3 plans (67%)
 - Plan 01-01 duration: 239 seconds
 - Plan 01-02 duration: 183 seconds
 - Plan 01-03 duration: 332 seconds
 - Plan 01-04 duration: 149 seconds
 - Plan 01-05 duration: 306 seconds
 - Plan 02-01 duration: 2950 seconds
+- Plan 02-02 duration: 351 seconds
 
 ## Accumulated Context
 
@@ -111,6 +112,12 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Use pattern validation for severity enum (INFO|WARNING|ERROR|CRITICAL) instead of Python enum
 - Enable ORM compatibility with from_attributes=True for SQLAlchemy model validation
 
+**POST and GET-by-ID endpoints (Plan 02-02):**
+- Use db.get() for efficient primary key lookup instead of select() query
+- Return SQLAlchemy model directly from endpoints (Pydantic from_attributes handles conversion)
+- Status code 400 for all validation errors per Phase 1 exception handler convention
+- Created test database test_logs_db with same schema as development database
+
 **Roadmap structure:**
 - 7 phases derived from 55 v1 requirements
 - Fine granularity based on config.json setting
@@ -138,8 +145,8 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 01-04: Seed Script for 100k Logs (Complete)
 - [x] Plan 01-05: Test Infrastructure with pytest (Complete)
 - [x] Plan 02-01: Pydantic Schemas and Cursor Utilities (Complete)
-- [ ] Plan 02-02: Log Ingestion Endpoint (Next)
-- [ ] Plan 02-03: Log List and Detail Endpoints
+- [x] Plan 02-02: POST and GET-by-ID Endpoints (Complete)
+- [ ] Plan 02-03: Log List Endpoint with Pagination (Next)
 
 ### Active Blockers
 
@@ -182,6 +189,15 @@ None. Roadmap approved and ready for planning.
   - Added 9 unit tests for schemas covering validation/ORM compatibility/timezone preservation
   - Fixed psycopg binary module installation issue (added [binary] extra)
   - Added dev dependencies to Dockerfile for test execution
+
+**2026-03-21:**
+- Completed Plan 02-02: POST and GET-by-ID Endpoints (3 tasks, 4 files, 2 commits, 351 seconds)
+  - Created logs router with POST /api/logs endpoint (accepts LogCreate, returns 201)
+  - Added GET /api/logs/{id} endpoint (primary key lookup, returns 200 or 404)
+  - Registered logs router in main.py at /api prefix with "logs" tag
+  - Created 15 integration tests (9 create + 6 get) all passing
+  - Fixed test database password in conftest.py (blocking issue)
+  - Fixed validation error handler to sanitize non-serializable error objects (bug fix)
 - Roadmap created with 7 phases
 - All 55 v1 requirements mapped to phases
 - STATE.md initialized
@@ -190,20 +206,21 @@ None. Roadmap approved and ready for planning.
 ## Session Continuity
 
 **What just happened:**
-Plan 02-01 (Pydantic Schemas and Cursor Utilities) executed successfully. Created base64-encoded cursor utilities for pagination and Pydantic schemas with timezone validation for log CRUD operations. All 2 tasks completed using TDD approach (RED-GREEN phases), 8 files created/modified, 2 commits made. 16 unit tests passing (7 cursor + 9 schema). Execution time: 2950 seconds (49.2 minutes).
+Plan 02-02 (POST and GET-by-ID Endpoints) executed successfully. Implemented POST /api/logs for creating logs and GET /api/logs/{id} for retrieving single logs by primary key. All 3 tasks completed using TDD approach, 4 files created/modified, 2 commits made. 15 integration tests passing (9 create + 6 get). Execution time: 351 seconds (5.85 minutes). Auto-fixed 2 blocking issues (test database password, validation error serialization).
 
 **What's next:**
-Plan 02-02: Implement POST /api/logs endpoint for log ingestion using LogCreate schema for validation.
+Plan 02-03: Implement GET /api/logs list endpoint with cursor-based pagination, filtering by date/severity/source, and sorting by timestamp/severity/source.
 
 **Context for next session:**
-- Cursor utilities available: encode_cursor(), decode_cursor() with comprehensive error handling
-- Pydantic schemas ready: LogCreate (request), LogResponse (single), LogListResponse (paginated)
-- Timezone validation enforced at schema level (rejects naive timestamps)
-- Severity validation uses pattern matching (INFO|WARNING|ERROR|CRITICAL)
-- ORM compatibility enabled with from_attributes=True
-- 16 new unit tests establish testing patterns for utilities and schemas
-- Docker environment has dev dependencies installed for testing
-- Ready to implement log ingestion endpoint with full validation
+- POST /api/logs working: accepts LogCreate, returns 201 with created log
+- GET /api/logs/{id} working: primary key lookup, returns 200 or 404
+- Logs router registered in main.py and visible in OpenAPI docs at /docs
+- Test database test_logs_db created and accessible
+- 15 integration tests establish CRUD testing patterns
+- Cursor utilities ready for pagination (encode_cursor, decode_cursor)
+- LogListResponse schema ready for paginated list responses
+- Composite index on (timestamp, severity, source) ready for filtering
+- Ready to implement list endpoint with full pagination and filtering
 
 ---
 *State tracking started: 2026-03-20*

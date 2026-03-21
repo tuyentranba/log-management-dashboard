@@ -20,9 +20,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **LOG-01**: User can create new log entry with timestamp, message, severity, and source
 - [ ] **LOG-02**: User can view paginated list of all logs
-- [ ] **LOG-03**: User can view detailed information for a single log
+- [x] **LOG-03**: User can view detailed information for a single log
 - [x] **LOG-04**: Log list uses cursor-based pagination for constant query time
-- [ ] **LOG-05**: Logs are immutable (no edit or delete functionality)
+- [x] **LOG-05**: Logs are immutable (no edit or delete functionality)
 
 ### Search & Filtering
 
@@ -52,9 +52,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Backend API
 
-- [ ] **API-01**: REST API provides POST /api/logs endpoint to create logs
+- [x] **API-01**: REST API provides POST /api/logs endpoint to create logs
 - [ ] **API-02**: REST API provides GET /api/logs endpoint with pagination, filtering, sorting
-- [ ] **API-03**: REST API provides GET /api/logs/{id} endpoint for single log detail
+- [x] **API-03**: REST API provides GET /api/logs/{id} endpoint for single log detail
 - [ ] **API-04**: REST API provides query endpoints with filtering by date range, severity, source
 - [ ] **API-05**: REST API provides aggregated data endpoints for analytics
 - [ ] **API-06**: REST API provides CSV export endpoint
@@ -157,17 +157,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-07 | Phase 1 | Complete |
 | API-08 | Phase 1 | Complete |
 | API-09 | Phase 1 | Complete |
-| API-01 | Phase 2 | Pending |
+| API-01 | Phase 2 | Complete |
 | API-02 | Phase 2 | Pending |
-| API-03 | Phase 2 | Pending |
+| API-03 | Phase 2 | Complete |
 | API-04 | Phase 2 | Pending |
 | API-05 | Phase 2 | Pending |
 | API-06 | Phase 2 | Pending |
 | LOG-01 | Phase 2 | Complete |
 | LOG-02 | Phase 2 | Pending |
-| LOG-03 | Phase 2 | Pending |
+| LOG-03 | Phase 2 | Complete |
 | LOG-04 | Phase 2 | Complete |
-| LOG-05 | Phase 2 | Pending |
+| LOG-05 | Phase 2 | Complete |
 | UI-01 | Phase 3 | Pending |
 | UI-02 | Phase 3 | Pending |
 | UI-03 | Phase 3 | Pending |
