@@ -173,3 +173,96 @@ async def test_create_log_all_severities(client: AsyncClient):
 
         assert response.status_code == 201, f"Failed for severity {severity}"
         assert response.json()["severity"] == severity
+
+
+# ============================================================================
+# GET /api/logs/{id} - Get single log endpoint tests
+# ============================================================================
+
+@pytest.mark.asyncio
+async def test_get_log_by_id_success(client: AsyncClient):
+    """GET /api/logs/{id} returns log details."""
+    # Create log first
+    create_response = await client.post("/api/logs", json={
+        "timestamp": "2024-03-20T15:30:00Z",
+        "message": "Test log",
+        "severity": "INFO",
+        "source": "test"
+    })
+    created_id = create_response.json()["id"]
+
+    # Get by id
+    response = await client.get(f"/api/logs/{created_id}")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == created_id
+    assert data["message"] == "Test log"
+    assert data["severity"] == "INFO"
+    assert data["source"] == "test"
+
+
+@pytest.mark.asyncio
+async def test_get_log_not_found(client: AsyncClient):
+    """GET /api/logs/{id} with non-existent id returns 404."""
+    response = await client.get("/api/logs/99999")
+
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_get_log_invalid_id(client: AsyncClient):
+    """GET /api/logs/{id} with non-integer id returns 400."""
+    response = await client.get("/api/logs/abc")
+
+    assert response.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_get_log_negative_id(client: AsyncClient):
+    """GET /api/logs/{id} with negative id returns 404."""
+    response = await client.get("/api/logs/-1")
+
+    assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_get_log_response_format(client: AsyncClient):
+    """GET /api/logs/{id} returns response with exactly 5 fields."""
+    # Create log first
+    create_response = await client.post("/api/logs", json={
+        "timestamp": "2024-03-20T15:30:00Z",
+        "message": "Format test",
+        "severity": "ERROR",
+        "source": "test-format"
+    })
+    created_id = create_response.json()["id"]
+
+    # Get by id
+    response = await client.get(f"/api/logs/{created_id}")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert set(data.keys()) == {"id", "timestamp", "message", "severity", "source"}
+
+
+@pytest.mark.asyncio
+async def test_get_log_timezone_preserved(client: AsyncClient):
+    """GET /api/logs/{id} preserves timezone in timestamp."""
+    # Create log first
+    create_response = await client.post("/api/logs", json={
+        "timestamp": "2024-03-20T15:30:00+05:30",  # Non-UTC timezone
+        "message": "Timezone test",
+        "severity": "WARNING",
+        "source": "test-tz"
+    })
+    created_id = create_response.json()["id"]
+
+    # Get by id
+    response = await client.get(f"/api/logs/{created_id}")
+
+    assert response.status_code == 200
+    data = response.json()
+    # Timestamp should have timezone indicator (Z or offset)
+    assert "Z" in data["timestamp"] or "+" in data["timestamp"] or "-" in data["timestamp"]
