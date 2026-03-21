@@ -13,8 +13,15 @@ export function useInfiniteScroll(
   const [hasMore, setHasMore] = useState(initialData.has_more)
   const [isLoading, setIsLoading] = useState(false)
 
-  // Refetch when filters change
+  // Refetch when filters change (but not on initial mount since we have initialData)
+  const [isFirstRender, setIsFirstRender] = useState(true)
+
   useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false)
+      return
+    }
+
     const refetch = async () => {
       setIsLoading(true)
       try {
