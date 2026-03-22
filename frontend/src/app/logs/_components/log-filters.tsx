@@ -1,6 +1,6 @@
 'use client'
 
-import { useQueryStates, parseAsString, parseAsArrayOf } from 'nuqs'
+import { useLogFilters } from '@/hooks/use-log-filters'
 import { SearchInput } from './search-input'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -9,15 +9,7 @@ import { Separator } from '@/components/ui/separator'
 import { SEVERITY_OPTIONS } from '@/lib/constants'
 
 export function LogFilters() {
-  const [filters, setFilters] = useQueryStates({
-    search: parseAsString,
-    severity: parseAsArrayOf(parseAsString),
-    source: parseAsString,
-    date_from: parseAsString,
-    date_to: parseAsString,
-    sort: parseAsString.withDefault('timestamp'),
-    order: parseAsString.withDefault('desc'),
-  })
+  const [filters, setFilters] = useLogFilters()
 
   const handleSeverityToggle = (value: string) => {
     const currentSeverity = filters.severity || []

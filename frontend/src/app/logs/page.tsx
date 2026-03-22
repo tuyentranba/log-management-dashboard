@@ -12,7 +12,7 @@ interface LogsPageProps {
 export default async function LogsPage({ searchParams }: LogsPageProps) {
   const params = await searchParams
 
-  // Parse URL search params into LogFilters
+  // Parse URL search params into LogFilters for SSR initial data fetch
   const filters: LogFilters = {
     search: typeof params.search === 'string' ? params.search : undefined,
     severity: Array.isArray(params.severity)
@@ -27,7 +27,7 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
     order: (params.order as any) || 'desc',
   }
 
-  // Fetch initial data on server with filters
+  // Fetch initial data on server with filters (SSR for performance)
   const initialData = await fetchLogs(filters, null, 50)
 
   return (
@@ -40,7 +40,8 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
         <h1 className="text-2xl font-semibold mb-4">Logs</h1>
 
         <Suspense fallback={<SkeletonRows count={10} />}>
-          <LogList initialData={initialData} filters={filters} />
+          {/* LogList reads filters directly from URL, only needs initial data */}
+          <LogList initialData={initialData} />
         </Suspense>
       </div>
     </div>

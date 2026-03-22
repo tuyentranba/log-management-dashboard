@@ -1,26 +1,19 @@
 'use client'
 
-import { LogListResponse, LogFilters } from '@/lib/types'
+import { LogListResponse } from '@/lib/types'
 import { LogTable } from './log-table'
 import { SkeletonRows } from './skeleton-rows'
 import { FilterChip } from './filter-chip'
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll'
-import { useQueryStates, parseAsString, parseAsArrayOf } from 'nuqs'
+import { useLogFilters } from '@/hooks/use-log-filters'
 
 interface LogListProps {
   initialData: LogListResponse
-  filters: LogFilters
 }
 
-export function LogList({ initialData, filters }: LogListProps) {
-  const { logs, hasMore, isLoading, loadMore } = useInfiniteScroll(initialData, filters)
-  const [, setFilters] = useQueryStates({
-    search: parseAsString,
-    severity: parseAsArrayOf(parseAsString),
-    source: parseAsString,
-    date_from: parseAsString,
-    date_to: parseAsString,
-  })
+export function LogList({ initialData }: LogListProps) {
+  const [filters, setFilters] = useLogFilters()
+  const { logs, hasMore, isLoading, loadMore } = useInfiniteScroll(initialData)
 
   if (logs.length === 0 && !isLoading) {
     return (
