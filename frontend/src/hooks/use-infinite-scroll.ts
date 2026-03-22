@@ -43,6 +43,14 @@ export function useInfiniteScroll(initialData: LogListResponse) {
     order: filters.order,
   })
 
+  console.log('[useInfiniteScroll] Render - filters:', filters)
+  console.log('[useInfiniteScroll] Render - filtersKey:', filtersKey)
+
+  // Debug: Track when filtersKey changes
+  useEffect(() => {
+    console.log('[useInfiniteScroll DEBUG] FiltersKey useEffect fired! New value:', filtersKey)
+  }, [filtersKey])
+
   useEffect(() => {
     // Skip refetch on initial mount (we already have initialData from SSR)
     if (isFirstRender.current) {
@@ -55,16 +63,29 @@ export function useInfiniteScroll(initialData: LogListResponse) {
 
     const refetch = async () => {
       setIsLoading(true)
+      const startTime = Date.now()
+
       try {
         const apiFilters = convertFiltersForAPI(filters)
         console.log('[useInfiniteScroll] Fetching with filters:', apiFilters)
-        const response = await fetchLogs(apiFilters, null, 50)
+
+        // Fetch data and ensure minimum 500ms loading display
+        const [response] = await Promise.all([
+          fetchLogs(apiFilters, null, 50),
+          new Promise(resolve => setTimeout(resolve, 500))
+        ])
+
         console.log('[useInfiniteScroll] Received', response.data.length, 'logs')
         setLogs(response.data)
         setCursor(response.next_cursor)
         setHasMore(response.has_more)
       } catch (error) {
         console.error('[useInfiniteScroll] Failed to refetch logs:', error)
+        // Still respect minimum duration even on error
+        const elapsed = Date.now() - startTime
+        if (elapsed < 500) {
+          await new Promise(resolve => setTimeout(resolve, 500 - elapsed))
+        }
       } finally {
         setIsLoading(false)
       }
