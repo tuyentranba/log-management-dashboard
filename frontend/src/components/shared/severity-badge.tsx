@@ -10,7 +10,7 @@ export function SeverityBadge({ severity }: SeverityBadgeProps) {
   const colorClass = SEVERITY_COLORS[severity]
 
   return (
-    <Badge className={colorClass}>
+    <Badge variant={null as any} className={colorClass}>
       {severity}
     </Badge>
   )
