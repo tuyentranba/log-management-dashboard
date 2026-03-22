@@ -22,9 +22,12 @@ export async function fetchLogs(
   if (filters.order) params.append('order', filters.order)
 
   const url = `${API_URL}/api/logs?${params}`
+  console.log('[api.fetchLogs] Fetching URL:', url)
+  console.log('[api.fetchLogs] Filters:', filters)
   const response = await fetch(url)
 
   if (!response.ok) {
+    console.error('[api.fetchLogs] Fetch failed:', response.status, response.statusText)
     throw new Error(`Failed to fetch logs: ${response.status}`)
   }
 
@@ -58,4 +61,51 @@ export async function createLog(data: LogCreate): Promise<LogResponse> {
   }
 
   return response.json()
+}
+
+export async function exportLogs(filters: LogFilters): Promise<void> {
+  const params = new URLSearchParams()
+
+  // Build filter parameters (same pattern as fetchLogs, excluding search)
+  if (filters.severity) {
+    filters.severity.forEach(s => params.append('severity', s))
+  }
+  if (filters.source) params.append('source', filters.source)
+  if (filters.date_from) params.append('date_from', filters.date_from)
+  if (filters.date_to) params.append('date_to', filters.date_to)
+  if (filters.sort) params.append('sort', filters.sort)
+  if (filters.order) params.append('order', filters.order)
+
+  const url = `${API_URL}/api/export?${params}`
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }))
+    throw new Error(error.detail || `Export failed: ${response.status}`)
+  }
+
+  // Convert streaming response to blob
+  const blob = await response.blob()
+
+  // Extract filename from Content-Disposition header
+  const contentDisposition = response.headers.get('Content-Disposition')
+  let filename = 'logs.csv'  // fallback
+  if (contentDisposition) {
+    const matches = /filename=([^;]+)/.exec(contentDisposition)
+    if (matches?.[1]) {
+      filename = matches[1].trim()
+    }
+  }
+
+  // Trigger browser download
+  const downloadUrl = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = downloadUrl
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+
+  // Cleanup
+  document.body.removeChild(link)
+  URL.revokeObjectURL(downloadUrl)
 }
