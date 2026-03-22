@@ -6,7 +6,11 @@ and GET /api/logs/{id} (read single).
 """
 from datetime import datetime
 from typing import Annotated, Optional
+import csv
+import io
+import anyio
 from fastapi import APIRouter, Depends, status, HTTPException, Query
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_, and_
 
@@ -16,6 +20,46 @@ from ..schemas.logs import LogCreate, LogResponse, LogListResponse
 from ..utils.cursor import encode_cursor, decode_cursor
 
 router = APIRouter()
+
+
+async def generate_csv_rows(logs_stream):
+    """
+    Async generator that yields CSV content incrementally.
+
+    Args:
+        logs_stream: SQLAlchemy scalars stream from AsyncResult
+
+    Yields:
+        str: CSV content chunks (UTF-8 BOM, header, then row by row)
+    """
+    # Create StringIO buffer and csv.writer instance
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # Yield UTF-8 BOM first (Excel compatibility)
+    yield '\ufeff'
+
+    # Write header row with Title Case
+    writer.writerow(['Timestamp', 'Severity', 'Source', 'Message'])
+    yield output.getvalue()
+    output.truncate(0)
+    output.seek(0)
+
+    # Async iterate over logs_stream
+    async for log in logs_stream:
+        # Write row with ISO 8601 timestamp format
+        writer.writerow([
+            log.timestamp.isoformat(),
+            log.severity,
+            log.source,
+            log.message
+        ])
+        yield output.getvalue()
+        output.truncate(0)
+        output.seek(0)
+
+        # Provide cancellation point (required for FastAPI cancellation protocol)
+        await anyio.sleep(0)
 
 
 @router.post("/logs", response_model=LogResponse, status_code=status.HTTP_201_CREATED)
