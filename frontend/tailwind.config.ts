@@ -7,6 +7,14 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    // Severity badge colors - forces Tailwind to include these classes
+    'bg-blue-500', 'bg-blue-600', 'hover:bg-blue-600',
+    'bg-yellow-500', 'bg-yellow-600', 'hover:bg-yellow-600',
+    'bg-orange-600', 'bg-orange-700', 'hover:bg-orange-700',
+    'bg-red-600', 'bg-red-700', 'hover:bg-red-700',
+    'border-transparent', 'text-white',
+  ],
   theme: {
     extend: {
       colors: {
