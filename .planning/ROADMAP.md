@@ -10,6 +10,7 @@
 - [x] **Phase 1: Foundation & Database** - Database schema, indexes, Docker infrastructure, seed data (completed 2026-03-20)
 - [x] **Phase 2: Core API Layer** - REST API endpoints with CRUD, pagination, filtering (completed 2026-03-21)
 - [ ] **Phase 3: Log Management UI** - Frontend pages for log browsing, search, filter, detail views
+- [ ] **Phase 03.1: UX Improvements** - Enhanced severity colors, loading states, source column (URGENT)
 - [ ] **Phase 4: Data Export** - CSV streaming export with filtering
 - [ ] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
@@ -22,6 +23,7 @@
 | 1. Foundation & Database | 5/5 | Complete   | 2026-03-20 |
 | 2. Core API Layer | 3/3 | Complete | 2026-03-21 |
 | 3. Log Management UI | 4/5 | In Progress|  |
+| 03.1 UX Improvements | 0/1 | Not started | - |
 | 4. Data Export | 0/? | Not started | - |
 | 5. Analytics Dashboard | 0/? | Not started | - |
 | 6. Testing | 0/? | Not started | - |
@@ -106,6 +108,27 @@ Plans:
 - [ ] 03-02-PLAN.md — Log list with infinite scroll and virtual scrolling
 - [ ] 03-03-PLAN.md — Filter sidebar with URL state persistence and sorting
 - [ ] 03-04-PLAN.md — Log detail modal and create form with validation
+
+---
+
+### Phase 03.1: UX Improvements for Log Filtering
+
+**Goal:** Enhanced visual scanning and user feedback in log table with colored severity tags, loading indicators, and source field display
+
+**Depends on:** Phase 3 (requires log table implementation)
+
+**Requirements:** None (urgent UX improvements - no formal requirement IDs)
+
+**Success Criteria** (what must be TRUE):
+1. Severity badges use vibrant, distinct colors (blue for INFO, yellow for WARNING, orange for ERROR, red for CRITICAL) with white text for immediate visual scanning
+2. Loading overlay with spinner and message appears over log table when filters update, providing clear feedback without hiding existing data
+3. Source column displays between severity and message columns, showing which service generated each log entry
+4. All three improvements integrate seamlessly with existing table functionality (sorting, filtering, virtual scrolling, infinite scroll)
+
+**Plans:** 1 plan
+
+Plans:
+- [ ] 03.1-01-PLAN.md — Enhance severity colors, add loading overlay, display source column (3 tasks)
 
 ---
 
@@ -194,4 +217,4 @@ All v1 requirements mapped to phases. No orphaned requirements.
 
 ---
 *Roadmap created: 2026-03-20*
-*Last updated: 2026-03-21*
+*Last updated: 2026-03-22*
