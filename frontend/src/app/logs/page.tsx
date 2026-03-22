@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { LogList } from './_components/log-list'
 import { LogFilters as LogFiltersComponent } from './_components/log-filters'
 import { SkeletonRows } from './_components/skeleton-rows'
+import { ExportButton } from './_components/export-button'
 import { fetchLogs } from '@/lib/api'
 import { LogFilters, Severity } from '@/lib/types'
 
@@ -37,7 +38,10 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
 
       {/* Main Content */}
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold mb-4">Logs</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-semibold">Logs</h1>
+          <ExportButton filters={filters} />
+        </div>
 
         <Suspense fallback={<SkeletonRows count={10} />}>
           {/* LogList reads filters directly from URL, only needs initial data */}
