@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useQueryState } from 'nuqs'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { SeverityBadge } from '@/components/shared/severity-badge'
 import { fetchLogById } from '@/lib/api'
 import { LogResponse } from '@/lib/types'
 import { format } from 'date-fns'
-import { X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
 export function LogDetailModal() {
@@ -45,11 +43,6 @@ export function LogDetailModal() {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Log Details</DialogTitle>
-          <DialogClose asChild>
-            <Button variant="ghost" size="sm" className="absolute right-4 top-4" aria-label="Close">
-              <X className="h-4 w-4" />
-            </Button>
-          </DialogClose>
         </DialogHeader>
 
         {isLoading ? (
