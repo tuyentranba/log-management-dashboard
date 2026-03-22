@@ -2,12 +2,12 @@ import { Severity } from './types'
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
-// Severity badge colors per 03-UI-SPEC.md lines 85-89
+// Severity badge colors - vibrant colors for better visual distinction
 export const SEVERITY_COLORS = {
-  INFO: 'bg-blue-100 text-blue-800',
-  WARNING: 'bg-yellow-100 text-yellow-800',
-  ERROR: 'bg-red-100 text-red-800',
-  CRITICAL: 'bg-red-900 text-white',
+  INFO: 'border-transparent bg-blue-500 text-white hover:bg-blue-600',
+  WARNING: 'border-transparent bg-yellow-500 text-white hover:bg-yellow-600',
+  ERROR: 'border-transparent bg-orange-600 text-white hover:bg-orange-700',
+  CRITICAL: 'border-transparent bg-red-600 text-white hover:bg-red-700',
 } as const
 
 export const SEVERITY_OPTIONS: Array<{value: Severity, label: string}> = [
