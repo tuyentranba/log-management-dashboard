@@ -47,14 +47,48 @@ UI never updates when URL changes
 
 ### Implementation Changes
 
+**0. Create Shared Hook `use-log-filters.ts`:**
+
+To avoid schema duplication across 3+ components, extract the filter state logic into a shared hook:
+
+```typescript
+// frontend/src/hooks/use-log-filters.ts
+import { useQueryStates, parseAsString, parseAsArrayOf } from 'nuqs'
+
+const logFiltersSchema = {
+  search: parseAsString,
+  severity: parseAsArrayOf(parseAsString),
+  source: parseAsString,
+  date_from: parseAsString,
+  date_to: parseAsString,
+  sort: parseAsString.withDefault('timestamp'),
+  order: parseAsString.withDefault('desc'),
+}
+
+export function useLogFilters() {
+  return useQueryStates(logFiltersSchema)
+}
+
+// Optional: Export type for reuse
+export type LogFiltersState = ReturnType<typeof useLogFilters>[0]
+```
+
+**Benefits of shared hook:**
+- Single source of truth for filter schema
+- Add new filter = change one place
+- Type safety guaranteed consistent
+- Can add helper methods (clearFilters, hasActiveFilters)
+
 **1. `use-infinite-scroll.ts` Hook:**
 ```typescript
 // Before: Received filters as parameter
 export function useInfiniteScroll(initialData, filters) { ... }
 
-// After: Reads filters directly from URL
+// After: Uses shared hook
+import { useLogFilters } from '@/hooks/use-log-filters'
+
 export function useInfiniteScroll(initialData) {
-  const [filters] = useQueryStates({ ... })
+  const [filters] = useLogFilters()
   // useEffect watches URL-derived values
 }
 ```
@@ -71,9 +105,11 @@ export function LogList({ initialData, filters }: LogListProps) {
   }
 }
 
-// After: Reads filters from URL
+// After: Uses shared hook
+import { useLogFilters } from '@/hooks/use-log-filters'
+
 export function LogList({ initialData }: LogListProps) {
-  const [filters, setFilters] = useQueryStates({ ... })
+  const [filters, setFilters] = useLogFilters()
   const activeFilters = computeFrom(filters) // reactive!
 
   onRemove: () => {
@@ -82,7 +118,22 @@ export function LogList({ initialData }: LogListProps) {
 }
 ```
 
-**3. `page.tsx` Server Component:**
+**3. `log-filters.tsx` Component:**
+```typescript
+// Before: Defined schema inline
+export function LogFilters() {
+  const [filters, setFilters] = useQueryStates({ ... schema ... })
+}
+
+// After: Uses shared hook
+import { useLogFilters } from '@/hooks/use-log-filters'
+
+export function LogFilters() {
+  const [filters, setFilters] = useLogFilters()
+}
+```
+
+**4. `page.tsx` Server Component:**
 ```typescript
 // Before: Passed filters prop
 <LogList initialData={...} filters={parsed} />
@@ -122,15 +173,15 @@ API refetch triggered with new filters
 
 ### Negative
 
-1. **Slight hook duplication** - Multiple components call `useQueryStates` with same schema
-2. **Client-only pattern** - All filter consumers must be Client Components
-3. **Migration effort** - Required refactoring 3 files with careful prop removal
-4. **Learning curve** - Team needs to understand nuqs reactivity model
+1. **Client-only pattern** - All filter consumers must be Client Components
+2. **Migration effort** - Required refactoring 4 files (3 components + 1 new shared hook)
+3. **Learning curve** - Team needs to understand nuqs reactivity model
+4. **Abstraction overhead** - Shared hook adds one layer of indirection
 
 ### Technical Debt
 
-- Consider extracting `useQueryStates` schema to shared hook if more components need filters
-- May need optimization if filter state becomes more complex (memoization, etc.)
+- May need optimization if filter state becomes more complex (memoization, debouncing)
+- Consider adding helper methods to shared hook (clearFilters, hasActiveFilters) in future iterations
 
 ## Alternatives Considered
 
@@ -193,9 +244,11 @@ API refetch triggered with new filters
 ## Implementation Status
 
 - [x] ADR created and approved
-- [ ] Refactor `use-infinite-scroll.ts`
-- [ ] Refactor `log-list.tsx`
-- [ ] Update `page.tsx`
+- [ ] Create shared hook `use-log-filters.ts`
+- [ ] Refactor `log-filters.tsx` to use shared hook
+- [ ] Refactor `use-infinite-scroll.ts` to use shared hook
+- [ ] Refactor `log-list.tsx` to use shared hook
+- [ ] Update `page.tsx` to remove filters prop
 - [ ] Test filter selection reactivity
 - [ ] Test FilterChip removal
 - [ ] Test URL sharing and hydration

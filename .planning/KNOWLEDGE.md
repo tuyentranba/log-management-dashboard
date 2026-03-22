@@ -203,6 +203,137 @@ async def get_logs(
 
 ---
 
+## Frontend Patterns (Next.js 15 + React)
+
+### URL State Management with Shared Hooks
+
+**Pattern**: Extract `useQueryStates` schema into shared custom hooks to avoid duplication and ensure type consistency.
+
+#### The Problem: Schema Duplication
+
+When multiple components need to read/write the same URL query parameters:
+
+```typescript
+// ❌ DON'T: Repeat schema in every component
+// Component A
+const [filters] = useQueryStates({
+  search: parseAsString,
+  severity: parseAsArrayOf(parseAsString),
+  // ... 7 fields
+})
+
+// Component B
+const [filters] = useQueryStates({
+  search: parseAsString,
+  severity: parseAsArrayOf(parseAsString),
+  // ... 7 fields (duplicated!)
+})
+```
+
+**Problems**:
+- Schema defined in 3+ places
+- Adding new filter requires updating all locations
+- Type inconsistencies across components
+- Hard to maintain
+
+#### The Solution: Shared Hook Pattern
+
+```typescript
+// ✅ DO: Extract to shared hook
+// hooks/use-log-filters.ts
+import { useQueryStates, parseAsString, parseAsArrayOf } from 'nuqs'
+
+const logFiltersSchema = {
+  search: parseAsString,
+  severity: parseAsArrayOf(parseAsString),
+  source: parseAsString,
+  date_from: parseAsString,
+  date_to: parseAsString,
+  sort: parseAsString.withDefault('timestamp'),
+  order: parseAsString.withDefault('desc'),
+}
+
+export function useLogFilters() {
+  return useQueryStates(logFiltersSchema)
+}
+
+export type LogFiltersState = ReturnType<typeof useLogFilters>[0]
+
+// Now all components use the same hook
+// Component A
+const [filters, setFilters] = useLogFilters()
+
+// Component B
+const [filters] = useLogFilters()
+```
+
+**Benefits**:
+- ✅ Single source of truth for filter schema
+- ✅ Add new filter = change one line
+- ✅ TypeScript type safety guaranteed consistent
+- ✅ Can add helper methods (clearFilters, hasActiveFilters)
+- ✅ Easy to test and mock
+
+**When to use this pattern**:
+- 3+ components reading same URL state
+- Schema has 5+ fields (non-trivial)
+- Anticipating schema changes/additions
+- Want helper methods for state operations
+
+**Implementation**: See `docs/decisions/001-filter-reactivity-refactor.md`
+
+---
+
+### Server Components vs Client Components (Next.js 15)
+
+**Key principle**: Server Components don't re-execute on client-side URL changes.
+
+#### The Pitfall: Stale Props from Server Components
+
+```typescript
+// ❌ PROBLEM: Server Component passing state as props
+// page.tsx (Server Component)
+export default async function Page({ searchParams }) {
+  const filters = parseSearchParams(searchParams)  // Frozen at initial render
+  return <ClientComponent filters={filters} />     // Props never update!
+}
+
+// ClientComponent updates URL, but filters prop stays stale
+```
+
+**Why this fails**:
+- Server Components only run on initial page load and full navigation
+- Client-side URL changes (nuqs, useRouter) don't trigger Server Component re-execution
+- Props passed to Client Components remain frozen
+
+#### The Solution: Client Components Read URL Directly
+
+```typescript
+// ✅ CORRECT: Client reads from URL directly
+// page.tsx (Server Component)
+export default async function Page({ searchParams }) {
+  const initialData = await fetchData()  // SSR for performance
+  return <ClientComponent initialData={initialData} />
+}
+
+// ClientComponent (reads state from URL)
+'use client'
+export function ClientComponent({ initialData }) {
+  const [filters] = useLogFilters()  // Reads directly from URL
+  // Reactive to URL changes ✅
+}
+```
+
+**Decision**: For reactive UI state (filters, selections, modals), always read from URL in Client Components. Only pass non-reactive data (initial fetched data) as props from Server Components.
+
+---
+
+### Testing Strategy
+
+*To be documented during implementation*
+
+---
+
 ## Technical Decisions Log
 
 | Date | Topic | Decision | Rationale |
@@ -211,6 +342,8 @@ async def get_logs(
 | 2026-03-20 | Categorical indexing | Use B-tree for severity/source | Random access patterns require exact lookups |
 | 2026-03-20 | Database pattern | Async + Dependency Injection | Handle 1000+ concurrent users with minimal resources, automatic connection cleanup, easier testing |
 | 2026-03-20 | API pagination format | Envelope with metadata in body | Need to return filters applied, easier frontend access, can include aggregations |
+| 2026-03-22 | URL state management | Shared custom hooks pattern | Eliminate schema duplication across components, ensure type consistency, enable helper methods. See ADR-001 |
+| 2026-03-22 | Client/Server reactivity | Client components read URL directly | Server Components don't re-execute on client URL changes; props become stale. Solution: Client components use nuqs hooks to read state directly from URL |
 
 ---
 
