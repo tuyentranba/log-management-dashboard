@@ -69,6 +69,13 @@ export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order }: 
           Severity
           <SortIcon field="severity" />
         </button>
+        <button
+          onClick={() => handleSort('source')}
+          className="w-32 flex items-center gap-1 hover:text-slate-900 transition-colors"
+        >
+          Source
+          <SortIcon field="source" />
+        </button>
         <div className="flex-1">Message</div>
         <button
           onClick={() => handleSort('timestamp')}
@@ -105,6 +112,9 @@ export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order }: 
               >
                 <div className="w-20">
                   <SeverityBadge severity={log.severity} />
+                </div>
+                <div className="w-32 text-sm text-slate-700 font-medium truncate">
+                  {log.source}
                 </div>
                 <div className="flex-1 truncate">
                   {log.message}
