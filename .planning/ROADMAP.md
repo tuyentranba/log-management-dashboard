@@ -24,7 +24,7 @@
 | 2. Core API Layer | 3/3 | Complete | 2026-03-21 |
 | 3. Log Management UI | 4/5 | In Progress|  |
 | 03.1 UX Improvements | 1/1 | Complete   | 2026-03-22 |
-| 4. Data Export | 0/? | Not started | - |
+| 4. Data Export | 0/2 | Not started | - |
 | 5. Analytics Dashboard | 0/? | Not started | - |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
@@ -133,7 +133,7 @@ Plans:
 ---
 
 ### Phase 4: Data Export
-**Goal:** Users can export filtered log data as CSV without memory issues or timeouts
+**Goal:** CSV export of filtered log data from log list page with streaming response handling large datasets
 
 **Depends on:** Phase 2 (requires API filtering), Phase 3 (requires UI for export trigger)
 
@@ -141,12 +141,16 @@ Plans:
 
 **Success Criteria** (what must be TRUE):
 1. User can click "Export CSV" button from log list page and receive CSV file download
-2. CSV export includes all log fields (id, timestamp, message, severity, source) with proper headers
+2. CSV export includes all log fields (timestamp, severity, source, message) with proper headers
 3. CSV export respects active filters (date range, severity, source, search text)
 4. User can export 10k logs without browser memory errors or API timeout (completes in under 30 seconds)
 5. Export streams data (FastAPI StreamingResponse) rather than loading full dataset into memory
 
-**Plans:** TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Backend streaming CSV export endpoint with filtering/sorting (3 tasks)
+- [ ] 04-02-PLAN.md — Frontend export button with loading states and download handling (3 tasks)
 
 ---
 
