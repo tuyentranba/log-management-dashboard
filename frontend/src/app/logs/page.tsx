@@ -18,7 +18,7 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
     severity: Array.isArray(params.severity)
       ? params.severity as Severity[]
       : typeof params.severity === 'string'
-      ? [params.severity as Severity]
+      ? params.severity.split(',') as Severity[]  // Split comma-separated string
       : undefined,
     source: typeof params.source === 'string' ? params.source : undefined,
     date_from: typeof params.date_from === 'string' ? params.date_from : undefined,
