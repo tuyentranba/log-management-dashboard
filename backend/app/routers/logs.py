@@ -255,3 +255,90 @@ async def get_log(
         )
 
     return log
+
+
+@router.get("/export")
+async def export_logs_csv(
+    # Same filter parameters as list_logs
+    severity: Annotated[Optional[list[str]], Query()] = None,
+    source: Annotated[Optional[str], Query()] = None,
+    date_from: Annotated[Optional[datetime], Query()] = None,
+    date_to: Annotated[Optional[datetime], Query()] = None,
+    sort: Annotated[str, Query(pattern="^(timestamp|severity|source)$")] = "timestamp",
+    order: Annotated[str, Query(pattern="^(asc|desc)$")] = "desc",
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Export filtered logs as CSV with streaming response.
+
+    Accepts same filter parameters as list_logs endpoint to ensure WYSIWYG
+    (What You See Is What You Get) - exported data matches UI view.
+
+    Parameters:
+        severity: One or more severity levels (repeat parameter: ?severity=ERROR&severity=WARNING)
+        source: Source identifier (case-insensitive partial match)
+        date_from: Start of date range (inclusive, ISO 8601 with timezone)
+        date_to: End of date range (inclusive, ISO 8601 with timezone)
+        sort: Field to sort by (timestamp, severity, or source)
+        order: Sort direction (asc or desc)
+        db: Database session (injected)
+
+    Returns:
+        StreamingResponse with CSV content (media_type: text/csv)
+
+    Raises:
+        400: Invalid filter parameters (invalid severity value)
+    """
+    # Build query using EXACT same filtering logic as list_logs
+    query = select(Log)
+
+    # Apply filters - same validation and filtering logic
+    if severity:
+        # Validate severity values per CONTEXT.md specification
+        valid_severities = {"INFO", "WARNING", "ERROR", "CRITICAL"}
+        for sev in severity:
+            if sev not in valid_severities:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Invalid severity: {sev}. Must be one of: {', '.join(sorted(valid_severities))}"
+                )
+        query = query.where(Log.severity.in_(severity))
+
+    if source:
+        # Case-insensitive partial match using ILIKE
+        query = query.where(Log.source.ilike(f"%{source}%"))
+
+    if date_from:
+        query = query.where(Log.timestamp >= date_from)
+
+    if date_to:
+        query = query.where(Log.timestamp <= date_to)
+
+    # Apply sorting - same sort logic as list_logs
+    sort_column = getattr(Log, sort)
+    if order == "desc":
+        sort_direction = sort_column.desc()
+    else:
+        sort_direction = sort_column.asc()
+
+    # Always include id as secondary sort for stable ordering
+    query = query.order_by(
+        sort_direction,
+        Log.id.desc() if order == "desc" else Log.id.asc()
+    )
+
+    # Hard limit at 50,000 rows per CONTEXT.md decision
+    query = query.limit(50000)
+
+    # Stream results from database (yield_per for batch fetching)
+    result = await db.stream(query.execution_options(yield_per=1000))
+    logs_stream = result.scalars()
+
+    # Generate filename with timestamp
+    filename = f"logs-{datetime.now().strftime('%Y-%m-%d-%H%M%S')}.csv"
+
+    return StreamingResponse(
+        generate_csv_rows(logs_stream),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
