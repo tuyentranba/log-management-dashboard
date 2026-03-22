@@ -10,7 +10,7 @@
 - [x] **Phase 1: Foundation & Database** - Database schema, indexes, Docker infrastructure, seed data (completed 2026-03-20)
 - [x] **Phase 2: Core API Layer** - REST API endpoints with CRUD, pagination, filtering (completed 2026-03-21)
 - [ ] **Phase 3: Log Management UI** - Frontend pages for log browsing, search, filter, detail views
-- [ ] **Phase 03.1: UX Improvements** - Enhanced severity colors, loading states, source column (URGENT)
+- [x] **Phase 03.1: UX Improvements** - Enhanced severity colors, loading states, source column (URGENT) (completed 2026-03-22)
 - [ ] **Phase 4: Data Export** - CSV streaming export with filtering
 - [ ] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
@@ -23,7 +23,7 @@
 | 1. Foundation & Database | 5/5 | Complete   | 2026-03-20 |
 | 2. Core API Layer | 3/3 | Complete | 2026-03-21 |
 | 3. Log Management UI | 4/5 | In Progress|  |
-| 03.1 UX Improvements | 0/1 | Not started | - |
+| 03.1 UX Improvements | 1/1 | Complete   | 2026-03-22 |
 | 4. Data Export | 0/? | Not started | - |
 | 5. Analytics Dashboard | 0/? | Not started | - |
 | 6. Testing | 0/? | Not started | - |
@@ -125,7 +125,7 @@ Plans:
 3. Source column displays between severity and message columns, showing which service generated each log entry
 4. All three improvements integrate seamlessly with existing table functionality (sorting, filtering, virtual scrolling, infinite scroll)
 
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 03.1-01-PLAN.md — Enhance severity colors, add loading overlay, display source column (3 tasks)

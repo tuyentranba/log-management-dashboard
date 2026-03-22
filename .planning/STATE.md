@@ -2,23 +2,23 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 3
-current_plan: 03-01 (Complete)
+current_phase: 3.1
+current_plan: 03.1-01 (Complete)
 status: completed
-last_updated: "2026-03-21T11:00:11.408Z"
+last_updated: "2026-03-22T06:35:26Z"
 progress:
-  total_phases: 7
-  completed_phases: 3
-  total_plans: 13
-  completed_plans: 13
+  total_phases: 8
+  completed_phases: 4
+  total_plans: 14
+  completed_plans: 14
   percent: 100
 ---
 
 # Project State: Logs Dashboard
 
-**Last Updated:** 2026-03-21
-**Current Phase:** 3
-**Current Plan:** 03-04 (Complete)
+**Last Updated:** 2026-03-22
+**Current Phase:** 3.1
+**Current Plan:** 03.1-01 (Complete)
 
 ## Project Reference
 
@@ -30,8 +30,8 @@ Phase 3 started! Wave 0 foundation complete - Jest and React Testing Library con
 
 ## Current Position
 
-**Phase:** 3 - Log Management UI
-**Plan:** 03-04 (Log Detail Modal and Create Form)
+**Phase:** 3.1 - UX Improvements for Log Filtering
+**Plan:** 03.1-01 (UX Improvements)
 **Status:** Complete
 
 **Progress:**
@@ -39,27 +39,29 @@ Phase 3 started! Wave 0 foundation complete - Jest and React Testing Library con
 Phase 1: [████████████████████] 100% (5/5 plans complete)
 Phase 2: [████████████████████] 100% (3/3 plans complete)
 Phase 3: [████████████████████] 100% (5/5 plans complete)
+Phase 3.1: [████████████████████] 100% (1/1 plans complete)
 Phase 4: [..................] 0% (0/? plans complete)
 Phase 5: [..................] 0% (0/? plans complete)
 Phase 6: [..................] 0% (0/? plans complete)
 Phase 7: [..................] 0% (0/? plans complete)
 ```
 
-**Overall:** 3/7 phases complete (43%)
+**Overall:** 4/8 phases complete (50%)
 
 ## Performance Metrics
 
 **Execution:**
-- Plans completed: 13
+- Plans completed: 14
 - Plans failed: 0
-- Phases completed: 3/7
+- Phases completed: 3/8
 
 **Estimates:**
-- Average time per plan: 788 seconds (13.1 minutes)
-- Velocity: 13 plans completed
+- Average time per plan: 751 seconds (12.5 minutes)
+- Velocity: 14 plans completed
 - Phase 1 progress: 5/5 plans (100%)
 - Phase 2 progress: 3/3 plans (100%)
 - Phase 3 progress: 5/5 plans (100%)
+- Phase 3.1 progress: 1/1 plans (100%)
 - Plan 01-01 duration: 239 seconds
 - Plan 01-02 duration: 183 seconds
 - Plan 01-03 duration: 332 seconds
@@ -73,6 +75,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Plan 03-02 duration: 326 seconds
 - Plan 03-03 duration: 198 seconds
 - Plan 03-04 duration: 345 seconds
+- Plan 03.1-01 duration: 530 seconds
 
 ## Accumulated Context
 
@@ -159,6 +162,12 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Timestamp field uses datetime-local input with ISO 8601 conversion via setValueAs
 - Form validation matches backend Pydantic schemas for client-side validation before API call
 
+**UX improvements for log filtering (Plan 03.1-01):**
+- Vibrant severity colors (blue-500, yellow-500, orange-600, red-600) for better visual distinction with white text
+- Source column positioned between Severity and Message for logical information flow (context → content)
+- Loading overlay with backdrop-blur only shows during filter updates (isLoading && logs.length > 0)
+- Removed standalone SkeletonRows in favor of semi-transparent overlay with spinner and message
+
 **Roadmap structure:**
 - 7 phases derived from 55 v1 requirements
 - Fine granularity based on config.json setting
@@ -178,6 +187,10 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Testing: pytest (backend) + Jest 29.7.0 + React Testing Library 16.3.2 (frontend)
 - Deployment: Docker Compose
 
+### Roadmap Evolution
+
+- Phase 03.1 inserted after Phase 3: Improve UX for log filtering - color severity tags, loading states, source display (URGENT)
+
 ### Current TODOs
 
 - [x] Plan 01-01: Database Schema with Indexes (Complete)
@@ -193,6 +206,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 03-02: Log List Implementation (Complete)
 - [x] Plan 03-03: Log Filtering and Sorting (Complete)
 - [x] Plan 03-04: Log Detail Modal and Create Form (Complete)
+- [x] Plan 03.1-01: UX Improvements for Log Filtering (Complete)
 - [ ] Phase 4: Log Filtering & Search (Next)
 
 ### Active Blockers
@@ -297,25 +311,32 @@ None. Roadmap approved and ready for planning.
   - Success toast and redirect to /logs after log creation
   - Fixed zod enum validation syntax (errorMap → message parameter)
 
+**2026-03-22:**
+- Completed Plan 03.1-01: UX Improvements for Log Filtering (3 tasks, 3 files, 3 commits, 530 seconds)
+  - Enhanced severity badge colors to vibrant palette (blue-500, yellow-500, orange-600, red-600) with white text
+  - Added sortable Source column to log table between Severity and Message
+  - Implemented loading overlay with backdrop-blur for filter updates
+  - Overlay shows spinner with "Updating filters..." message during filter changes
+  - Removed standalone SkeletonRows in favor of semi-transparent overlay approach
+
 ## Session Continuity
 
 **What just happened:**
-Plan 03-04 (Log Detail Modal and Create Form) executed successfully. Created LogDetailModal component with URL state for deep linking, added createLog API function, and built CreateForm with react-hook-form + zod validation. All 3 tasks completed, 5 files created/modified, 3 commits made. Production build succeeds. Execution time: 345 seconds (5.8 minutes). Auto-fixed bug: zod enum validation syntax (errorMap → message parameter). Phase 3 now complete (5/5 plans)!
+Plan 03.1-01 (UX Improvements for Log Filtering) executed successfully. Enhanced severity badge colors with vibrant palette for better visual distinction, added sortable Source column to log table, and implemented loading overlay with backdrop-blur for filter updates. All 3 tasks completed, 3 files modified, 3 commits made. TypeScript compilation passes. Execution time: 530 seconds (8.8 minutes). No deviations from plan. Phase 3.1 now complete (1/1 plans)!
 
 **What's next:**
 Phase 4: Log Filtering & Search - Implement advanced filtering UI and search functionality for enhanced log discovery.
 
 **Context for next session:**
-- Phase 3 complete! All core log management UI features implemented
-- Log table with virtual scrolling (100k logs performant)
-- Filter and sort UI connected to URL state with nuqs
-- Log detail modal with URL state for deep linking (?log={id})
-- Create form with validation matching backend Pydantic schemas
-- All user workflows enabled: view logs, filter/sort, view details, create new logs
-- Frontend fully functional with optimistic UI updates and error handling
+- Phase 3.1 complete! UX improvements successfully applied to log filtering
+- Severity badges now use vibrant colors (blue-500, yellow-500, orange-600, red-600) for immediate scanability
+- Source column added to log table showing which service generated each log
+- Loading overlay with backdrop-blur provides clear feedback during filter updates
+- Log table now displays: Severity, Source, Message, Timestamp columns (all sortable)
+- All Phase 3 features enhanced: better visual hierarchy, more information density, improved loading states
+- Frontend continues to be fully functional with optimistic UI updates and error handling
 - Backend API ready at http://localhost:8000/api
-- Toast notifications for all user feedback
-- Shared types, constants, and components established
+- Ready for Phase 4 advanced filtering features
 
 ---
 *State tracking started: 2026-03-20*
