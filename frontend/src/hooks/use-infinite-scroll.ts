@@ -31,38 +31,47 @@ export function useInfiniteScroll(initialData: LogListResponse) {
   // Use ref to skip initial mount without causing extra renders
   const isFirstRender = useRef(true)
 
+  // Serialize filters for dependency comparison
+  // This ensures React detects changes even with complex objects/arrays
+  const filtersKey = JSON.stringify({
+    search: filters.search,
+    severity: filters.severity,
+    source: filters.source,
+    date_from: filters.date_from,
+    date_to: filters.date_to,
+    sort: filters.sort,
+    order: filters.order,
+  })
+
   useEffect(() => {
     // Skip refetch on initial mount (we already have initialData from SSR)
     if (isFirstRender.current) {
       isFirstRender.current = false
+      console.log('[useInfiniteScroll] Initial mount - skipping refetch')
       return
     }
+
+    console.log('[useInfiniteScroll] Filters changed, refetching...', filters)
 
     const refetch = async () => {
       setIsLoading(true)
       try {
         const apiFilters = convertFiltersForAPI(filters)
+        console.log('[useInfiniteScroll] Fetching with filters:', apiFilters)
         const response = await fetchLogs(apiFilters, null, 50)
+        console.log('[useInfiniteScroll] Received', response.data.length, 'logs')
         setLogs(response.data)
         setCursor(response.next_cursor)
         setHasMore(response.has_more)
       } catch (error) {
-        console.error('Failed to refetch logs:', error)
+        console.error('[useInfiniteScroll] Failed to refetch logs:', error)
       } finally {
         setIsLoading(false)
       }
     }
 
     refetch()
-  }, [
-    filters.search,
-    filters.severity?.join(','),
-    filters.source,
-    filters.date_from,
-    filters.date_to,
-    filters.sort,
-    filters.order,
-  ])
+  }, [filtersKey]) // Use serialized key for reliable change detection
 
   const loadMore = useCallback(async () => {
     if (!hasMore || isLoading) return
