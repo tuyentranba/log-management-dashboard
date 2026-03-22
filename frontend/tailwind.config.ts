@@ -7,6 +7,14 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    // Severity badge colors - forces Tailwind to include these classes
+    'bg-blue-500', 'bg-blue-600', 'hover:bg-blue-600',
+    'bg-yellow-500', 'bg-yellow-600', 'hover:bg-yellow-600',
+    'bg-orange-600', 'bg-orange-700', 'hover:bg-orange-700',
+    'bg-red-600', 'bg-red-700', 'hover:bg-red-700',
+    'border-transparent', 'text-white',
+  ],
   theme: {
     extend: {
       colors: {
@@ -49,12 +57,6 @@ const config: Config = {
           "3": "hsl(var(--chart-3))",
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
-        },
-        severity: {
-          info: "rgb(var(--severity-info) / <alpha-value>)",
-          warning: "rgb(var(--severity-warning) / <alpha-value>)",
-          error: "rgb(var(--severity-error) / <alpha-value>)",
-          critical: "rgb(var(--severity-critical) / <alpha-value>)",
         },
       },
       borderRadius: {
