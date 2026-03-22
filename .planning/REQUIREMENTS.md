@@ -46,9 +46,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data Export
 
-- [ ] **EXPORT-01**: User can export filtered log data as CSV
-- [ ] **EXPORT-02**: CSV export uses streaming response (no memory loading of full dataset)
-- [ ] **EXPORT-03**: CSV export includes all log fields
+- [x] **EXPORT-01**: User can export filtered log data as CSV
+- [x] **EXPORT-02**: CSV export uses streaming response (no memory loading of full dataset)
+- [x] **EXPORT-03**: CSV export includes all log fields
 
 ### Backend API
 
@@ -65,13 +65,13 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Frontend
 
 - [x] **UI-01**: Frontend provides log list page with search, filter, sort, pagination controls
-- [ ] **UI-02**: Frontend provides log detail page
-- [ ] **UI-03**: Frontend provides log creation page/form
+- [x] **UI-02**: Frontend provides log detail page
+- [x] **UI-03**: Frontend provides log creation page/form
 - [ ] **UI-04**: Frontend provides analytics dashboard page
 - [x] **UI-05**: Frontend uses React Server Components for data fetching
 - [x] **UI-06**: Frontend uses Client Components only for interactive features
 - [x] **UI-07**: Frontend displays loading states during data fetch
-- [ ] **UI-08**: Frontend displays meaningful error messages
+- [x] **UI-08**: Frontend displays meaningful error messages
 - [x] **UI-09**: Frontend is responsive across desktop and tablet screen sizes
 
 ### Infrastructure & Deployment
@@ -169,12 +169,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LOG-04 | Phase 2 | Complete |
 | LOG-05 | Phase 2 | Complete |
 | UI-01 | Phase 3 | Complete |
-| UI-02 | Phase 3 | Pending |
-| UI-03 | Phase 3 | Pending |
+| UI-02 | Phase 3 | Complete |
+| UI-03 | Phase 3 | Complete |
 | UI-05 | Phase 3 | Complete |
 | UI-06 | Phase 3 | Complete |
 | UI-07 | Phase 3 | Complete |
-| UI-08 | Phase 3 | Pending |
+| UI-08 | Phase 3 | Complete |
 | UI-09 | Phase 3 | Complete |
 | FILTER-01 | Phase 3 | Complete |
 | FILTER-02 | Phase 3 | Complete |
@@ -183,9 +183,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FILTER-05 | Phase 3 | Complete |
 | FILTER-06 | Phase 3 | Complete |
 | FILTER-07 | Phase 3 | Complete |
-| EXPORT-01 | Phase 4 | Pending |
-| EXPORT-02 | Phase 4 | Pending |
-| EXPORT-03 | Phase 4 | Pending |
+| EXPORT-01 | Phase 4 | Complete |
+| EXPORT-02 | Phase 4 | Complete |
+| EXPORT-03 | Phase 4 | Complete |
 | ANALYTICS-01 | Phase 5 | Pending |
 | ANALYTICS-02 | Phase 5 | Pending |
 | ANALYTICS-03 | Phase 5 | Pending |
