@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { LogResponse, LogListResponse, LogFilters } from '@/lib/types'
 import { fetchLogs } from '@/lib/api'
 import { useLogFilters } from './use-log-filters'
@@ -28,12 +28,13 @@ export function useInfiniteScroll(initialData: LogListResponse) {
   const [hasMore, setHasMore] = useState(initialData.has_more)
   const [isLoading, setIsLoading] = useState(false)
 
-  // Refetch when filters change (but not on initial mount since we have initialData)
-  const [isFirstRender, setIsFirstRender] = useState(true)
+  // Use ref to skip initial mount without causing extra renders
+  const isFirstRender = useRef(true)
 
   useEffect(() => {
-    if (isFirstRender) {
-      setIsFirstRender(false)
+    // Skip refetch on initial mount (we already have initialData from SSR)
+    if (isFirstRender.current) {
+      isFirstRender.current = false
       return
     }
 
