@@ -43,16 +43,35 @@ export function useInfiniteScroll(initialData: LogListResponse) {
     order: filters.order,
   })
 
-  console.log('[useInfiniteScroll] Current filters:', filters)
-  console.log('[useInfiniteScroll] FiltersKey:', filtersKey)
-
-  // Sync state with SSR data when initialData changes (e.g., when URL params change and Next.js re-fetches)
   useEffect(() => {
-    console.log('[useInfiniteScroll] Syncing with new initialData:', initialData.data.length, 'logs')
-    setLogs(initialData.data)
-    setCursor(initialData.next_cursor)
-    setHasMore(initialData.has_more)
-  }, [initialData])
+    // Skip refetch on initial mount (we already have initialData from SSR)
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      console.log('[useInfiniteScroll] Initial mount - skipping refetch')
+      return
+    }
+
+    console.log('[useInfiniteScroll] Filters changed, refetching...', filters)
+
+    const refetch = async () => {
+      setIsLoading(true)
+      try {
+        const apiFilters = convertFiltersForAPI(filters)
+        console.log('[useInfiniteScroll] Fetching with filters:', apiFilters)
+        const response = await fetchLogs(apiFilters, null, 50)
+        console.log('[useInfiniteScroll] Received', response.data.length, 'logs')
+        setLogs(response.data)
+        setCursor(response.next_cursor)
+        setHasMore(response.has_more)
+      } catch (error) {
+        console.error('[useInfiniteScroll] Failed to refetch logs:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    refetch()
+  }, [filtersKey]) // Use serialized key for reliable change detection
 
   const loadMore = useCallback(async () => {
     if (!hasMore || isLoading) return

@@ -22,12 +22,9 @@ export async function fetchLogs(
   if (filters.order) params.append('order', filters.order)
 
   const url = `${API_URL}/api/logs?${params}`
-  console.log('[api.fetchLogs] Fetching URL:', url)
-  console.log('[api.fetchLogs] API_URL:', API_URL)
   const response = await fetch(url)
 
   if (!response.ok) {
-    console.error('[api.fetchLogs] Fetch failed:', response.status, response.statusText)
     throw new Error(`Failed to fetch logs: ${response.status}`)
   }
 
