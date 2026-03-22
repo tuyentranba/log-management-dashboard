@@ -59,17 +59,27 @@ export function LogList({ initialData }: LogListProps) {
         </div>
       )}
 
-      {/* Log Table */}
-      <LogTable
-        logs={logs}
-        onLoadMore={loadMore}
-        hasMore={hasMore}
-        isLoading={isLoading}
-        sort={filters.sort || 'timestamp'}
-        order={filters.order || 'desc'}
-      />
+      {/* Log Table with Loading Overlay */}
+      <div className="relative">
+        <LogTable
+          logs={logs}
+          onLoadMore={loadMore}
+          hasMore={hasMore}
+          isLoading={isLoading}
+          sort={filters.sort || 'timestamp'}
+          order={filters.order || 'desc'}
+        />
 
-      {isLoading && <SkeletonRows count={3} />}
+        {/* Loading overlay - shown during filter updates */}
+        {isLoading && logs.length > 0 && (
+          <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center rounded">
+            <div className="bg-white px-6 py-3 rounded-lg shadow-lg border flex items-center gap-3">
+              <div className="animate-spin h-5 w-5 border-2 border-slate-300 border-t-slate-600 rounded-full" />
+              <span className="text-sm font-medium text-slate-700">Updating filters...</span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
