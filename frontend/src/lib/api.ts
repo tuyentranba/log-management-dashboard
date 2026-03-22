@@ -16,9 +16,8 @@ export async function fetchLogs(
     filters.severity.forEach(s => params.append('severity', s))
   }
   if (filters.source) params.append('source', filters.source)
-  // Convert simple date format (YYYY-MM-DD) to ISO 8601 datetime (YYYY-MM-DDTHH:MM:SSZ)
-  if (filters.date_from) params.append('date_from', `${filters.date_from}T00:00:00Z`)
-  if (filters.date_to) params.append('date_to', `${filters.date_to}T23:59:59Z`)
+  if (filters.date_from) params.append('date_from', filters.date_from)
+  if (filters.date_to) params.append('date_to', filters.date_to)
   if (filters.sort) params.append('sort', filters.sort)
   if (filters.order) params.append('order', filters.order)
 
