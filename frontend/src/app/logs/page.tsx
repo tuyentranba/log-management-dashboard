@@ -40,7 +40,7 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
       <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold">Logs</h1>
-          <ExportButton filters={filters} />
+          <ExportButton />
         </div>
 
         <Suspense fallback={<SkeletonRows count={10} />}>
