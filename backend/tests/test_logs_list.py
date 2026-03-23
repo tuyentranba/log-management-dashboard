@@ -564,3 +564,182 @@ async def test_pagination_with_filters(client: AsyncClient, test_db):
     assert len(data["data"]) == 25
     assert all(log["severity"] == "ERROR" for log in data["data"])
     assert data["has_more"] is True
+
+
+# =====================================================================
+# SEARCH TESTS
+# =====================================================================
+
+
+@pytest.mark.asyncio
+async def test_list_logs_search_basic(client: AsyncClient, test_db):
+    """GET /api/logs?search=timeout returns only logs containing 'timeout' in message."""
+    # Create 3 logs with known message content
+    logs_data = [
+        "Connection timeout occurred",
+        "User login successful",
+        "Database query completed"
+    ]
+
+    for message in logs_data:
+        log = Log(
+            timestamp=datetime(2024, 3, 20, 10, 0, 0, tzinfo=timezone.utc),
+            message=message,
+            severity="INFO",
+            source="test"
+        )
+        test_db.add(log)
+    await test_db.commit()
+
+    # Search for "timeout"
+    response = await client.get("/api/logs?search=timeout")
+
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert len(data) == 1
+    assert "timeout" in data[0]["message"].lower()
+
+
+@pytest.mark.asyncio
+async def test_list_logs_search_case_insensitive(client: AsyncClient, test_db):
+    """GET /api/logs?search=ERROR matches logs with lowercase 'error' in message."""
+    # Create log with message containing lowercase "error"
+    log = Log(
+        timestamp=datetime(2024, 3, 20, 10, 0, 0, tzinfo=timezone.utc),
+        message="Connection error occurred",
+        severity="INFO",
+        source="test"
+    )
+    test_db.add(log)
+    await test_db.commit()
+
+    # Search for "ERROR" in uppercase
+    response = await client.get("/api/logs?search=ERROR")
+
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert len(data) == 1
+    assert "error" in data[0]["message"].lower()
+
+
+@pytest.mark.asyncio
+async def test_list_logs_search_partial(client: AsyncClient, test_db):
+    """GET /api/logs?search=connection matches partial string in message."""
+    # Create log with message containing "connection"
+    log = Log(
+        timestamp=datetime(2024, 3, 20, 10, 0, 0, tzinfo=timezone.utc),
+        message="Connection timeout occurred",
+        severity="INFO",
+        source="test"
+    )
+    test_db.add(log)
+    await test_db.commit()
+
+    # Search for partial match "connection"
+    response = await client.get("/api/logs?search=connection")
+
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert len(data) == 1
+    assert "connection" in data[0]["message"].lower()
+
+
+@pytest.mark.asyncio
+async def test_list_logs_search_no_results(client: AsyncClient, test_db):
+    """GET /api/logs?search=nonexistent returns empty list."""
+    # Create 2 logs with known messages
+    for message in ["User login successful", "Database query completed"]:
+        log = Log(
+            timestamp=datetime(2024, 3, 20, 10, 0, 0, tzinfo=timezone.utc),
+            message=message,
+            severity="INFO",
+            source="test"
+        )
+        test_db.add(log)
+    await test_db.commit()
+
+    # Search for non-existent term
+    response = await client.get("/api/logs?search=nonexistent_term_xyz")
+
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert len(data) == 0
+
+
+@pytest.mark.asyncio
+async def test_list_logs_search_empty(client: AsyncClient, test_db):
+    """GET /api/logs?search= returns all logs (empty search ignored)."""
+    # Create 3 logs
+    for i in range(3):
+        log = Log(
+            timestamp=datetime(2024, 3, 20, 10, 0, 0, tzinfo=timezone.utc) + timedelta(seconds=i),
+            message=f"Test log {i}",
+            severity="INFO",
+            source="test"
+        )
+        test_db.add(log)
+    await test_db.commit()
+
+    # Search with empty string
+    response = await client.get("/api/logs?search=")
+
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert len(data) == 3  # All logs returned
+
+
+@pytest.mark.asyncio
+async def test_list_logs_search_special_characters(client: AsyncClient, test_db):
+    """GET /api/logs?search=term matches messages with special characters."""
+    # Create log with message containing quotes
+    log = Log(
+        timestamp=datetime(2024, 3, 20, 10, 0, 0, tzinfo=timezone.utc),
+        message='Error: "connection failed"',
+        severity="INFO",
+        source="test"
+    )
+    test_db.add(log)
+    await test_db.commit()
+
+    # Search for "connection failed"
+    response = await client.get("/api/logs?search=connection failed")
+
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert len(data) == 1
+    assert "connection failed" in data[0]["message"].lower()
+
+
+@pytest.mark.asyncio
+async def test_list_logs_search_combined(client: AsyncClient, test_db):
+    """GET /api/logs with search + severity + source filters returns correct intersection."""
+    # Create 5 logs with varying severity, source, and messages
+    logs_data = [
+        {"message": "Connection error occurred", "severity": "ERROR", "source": "api-service"},
+        {"message": "Database error timeout", "severity": "ERROR", "source": "api-service"},
+        {"message": "Connection error occurred", "severity": "INFO", "source": "api-service"},
+        {"message": "Connection error occurred", "severity": "ERROR", "source": "auth-service"},
+        {"message": "User login successful", "severity": "ERROR", "source": "api-service"},
+    ]
+
+    for log_data in logs_data:
+        log = Log(
+            timestamp=datetime(2024, 3, 20, 10, 0, 0, tzinfo=timezone.utc),
+            message=log_data["message"],
+            severity=log_data["severity"],
+            source=log_data["source"]
+        )
+        test_db.add(log)
+    await test_db.commit()
+
+    # Search for "error" + filter severity=ERROR + filter source containing "api"
+    response = await client.get("/api/logs?search=error&severity=ERROR&source=api")
+
+    assert response.status_code == 200
+    data = response.json()["data"]
+    # Should match first 2 logs only (error in message + ERROR severity + api in source)
+    assert len(data) == 2
+    for log in data:
+        assert "error" in log["message"].lower()
+        assert log["severity"] == "ERROR"
+        assert "api" in log["source"].lower()
