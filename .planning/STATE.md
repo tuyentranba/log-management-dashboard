@@ -213,6 +213,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 ### Roadmap Evolution
 
 - Phase 03.1 inserted after Phase 3: Improve UX for log filtering - color severity tags, loading states, source display (URGENT)
+- Phase 04.1 inserted after Phase 4: Add search logic in backend (URGENT)
 
 ### Current TODOs
 
