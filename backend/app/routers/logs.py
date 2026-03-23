@@ -101,6 +101,7 @@ async def list_logs(
     # Filtering parameters
     severity: Annotated[Optional[list[str]], Query()] = None,
     source: Annotated[Optional[str], Query()] = None,
+    search: Annotated[Optional[str], Query()] = None,
     date_from: Annotated[Optional[datetime], Query()] = None,
     date_to: Annotated[Optional[datetime], Query()] = None,
     # Sorting parameters
@@ -154,6 +155,11 @@ async def list_logs(
         # Case-insensitive partial match using ILIKE
         # Note: ILIKE bypasses indexes (acceptable for MVP, documented in RESEARCH.md Pitfall 3)
         query = query.where(Log.source.ilike(f"%{source}%"))
+
+    if search:
+        # Case-insensitive partial match using ILIKE
+        # Note: ILIKE bypasses indexes (acceptable for MVP, documented in RESEARCH.md Pitfall 3)
+        query = query.where(Log.message.ilike(f"%{search}%"))
 
     if date_from:
         query = query.where(Log.timestamp >= date_from)
@@ -262,6 +268,7 @@ async def export_logs_csv(
     # Same filter parameters as list_logs
     severity: Annotated[Optional[list[str]], Query()] = None,
     source: Annotated[Optional[str], Query()] = None,
+    search: Annotated[Optional[str], Query()] = None,
     date_from: Annotated[Optional[datetime], Query()] = None,
     date_to: Annotated[Optional[datetime], Query()] = None,
     sort: Annotated[str, Query(pattern="^(timestamp|severity|source)$")] = "timestamp",
@@ -307,6 +314,10 @@ async def export_logs_csv(
     if source:
         # Case-insensitive partial match using ILIKE
         query = query.where(Log.source.ilike(f"%{source}%"))
+
+    if search:
+        # Case-insensitive partial match using ILIKE
+        query = query.where(Log.message.ilike(f"%{search}%"))
 
     if date_from:
         query = query.where(Log.timestamp >= date_from)
