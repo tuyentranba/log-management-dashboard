@@ -11,7 +11,8 @@
 - [x] **Phase 2: Core API Layer** - REST API endpoints with CRUD, pagination, filtering (completed 2026-03-21)
 - [ ] **Phase 3: Log Management UI** - Frontend pages for log browsing, search, filter, detail views
 - [x] **Phase 03.1: UX Improvements** - Enhanced severity colors, loading states, source column (URGENT) (completed 2026-03-22)
-- [ ] **Phase 4: Data Export** - CSV streaming export with filtering
+- [x] **Phase 4: Data Export** - CSV streaming export with filtering (completed 2026-03-22)
+- [ ] **Phase 04.1: Add search logic in backend** - Message search with ILIKE filtering (URGENT)
 - [ ] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
 - [ ] **Phase 7: Documentation** - README, design decisions, setup instructions
@@ -24,7 +25,8 @@
 | 2. Core API Layer | 3/3 | Complete | 2026-03-21 |
 | 3. Log Management UI | 4/5 | In Progress|  |
 | 03.1 UX Improvements | 1/1 | Complete   | 2026-03-22 |
-| 4. Data Export | 0/2 | Not started | - |
+| 4. Data Export | 2/2 | Complete | 2026-03-22 |
+| 04.1 Add search logic | 0/1 | Not started | - |
 | 5. Analytics Dashboard | 0/? | Not started | - |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
@@ -128,7 +130,7 @@ Plans:
 **Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 03.1-01-PLAN.md — Enhance severity colors, add loading overlay, display source column (3 tasks)
+- [x] 03.1-01-PLAN.md — Enhance severity colors, add loading overlay, display source column (3 tasks)
 
 ---
 
@@ -146,11 +148,33 @@ Plans:
 4. User can export 10k logs without browser memory errors or API timeout (completes in under 30 seconds)
 5. Export streams data (FastAPI StreamingResponse) rather than loading full dataset into memory
 
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
-- [ ] 04-01-PLAN.md — Backend streaming CSV export endpoint with filtering/sorting (3 tasks)
-- [ ] 04-02-PLAN.md — Frontend export button with loading states and download handling (3 tasks)
+- [x] 04-01-PLAN.md — Backend streaming CSV export endpoint with filtering/sorting (3 tasks)
+- [x] 04-02-PLAN.md — Frontend export button with loading states and download handling (3 tasks)
+
+---
+
+### Phase 04.1: Add search logic in backend
+
+**Goal:** Backend message search functionality using case-insensitive ILIKE filtering on Log.message field, closing gap between frontend SearchInput component and backend implementation
+
+**Depends on:** Phase 4 (requires export endpoint to integrate search)
+
+**Requirements:** FILTER-01
+
+**Success Criteria** (what must be TRUE):
+1. User can search logs by message content using search query parameter
+2. Search is case-insensitive (searching 'ERROR' matches 'error' in messages)
+3. Search performs partial matching (searching 'timeout' matches 'connection timeout occurred')
+4. Export respects search filter (WYSIWYG principle)
+5. Search works with other filters (severity, source, date range)
+
+**Plans:** 1 plan
+
+Plans:
+- [ ] 04.1-01-PLAN.md — Add search parameter to list and export endpoints with ILIKE filtering (3 tasks)
 
 ---
 
@@ -221,4 +245,4 @@ All v1 requirements mapped to phases. No orphaned requirements.
 
 ---
 *Roadmap created: 2026-03-20*
-*Last updated: 2026-03-22*
+*Last updated: 2026-03-23*
