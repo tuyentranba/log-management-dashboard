@@ -66,7 +66,8 @@ export async function createLog(data: LogCreate): Promise<LogResponse> {
 export async function exportLogs(filters: LogFilters): Promise<void> {
   const params = new URLSearchParams()
 
-  // Build filter parameters (same pattern as fetchLogs, excluding search)
+  // Build filter parameters (same pattern as fetchLogs, including search per WYSIWYG)
+  if (filters.search) params.append('search', filters.search)
   if (filters.severity) {
     filters.severity.forEach(s => params.append('severity', s))
   }

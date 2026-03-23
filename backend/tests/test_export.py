@@ -401,3 +401,76 @@ async def test_export_50k_limit(client, test_db):
     rows = parse_csv_response(response.content)
     # Verify exactly 50,000 data rows (+ 1 header = 50,001 total)
     assert len(rows) == 50001
+
+
+# Search filter tests
+
+
+@pytest.mark.asyncio
+async def test_export_search_filter(client, test_db):
+    """Export with search filter returns only matching logs in CSV."""
+    # Create 3 logs with known messages
+    now = datetime.now(timezone.utc)
+    logs_data = [
+        "Connection timeout",
+        "User login",
+        "Database error"
+    ]
+
+    for i, message in enumerate(logs_data):
+        log = Log(
+            timestamp=now + timedelta(minutes=i),
+            severity="INFO",
+            source="test-service",
+            message=message
+        )
+        test_db.add(log)
+    await test_db.commit()
+
+    # Export with search=timeout
+    response = await client.get("/api/export?search=timeout")
+    assert response.status_code == 200
+
+    # Parse CSV
+    rows = parse_csv_response(response.content)
+    assert len(rows) == 2  # header + 1 data row
+    assert rows[0] == ['Timestamp', 'Severity', 'Source', 'Message']
+    assert "Connection timeout" in rows[1][3]
+
+
+@pytest.mark.asyncio
+async def test_export_search_combined(client, test_db):
+    """Export with search + severity + source filters returns correct intersection."""
+    # Create 5 logs with varying severity, source, and messages
+    now = datetime.now(timezone.utc)
+    logs_data = [
+        {"message": "Connection error occurred", "severity": "ERROR", "source": "api-service"},
+        {"message": "Database error timeout", "severity": "ERROR", "source": "api-service"},
+        {"message": "Connection error occurred", "severity": "INFO", "source": "api-service"},
+        {"message": "Connection error occurred", "severity": "ERROR", "source": "auth-service"},
+        {"message": "User login successful", "severity": "ERROR", "source": "api-service"},
+    ]
+
+    for i, log_data in enumerate(logs_data):
+        log = Log(
+            timestamp=now + timedelta(minutes=i),
+            severity=log_data["severity"],
+            source=log_data["source"],
+            message=log_data["message"]
+        )
+        test_db.add(log)
+    await test_db.commit()
+
+    # Export with search=error + severity=ERROR + source=api
+    response = await client.get("/api/export?search=error&severity=ERROR&source=api")
+    assert response.status_code == 200
+
+    # Parse CSV
+    rows = parse_csv_response(response.content)
+    assert len(rows) == 3  # header + 2 data rows
+
+    # Verify each row matches all criteria
+    for row in rows[1:]:
+        assert "error" in row[3].lower()  # message contains "error"
+        assert row[1] == "ERROR"  # severity is ERROR
+        assert "api" in row[2].lower()  # source contains "api"
