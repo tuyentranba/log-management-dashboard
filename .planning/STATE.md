@@ -2,23 +2,23 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 4
-current_plan: Not started
-status: planning
-last_updated: "2026-03-22T08:52:57.073Z"
+current_phase: 04.1
+current_plan: 01
+status: executing
+last_updated: "2026-03-23T06:51:28Z"
 progress:
   total_phases: 8
   completed_phases: 5
-  total_plans: 16
-  completed_plans: 16
+  total_plans: 17
+  completed_plans: 17
   percent: 100
 ---
 
 # Project State: Logs Dashboard
 
-**Last Updated:** 2026-03-22
-**Current Phase:** 4
-**Current Plan:** Not started
+**Last Updated:** 2026-03-23
+**Current Phase:** 04.1
+**Current Plan:** 01 (Complete)
 
 ## Project Reference
 
@@ -30,8 +30,8 @@ Phase 3 started! Wave 0 foundation complete - Jest and React Testing Library con
 
 ## Current Position
 
-**Phase:** 4 - Data Export
-**Plan:** Complete
+**Phase:** 04.1 - Add Search Logic in Backend
+**Plan:** 01 (Complete)
 **Status:** Phase complete
 
 **Progress:**
@@ -41,28 +41,30 @@ Phase 2: [████████████████████] 100% (3/
 Phase 3: [████████████████████] 100% (5/5 plans complete)
 Phase 3.1: [████████████████████] 100% (1/1 plans complete)
 Phase 4: [████████████████████] 100% (2/2 plans complete)
+Phase 4.1: [████████████████████] 100% (1/1 plans complete)
 Phase 5: [..................] 0% (0/? plans complete)
 Phase 6: [..................] 0% (0/? plans complete)
 Phase 7: [..................] 0% (0/? plans complete)
 ```
 
-**Overall:** 5/8 phases complete (62%)
+**Overall:** 6/8 phases complete (75%)
 
 ## Performance Metrics
 
 **Execution:**
-- Plans completed: 16
+- Plans completed: 17
 - Plans failed: 0
-- Phases completed: 5/8
+- Phases completed: 6/8
 
 **Estimates:**
-- Average time per plan: 669 seconds (11.2 minutes)
-- Velocity: 16 plans completed
+- Average time per plan: 656 seconds (10.9 minutes)
+- Velocity: 17 plans completed
 - Phase 1 progress: 5/5 plans (100%)
 - Phase 2 progress: 3/3 plans (100%)
 - Phase 3 progress: 5/5 plans (100%)
 - Phase 3.1 progress: 1/1 plans (100%)
 - Phase 4 progress: 2/2 plans (100%)
+- Phase 4.1 progress: 1/1 plans (100%)
 - Plan 01-01 duration: 239 seconds
 - Plan 01-02 duration: 183 seconds
 - Plan 01-03 duration: 332 seconds
@@ -79,6 +81,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Plan 03.1-01 duration: 530 seconds
 - Plan 04-01 duration: 315 seconds
 - Plan 04-02 duration: 144 seconds
+- Plan 04.1-01 duration: 170 seconds
 
 ## Accumulated Context
 
@@ -191,6 +194,14 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Client Component for interactivity, Server Component parent for SSR
 - Cleanup with revokeObjectURL prevents memory leaks
 
+**Message search implementation (Plan 04.1-01):**
+- Use SQLAlchemy ILIKE for case-insensitive partial matching (mirrors source filter pattern)
+- Pattern: `Log.message.ilike(f"%{search}%")` provides wildcard matching
+- Empty search strings are ignored (no filter applied)
+- Search parameter added to both list_logs and export_logs_csv endpoints for WYSIWYG consistency
+- Frontend exportLogs function includes search parameter maintaining WYSIWYG principle
+- ILIKE bypasses indexes but acceptable for MVP (documented in RESEARCH.md)
+
 **Roadmap structure:**
 - 7 phases derived from 55 v1 requirements
 - Fine granularity based on config.json setting
@@ -231,7 +242,10 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 03-03: Log Filtering and Sorting (Complete)
 - [x] Plan 03-04: Log Detail Modal and Create Form (Complete)
 - [x] Plan 03.1-01: UX Improvements for Log Filtering (Complete)
-- [ ] Phase 4: Log Filtering & Search (Next)
+- [x] Plan 04-01: Streaming CSV Export (Complete)
+- [x] Plan 04-02: Frontend Export Button (Complete)
+- [x] Plan 04.1-01: Add Search Logic in Backend (Complete)
+- [ ] Phase 5: Log Filtering & Search (Next)
 
 ### Active Blockers
 
@@ -355,23 +369,35 @@ None. Roadmap approved and ready for planning.
   - Export passes current filter state to backend (WYSIWYG principle)
   - Production build succeeds with no errors
 
+**2026-03-23:**
+- Completed Plan 04.1-01: Add Search Logic in Backend (3 tasks, 4 files, 3 commits, 170 seconds)
+  - Added 7 search integration tests for list endpoint (RED phase TDD)
+  - Implemented search parameter in list_logs and export_logs_csv endpoints using ILIKE pattern
+  - Added 2 export search tests verifying CSV export respects search filter
+  - Updated frontend exportLogs function to include search parameter (WYSIWYG principle)
+  - All 9 new tests pass (7 list + 2 export)
+  - Search is case-insensitive and performs partial matching on message field
+  - Empty search strings are ignored
+
 ## Session Continuity
 
 **What just happened:**
-Plan 04-02 (Frontend Export Button) executed successfully. Implemented frontend export functionality with Blob download pattern, loading states, and toast notifications. All 3 tasks completed, 3 files modified (1 created, 2 modified), 3 commits made. Production build succeeds. Execution time: 144 seconds (2m 24s). No deviations from plan. Phase 4 complete!
+Plan 04.1-01 (Add Search Logic in Backend) executed successfully. Implemented backend message search using ILIKE pattern matching. All 3 tasks completed using TDD approach (RED → GREEN phases). 4 files modified, 3 commits made. Added 9 new tests (7 list + 2 export), all passing. Execution time: 170 seconds (2m 50s). No deviations from plan. Phase 04.1 complete!
 
 **What's next:**
-Phase 5: Log Filtering & Search - Implement advanced filtering capabilities and full-text search functionality.
+Phase 5: Log Filtering & Search - Implement advanced filtering capabilities and full-text search functionality (if needed).
 
 **Context for next session:**
-- Phase 4 (Data Export) COMPLETE! Both backend streaming and frontend UI finished
-- Users can export filtered log data as CSV with proper loading states and feedback
-- Export button positioned in logs page header, passes current filter state to API
-- Blob + createObjectURL pattern handles file downloads with proper cleanup
-- Toast notifications provide success/error feedback
-- Export respects all filters: severity, source, date range, sort order (WYSIWYG)
-- CSV format: UTF-8 with BOM, Title Case headers, backend-generated filename pattern
-- Ready for Phase 5: Advanced filtering and search features
+- Phase 04.1 (Add Search Logic in Backend) COMPLETE! Backend search fully integrated
+- Users can now search logs by message content with case-insensitive partial matching
+- Search parameter works in both /api/logs and /api/export endpoints (WYSIWYG)
+- Frontend SearchInput (Phase 3) now connected to working backend search
+- Frontend ExportButton respects search filter (updated in this plan)
+- Search combines correctly with other filters: severity, source, date range
+- Empty search strings are ignored (returns all logs)
+- ILIKE pattern: `Log.message.ilike(f"%{search}%")` mirrors source filter approach
+- 9 new integration tests verify all search scenarios
+- Ready for Phase 5 or next urgent insertion
 
 ---
 *State tracking started: 2026-03-20*

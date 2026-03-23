@@ -12,7 +12,7 @@
 - [ ] **Phase 3: Log Management UI** - Frontend pages for log browsing, search, filter, detail views
 - [x] **Phase 03.1: UX Improvements** - Enhanced severity colors, loading states, source column (URGENT) (completed 2026-03-22)
 - [x] **Phase 4: Data Export** - CSV streaming export with filtering (completed 2026-03-22)
-- [ ] **Phase 04.1: Add search logic in backend** - Message search with ILIKE filtering (URGENT)
+- [x] **Phase 04.1: Add search logic in backend** - Message search with ILIKE filtering (URGENT) (completed 2026-03-23)
 - [ ] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
 - [ ] **Phase 7: Documentation** - README, design decisions, setup instructions
@@ -26,7 +26,7 @@
 | 3. Log Management UI | 4/5 | In Progress|  |
 | 03.1 UX Improvements | 1/1 | Complete   | 2026-03-22 |
 | 4. Data Export | 2/2 | Complete | 2026-03-22 |
-| 04.1 Add search logic | 0/1 | Not started | - |
+| 04.1 Add search logic | 1/1 | Complete | 2026-03-23 |
 | 5. Analytics Dashboard | 0/? | Not started | - |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
