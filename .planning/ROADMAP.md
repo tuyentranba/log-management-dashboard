@@ -27,7 +27,7 @@
 | 03.1 UX Improvements | 1/1 | Complete   | 2026-03-22 |
 | 4. Data Export | 2/2 | Complete | 2026-03-22 |
 | 04.1 Add search logic | 1/1 | Complete | 2026-03-23 |
-| 5. Analytics Dashboard | 0/? | Not started | - |
+| 5. Analytics Dashboard | 0/2 | Not started | - |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
@@ -187,15 +187,19 @@ Plans:
 
 **Success Criteria** (what must be TRUE):
 1. User can navigate to analytics dashboard and see summary statistics (total log count, counts by severity level)
-2. Dashboard displays time-series line chart showing log volume trends over selected time period
-3. Dashboard displays severity distribution histogram showing count of logs per severity level
-4. User can select date range filter and see charts update to show only logs within that range
-5. User can filter dashboard by severity or source and see charts reflect filtered data
+2. Dashboard displays time-series area chart showing log volume trends over selected time period with auto-adjusted granularity
+3. Dashboard displays severity distribution bar chart showing count of logs per severity level
+4. User can click severity bar and navigate to /logs with pre-selected severity filter
+5. User can select date range presets (Last hour, 6h, 24h, 7d, 30d) and see charts update
 6. Analytics queries require date range filter (API returns 400 error if date range missing)
-7. Time-series aggregations display consistent results regardless of user timezone (UTC-normalized)
+7. Time-series aggregations use UTC-normalized timestamps and display in local timezone
 8. Dashboard loads in under 2 seconds with 100k logs and 30-day date range
 
-**Plans:** TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Backend analytics endpoint with aggregation queries (3 tasks: schemas, router with date_trunc/GROUP BY, tests)
+- [ ] 05-02-PLAN.md — Frontend analytics dashboard with Recharts (3 tasks: types/API, page with chart components, navigation)
 
 ---
 
@@ -245,4 +249,4 @@ All v1 requirements mapped to phases. No orphaned requirements.
 
 ---
 *Roadmap created: 2026-03-20*
-*Last updated: 2026-03-23*
+*Last updated: 2026-03-25*
