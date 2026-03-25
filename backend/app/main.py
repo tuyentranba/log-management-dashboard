@@ -11,7 +11,7 @@ from sqlalchemy import text
 
 from .config import settings
 from .database import engine, AsyncSessionLocal
-from .routers import health, logs
+from .routers import health, logs, analytics
 
 
 # Configure logging
@@ -133,6 +133,7 @@ async def generic_exception_handler(
 
 
 # Include routers
+app.include_router(analytics.router, prefix="/api", tags=["analytics"])
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(logs.router, prefix="/api", tags=["logs"])
 
