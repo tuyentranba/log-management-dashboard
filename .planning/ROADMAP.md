@@ -14,7 +14,7 @@
 - [x] **Phase 4: Data Export** - CSV streaming export with filtering (completed 2026-03-22)
 - [x] **Phase 04.1: Add search logic in backend** - Message search with ILIKE filtering (URGENT) (completed 2026-03-23)
 - [x] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations (completed 2026-03-25)
-- [ ] **Phase 05.1: Analytics Dashboard UX Polish** - Spacing/padding refinement and visual time range filtering (URGENT)
+- [x] **Phase 05.1: Analytics Dashboard UX Polish** - Spacing/padding refinement and visual time range filtering (URGENT) (completed 2026-03-25)
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
 - [ ] **Phase 7: Documentation** - README, design decisions, setup instructions
 
@@ -29,7 +29,7 @@
 | 4. Data Export | 2/2 | Complete | 2026-03-22 |
 | 04.1 Add search logic | 1/1 | Complete | 2026-03-23 |
 | 5. Analytics Dashboard | 2/2 | Complete   | 2026-03-25 |
-| 05.1 Analytics UX Polish | 0/1 | Not started | - |
+| 05.1 Analytics UX Polish | 1/1 | Complete   | 2026-03-25 |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
@@ -223,7 +223,7 @@ Plans:
 7. Chart cards maintain 24px internal padding with consistent styling
 8. Overall layout feels balanced and professional following Tailwind's 8-point grid system
 
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 05.1-01-PLAN.md — Add spacing/padding and create TimeRangeFilter component (3 tasks)

@@ -5,12 +5,12 @@ milestone_name: milestone
 current_phase: 6
 current_plan: Not started
 status: planning
-last_updated: "2026-03-25T05:40:28.916Z"
+last_updated: "2026-03-25T07:59:07.901Z"
 progress:
-  total_phases: 9
-  completed_phases: 7
-  total_plans: 19
-  completed_plans: 19
+  total_phases: 10
+  completed_phases: 8
+  total_plans: 20
+  completed_plans: 20
   percent: 100
 ---
 
@@ -84,6 +84,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Plan 04.1-01 duration: 170 seconds
 - Plan 05-01 duration: 301 seconds
 - Plan 05-02 duration: 1168 seconds
+- Plan 05.1-01 duration: 209 seconds
 
 ## Accumulated Context
 
@@ -222,6 +223,14 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Click navigation from severity bar chart to /logs with pre-selected severity filter
 - Color tint backgrounds for severity stat cards (blue-50, yellow-50, orange-50, red-50)
 
+**Analytics dashboard UX polish (Plan 05.1-01):**
+- Segmented control for time range presets instead of dropdown for better discoverability
+- Inline custom date pickers expand below button group (no modal) for better UX
+- 8-point grid spacing system: 24px padding (p-6), 32px gaps (space-y-8), 16px stat gaps (gap-4)
+- Upgraded page title from text-2xl to text-3xl for stronger visual hierarchy
+- Removed Separator component in favor of consistent space-y-8 gaps for cleaner visual flow
+- nuqs URL state management for time range filters enables shareable links
+
 **Roadmap structure:**
 - 7 phases derived from 55 v1 requirements
 - Fine granularity based on config.json setting
@@ -268,6 +277,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 04.1-01: Add Search Logic in Backend (Complete)
 - [x] Plan 05-01: Backend Analytics API (Complete)
 - [x] Plan 05-02: Frontend Analytics Dashboard (Complete)
+- [x] Plan 05.1-01: Analytics Dashboard UX Polish (Complete)
 - [ ] Phase 6: Performance Optimization (Next)
 
 ### Active Blockers
@@ -405,28 +415,36 @@ None. Roadmap approved and ready for planning.
   - Registered analytics router in main.py at /api prefix with "analytics" tag
   - Added 12 integration tests following TDD RED-GREEN flow (11 pass, 1 skip)
   - Tests cover date validation, summary stats, time-series granularity, severity distribution, filtering
+- Completed Plan 05.1-01: Analytics Dashboard UX Polish (3 tasks, 3 files, 3 commits, 209 seconds)
+  - Created TimeRangeFilter component with 6 time range presets (1h, 6h, 24h, 7d, 30d, Custom)
+  - Implemented segmented button group with connected borders (iOS-style UI pattern)
+  - Added inline custom date pickers (datetime-local) that expand when Custom selected
+  - Integrated nuqs for URL state management (date_from/date_to parameters)
+  - Added 24px page padding (p-6) and 32px section gaps (space-y-8) to analytics page
+  - Upgraded page title from text-2xl to text-3xl for better hierarchy
+  - Integrated TimeRangeFilter in Card wrapper (p-6) above stat cards
+  - Removed Separator component for cleaner visual flow with space-y-8 gaps
 
 ## Session Continuity
 
 **What just happened:**
-Plan 05-02 (Frontend Analytics Dashboard) executed successfully. Created /analytics page with Recharts time-series area chart, severity distribution bar chart, and summary stat cards. All 3 tasks completed. 10 files created/modified (6 created, 4 modified), 3 commits made. Auto-fixed 2 deviations: added missing Card component (Rule 3 - Blocking) and fixed Next.js 15 async searchParams pattern (Rule 1 - Bug). Execution time: 1168 seconds (19m 28s).
+Plan 05.1-01 (Analytics Dashboard UX Polish) executed successfully. Created TimeRangeFilter component with segmented control and inline custom date pickers. Applied professional spacing throughout analytics page. All 3 tasks completed. 3 files created/modified (1 created, 2 modified), 3 commits made. No deviations. Execution time: 209 seconds (3m 29s).
 
 **What's next:**
 Phase 6: Performance Optimization - Implement caching, database query optimization, and frontend performance improvements.
 
 **Context for next session:**
-- Phase 05 (Analytics Dashboard) COMPLETE! Both backend API and frontend dashboard fully functional
-- /analytics page displays summary stats cards with Total + 4 severity counts (vibrant color tints)
-- Time-series area chart shows log volume over time with auto-adjusted X-axis formatting (hour/day/week)
-- Severity distribution bar chart displays colored bars with click-to-filter navigation to /logs
-- Analytics navigation link integrated into sidebar layout between Logs and Create
-- Server Component + Client Islands pattern: page fetches data on server, charts render on client
-- Recharts 2.15.4 installed for declarative chart visualization
-- Default 7-day date range when no URL params provided (subDays from date-fns)
-- Charts consume AnalyticsResponse from backend with auto-adjusted granularity
-- All UI-04 requirements satisfied
-- Production build succeeds with no errors
-- Phase 5 complete, ready for Phase 6 planning
+- Phase 05.1 (Analytics Dashboard UX Polish) COMPLETE! Professional visual polish and time range filtering implemented
+- TimeRangeFilter component displays 6 preset buttons in segmented control style
+- Custom date range option expands inline date pickers (datetime-local inputs) below button group
+- URL state management via nuqs enables shareable links with time range preserved
+- Analytics page has proper 24px padding (p-6) from viewport edges
+- Major sections separated by 32px gaps (space-y-8): header → filters → stats → charts
+- Stat cards have 16px gaps (gap-4), all Cards have 24px internal padding (p-6)
+- Page title upgraded to text-3xl for stronger visual hierarchy
+- Removed Separator component for consistent space-y-8 visual rhythm
+- All chart and stat card components maintain consistent Card structure
+- Phase 5.1 complete, ready for Phase 6 planning
 
 ---
 *State tracking started: 2026-03-20*
