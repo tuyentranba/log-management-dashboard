@@ -13,7 +13,7 @@
 - [x] **Phase 03.1: UX Improvements** - Enhanced severity colors, loading states, source column (URGENT) (completed 2026-03-22)
 - [x] **Phase 4: Data Export** - CSV streaming export with filtering (completed 2026-03-22)
 - [x] **Phase 04.1: Add search logic in backend** - Message search with ILIKE filtering (URGENT) (completed 2026-03-23)
-- [ ] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations
+- [x] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations (completed 2026-03-25)
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
 - [ ] **Phase 7: Documentation** - README, design decisions, setup instructions
 
@@ -27,7 +27,7 @@
 | 03.1 UX Improvements | 1/1 | Complete   | 2026-03-22 |
 | 4. Data Export | 2/2 | Complete | 2026-03-22 |
 | 04.1 Add search logic | 1/1 | Complete | 2026-03-23 |
-| 5. Analytics Dashboard | 1/2 | In Progress|  |
+| 5. Analytics Dashboard | 2/2 | Complete   | 2026-03-25 |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
@@ -195,7 +195,7 @@ Plans:
 7. Time-series aggregations use UTC-normalized timestamps and display in local timezone
 8. Dashboard loads in under 2 seconds with 100k logs and 30-day date range
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 05-01-PLAN.md — Backend analytics endpoint with aggregation queries (3 tasks: schemas, router with date_trunc/GROUP BY, tests)
