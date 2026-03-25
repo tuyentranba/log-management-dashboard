@@ -32,3 +32,37 @@ export interface LogFilters {
   sort?: 'timestamp' | 'severity' | 'source'
   order?: 'asc' | 'desc'
 }
+
+// Analytics Dashboard Types (mirror backend AnalyticsResponse schema)
+
+export interface AnalyticsFilters {
+  date_from: string  // ISO 8601 with timezone (REQUIRED)
+  date_to: string    // ISO 8601 with timezone (REQUIRED)
+  severity?: Severity[]
+  source?: string
+}
+
+export interface TimeSeriesDataPoint {
+  timestamp: string  // ISO 8601 with timezone from PostgreSQL date_trunc
+  count: number
+}
+
+export interface SeverityDistributionPoint {
+  severity: Severity
+  count: number
+}
+
+export interface AnalyticsResponse {
+  summary: {
+    total: number
+    by_severity: {
+      INFO: number
+      WARNING: number
+      ERROR: number
+      CRITICAL: number
+    }
+  }
+  time_series: TimeSeriesDataPoint[]
+  severity_distribution: SeverityDistributionPoint[]
+  granularity: 'hour' | 'day' | 'week'
+}

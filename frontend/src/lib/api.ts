@@ -1,4 +1,4 @@
-import { LogFilters, LogListResponse, LogResponse, LogCreate } from './types'
+import { LogFilters, LogListResponse, LogResponse, LogCreate, AnalyticsFilters, AnalyticsResponse } from './types'
 import { API_URL } from './constants'
 
 export async function fetchLogs(
@@ -109,4 +109,35 @@ export async function exportLogs(filters: LogFilters): Promise<void> {
   // Cleanup
   document.body.removeChild(link)
   URL.revokeObjectURL(downloadUrl)
+}
+
+export async function fetchAnalytics(
+  filters: AnalyticsFilters
+): Promise<AnalyticsResponse> {
+  const params = new URLSearchParams()
+
+  // Required parameters (enforced by backend - returns 400 if missing)
+  if (!filters.date_from || !filters.date_to) {
+    throw new Error('Date range is required for analytics')
+  }
+  params.append('date_from', filters.date_from)
+  params.append('date_to', filters.date_to)
+
+  // Optional parameters
+  if (filters.severity) {
+    filters.severity.forEach(s => params.append('severity', s))
+  }
+  if (filters.source) {
+    params.append('source', filters.source)
+  }
+
+  const url = `${API_URL}/api/analytics?${params}`
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }))
+    throw new Error(error.detail || `Failed to fetch analytics: ${response.status}`)
+  }
+
+  return response.json()
 }
