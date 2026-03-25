@@ -1,6 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { useQueryStates, parseAsString } from 'nuqs'
 import { AnalyticsResponse } from '@/lib/types'
+import { fetchAnalytics } from '@/lib/api'
 import { SummaryStats } from './summary-stats'
 import { TimeSeriesChart } from './time-series-chart'
 import { SeverityDistributionChart } from './severity-distribution-chart'
@@ -12,8 +15,36 @@ interface Props {
 }
 
 export function AnalyticsView({ initialData }: Props) {
-  // For Phase 5, we'll use initialData directly
-  // Future enhancement: add client-side filter state and refetching
+  const [data, setData] = useState<AnalyticsResponse>(initialData)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Read URL params for date range
+  const [{ date_from, date_to }] = useQueryStates({
+    date_from: parseAsString,
+    date_to: parseAsString
+  })
+
+  // Refetch data when date range changes
+  useEffect(() => {
+    if (!date_from || !date_to) return
+
+    const refetch = async () => {
+      setIsLoading(true)
+      try {
+        const newData = await fetchAnalytics({
+          date_from,
+          date_to
+        })
+        setData(newData)
+      } catch (error) {
+        console.error('Failed to fetch analytics:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    refetch()
+  }, [date_from, date_to])
 
   return (
     <div className="space-y-8">
@@ -23,18 +54,30 @@ export function AnalyticsView({ initialData }: Props) {
         {/* Future: Add severity and source dropdowns here */}
       </Card>
 
+      {/* Loading overlay */}
+      {isLoading && (
+        <div className="relative">
+          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-10 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+              <p className="text-sm text-muted-foreground">Updating charts...</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Summary stats cards */}
-      <SummaryStats data={initialData.summary} />
+      <SummaryStats data={data.summary} />
 
       {/* Charts grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <TimeSeriesChart
-          data={initialData.time_series}
-          granularity={initialData.granularity}
+          data={data.time_series}
+          granularity={data.granularity}
         />
         <SeverityDistributionChart
-          data={initialData.severity_distribution}
-          total={initialData.summary.total}
+          data={data.severity_distribution}
+          total={data.summary.total}
         />
       </div>
     </div>
