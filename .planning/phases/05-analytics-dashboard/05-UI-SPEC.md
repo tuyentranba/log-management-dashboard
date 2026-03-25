@@ -52,8 +52,8 @@ Exceptions: None
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 14px | 400 (regular) | 1.5 |
-| Label | 14px | 500 (medium) | 1.5 |
-| Heading | 28px | 600 (semibold) | 1.2 |
+| Label | 14px | 700 (bold) | 1.5 |
+| Heading | 28px | 700 (bold) | 1.2 |
 | Display (stat numbers) | 24px | 700 (bold) | 1.2 |
 
 **Source:** shadcn default typography scale, optimized for dashboard data density
