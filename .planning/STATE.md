@@ -245,6 +245,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 
 - Phase 03.1 inserted after Phase 3: Improve UX for log filtering - color severity tags, loading states, source display (URGENT)
 - Phase 04.1 inserted after Phase 4: Add search logic in backend (URGENT)
+- Phase 05.1 inserted after Phase 5: Re-design analytics dashboard with aggregated data filtering and trend charts in datalog-like style (URGENT)
 
 ### Current TODOs
 
