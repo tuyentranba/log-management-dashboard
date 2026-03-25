@@ -36,13 +36,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Analytics Dashboard
 
-- [ ] **ANALYTICS-01**: User can view analytics dashboard with aggregated log metrics
-- [ ] **ANALYTICS-02**: Dashboard displays summary statistics (total logs, counts by severity)
-- [ ] **ANALYTICS-03**: Dashboard displays chart showing log count trends over time
-- [ ] **ANALYTICS-04**: Dashboard displays histogram of log severity distribution
-- [ ] **ANALYTICS-05**: Dashboard filters work for date range, severity, and source
-- [ ] **ANALYTICS-06**: Analytics queries require date range filter (no unbounded COUNT queries)
-- [ ] **ANALYTICS-07**: Time-series aggregations use explicit timezone handling
+- [x] **ANALYTICS-01**: User can view analytics dashboard with aggregated log metrics
+- [x] **ANALYTICS-02**: Dashboard displays summary statistics (total logs, counts by severity)
+- [x] **ANALYTICS-03**: Dashboard displays chart showing log count trends over time
+- [x] **ANALYTICS-04**: Dashboard displays histogram of log severity distribution
+- [x] **ANALYTICS-05**: Dashboard filters work for date range, severity, and source
+- [x] **ANALYTICS-06**: Analytics queries require date range filter (no unbounded COUNT queries)
+- [x] **ANALYTICS-07**: Time-series aggregations use explicit timezone handling
 
 ### Data Export
 
@@ -186,13 +186,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXPORT-01 | Phase 4 | Complete |
 | EXPORT-02 | Phase 4 | Complete |
 | EXPORT-03 | Phase 4 | Complete |
-| ANALYTICS-01 | Phase 5 | Pending |
-| ANALYTICS-02 | Phase 5 | Pending |
-| ANALYTICS-03 | Phase 5 | Pending |
-| ANALYTICS-04 | Phase 5 | Pending |
-| ANALYTICS-05 | Phase 5 | Pending |
-| ANALYTICS-06 | Phase 5 | Pending |
-| ANALYTICS-07 | Phase 5 | Pending |
+| ANALYTICS-01 | Phase 5 | Complete |
+| ANALYTICS-02 | Phase 5 | Complete |
+| ANALYTICS-03 | Phase 5 | Complete |
+| ANALYTICS-04 | Phase 5 | Complete |
+| ANALYTICS-05 | Phase 5 | Complete |
+| ANALYTICS-06 | Phase 5 | Complete |
+| ANALYTICS-07 | Phase 5 | Complete |
 | UI-04 | Phase 5 | Pending |
 | TEST-01 | Phase 6 | Pending |
 | TEST-02 | Phase 6 | Pending |

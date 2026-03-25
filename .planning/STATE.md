@@ -3,22 +3,22 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 5
-current_plan: Not started
-status: planning
-last_updated: "2026-03-23T07:04:10.034Z"
+current_plan: 01
+status: executing
+last_updated: "2026-03-25T04:57:02Z"
 progress:
   total_phases: 9
   completed_phases: 6
-  total_plans: 17
-  completed_plans: 17
+  total_plans: 18
+  completed_plans: 18
   percent: 100
 ---
 
 # Project State: Logs Dashboard
 
-**Last Updated:** 2026-03-23
+**Last Updated:** 2026-03-25
 **Current Phase:** 5
-**Current Plan:** Not started
+**Current Plan:** 01 (Complete)
 
 ## Project Reference
 
@@ -30,9 +30,9 @@ Phase 3 started! Wave 0 foundation complete - Jest and React Testing Library con
 
 ## Current Position
 
-**Phase:** 04.1 - Add Search Logic in Backend
+**Phase:** 05 - Analytics Dashboard
 **Plan:** 01 (Complete)
-**Status:** Ready to plan
+**Status:** Ready to plan Wave 1
 
 **Progress:**
 [██████████] 100%
@@ -42,7 +42,7 @@ Phase 3: [████████████████████] 100% (5/
 Phase 3.1: [████████████████████] 100% (1/1 plans complete)
 Phase 4: [████████████████████] 100% (2/2 plans complete)
 Phase 4.1: [████████████████████] 100% (1/1 plans complete)
-Phase 5: [..................] 0% (0/? plans complete)
+Phase 5: [████████░░░░░░░░░░░░] 100% (1/? plans complete)
 Phase 6: [..................] 0% (0/? plans complete)
 Phase 7: [..................] 0% (0/? plans complete)
 ```
@@ -52,13 +52,13 @@ Phase 7: [..................] 0% (0/? plans complete)
 ## Performance Metrics
 
 **Execution:**
-- Plans completed: 17
+- Plans completed: 18
 - Plans failed: 0
 - Phases completed: 6/8
 
 **Estimates:**
-- Average time per plan: 656 seconds (10.9 minutes)
-- Velocity: 17 plans completed
+- Average time per plan: 636 seconds (10.6 minutes)
+- Velocity: 18 plans completed
 - Phase 1 progress: 5/5 plans (100%)
 - Phase 2 progress: 3/3 plans (100%)
 - Phase 3 progress: 5/5 plans (100%)
@@ -82,6 +82,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Plan 04-01 duration: 315 seconds
 - Plan 04-02 duration: 144 seconds
 - Plan 04.1-01 duration: 170 seconds
+- Plan 05-01 duration: 301 seconds
 
 ## Accumulated Context
 
@@ -202,6 +203,15 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Frontend exportLogs function includes search parameter maintaining WYSIWYG principle
 - ILIKE bypasses indexes but acceptable for MVP (documented in RESEARCH.md)
 
+**Backend analytics API (Plan 05-01):**
+- Use PostgreSQL date_trunc() for time bucketing (efficient, timezone-aware with timestamptz)
+- Auto-adjust granularity based on date range (hour <3d, day 3-30d, week >30d) for optimal chart readability
+- Require date_from/date_to parameters (enforce ANALYTICS-06, prevent unbounded COUNT queries)
+- Use conditional aggregation (COUNT FILTER) for summary stats (single query, atomic results)
+- Apply base_filters consistently across all queries (ensures data consistency between summary, time-series, and severity distribution)
+- Three-query pattern: summary stats (conditional COUNT), time-series (date_trunc + GROUP BY), severity distribution (GROUP BY severity)
+- Leverage Phase 1 composite index (timestamp, severity, source) for efficient filtered aggregations
+
 **Roadmap structure:**
 - 7 phases derived from 55 v1 requirements
 - Fine granularity based on config.json setting
@@ -245,7 +255,8 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 04-01: Streaming CSV Export (Complete)
 - [x] Plan 04-02: Frontend Export Button (Complete)
 - [x] Plan 04.1-01: Add Search Logic in Backend (Complete)
-- [ ] Phase 5: Log Filtering & Search (Next)
+- [x] Plan 05-01: Backend Analytics API (Complete)
+- [ ] Phase 5 Wave 1: Frontend Analytics Dashboard (Next)
 
 ### Active Blockers
 
@@ -371,33 +382,37 @@ None. Roadmap approved and ready for planning.
 
 **2026-03-23:**
 - Completed Plan 04.1-01: Add Search Logic in Backend (3 tasks, 4 files, 3 commits, 170 seconds)
-  - Added 7 search integration tests for list endpoint (RED phase TDD)
-  - Implemented search parameter in list_logs and export_logs_csv endpoints using ILIKE pattern
-  - Added 2 export search tests verifying CSV export respects search filter
-  - Updated frontend exportLogs function to include search parameter (WYSIWYG principle)
-  - All 9 new tests pass (7 list + 2 export)
-  - Search is case-insensitive and performs partial matching on message field
-  - Empty search strings are ignored
+
+**2026-03-25:**
+- Completed Plan 05-01: Backend Analytics API (3 tasks, 4 files, 4 commits, 301 seconds)
+  - Created analytics Pydantic schemas (TimeSeriesDataPoint, SeverityDistributionPoint, SummaryStats, AnalyticsResponse)
+  - Created analytics router with GET /api/analytics endpoint
+  - Implemented determine_granularity helper (hour <3d, day 3-30d, week >30d)
+  - Three aggregation queries: summary stats (COUNT FILTER), time-series (date_trunc), severity distribution (GROUP BY)
+  - Required date range validation (400 error if missing) enforces ANALYTICS-06
+  - Registered analytics router in main.py at /api prefix with "analytics" tag
+  - Added 12 integration tests following TDD RED-GREEN flow (11 pass, 1 skip)
+  - Tests cover date validation, summary stats, time-series granularity, severity distribution, filtering
 
 ## Session Continuity
 
 **What just happened:**
-Plan 04.1-01 (Add Search Logic in Backend) executed successfully. Implemented backend message search using ILIKE pattern matching. All 3 tasks completed using TDD approach (RED → GREEN phases). 4 files modified, 3 commits made. Added 9 new tests (7 list + 2 export), all passing. Execution time: 170 seconds (2m 50s). No deviations from plan. Phase 04.1 complete!
+Plan 05-01 (Backend Analytics API) executed successfully. Created GET /api/analytics endpoint with PostgreSQL date_trunc aggregations, auto-adjusted time granularity, and required date range validation. All 3 tasks completed using TDD approach (RED → GREEN phases). 4 files created/modified, 4 commits made. Added 12 integration tests (11 passing, 1 skipped). Execution time: 301 seconds (5m 1s). No deviations from plan.
 
 **What's next:**
-Phase 5: Log Filtering & Search - Implement advanced filtering capabilities and full-text search functionality (if needed).
+Phase 5 Wave 1: Frontend Analytics Dashboard - Create /analytics page with Recharts time-series and severity distribution charts, summary stat cards, date range filter UI, and integration with backend endpoint.
 
 **Context for next session:**
-- Phase 04.1 (Add Search Logic in Backend) COMPLETE! Backend search fully integrated
-- Users can now search logs by message content with case-insensitive partial matching
-- Search parameter works in both /api/logs and /api/export endpoints (WYSIWYG)
-- Frontend SearchInput (Phase 3) now connected to working backend search
-- Frontend ExportButton respects search filter (updated in this plan)
-- Search combines correctly with other filters: severity, source, date range
-- Empty search strings are ignored (returns all logs)
-- ILIKE pattern: `Log.message.ilike(f"%{search}%")` mirrors source filter approach
-- 9 new integration tests verify all search scenarios
-- Ready for Phase 5 or next urgent insertion
+- Phase 05-01 (Backend Analytics API) COMPLETE! Analytics aggregation endpoint fully functional
+- GET /api/analytics endpoint enforces date range requirement (ANALYTICS-06: no unbounded COUNTs)
+- Returns AnalyticsResponse with summary (total + by_severity), time_series (date_trunc buckets), severity_distribution (GROUP BY severity), and granularity (hour/day/week)
+- Auto-adjusted time granularity: hourly for <3 days, daily for 3-30 days, weekly for >30 days
+- Supports optional filtering by severity (multi-select) and source (case-insensitive)
+- Three-query pattern: conditional aggregation (COUNT FILTER), date_trunc (time-series), GROUP BY (severity distribution)
+- Base filters applied consistently across all queries for data consistency
+- 11 integration tests cover all ANALYTICS-* requirements (date validation, summary stats, time-series, severity distribution, filtering)
+- Leverages Phase 1 composite index (timestamp, severity, source) for efficient aggregations
+- Ready for frontend analytics dashboard implementation (Recharts charts + date range filter UI)
 
 ---
 *State tracking started: 2026-03-20*

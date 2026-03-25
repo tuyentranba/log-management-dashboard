@@ -27,7 +27,7 @@
 | 03.1 UX Improvements | 1/1 | Complete   | 2026-03-22 |
 | 4. Data Export | 2/2 | Complete | 2026-03-22 |
 | 04.1 Add search logic | 1/1 | Complete | 2026-03-23 |
-| 5. Analytics Dashboard | 0/2 | Not started | - |
+| 5. Analytics Dashboard | 1/2 | In Progress|  |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
@@ -195,7 +195,7 @@ Plans:
 7. Time-series aggregations use UTC-normalized timestamps and display in local timezone
 8. Dashboard loads in under 2 seconds with 100k logs and 30-day date range
 
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 05-01-PLAN.md — Backend analytics endpoint with aggregation queries (3 tasks: schemas, router with date_trunc/GROUP BY, tests)
