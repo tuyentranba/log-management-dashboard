@@ -26,7 +26,11 @@ export function AnalyticsView({ initialData }: Props) {
 
   // Refetch data when date range changes
   useEffect(() => {
+    // Only refetch if URL params exist (user clicked a filter)
+    // Skip if params are missing (initial load uses initialData)
     if (!date_from || !date_to) return
+
+    console.log('[AnalyticsView] Refetching with:', { date_from, date_to })
 
     const refetch = async () => {
       setIsLoading(true)
@@ -35,9 +39,13 @@ export function AnalyticsView({ initialData }: Props) {
           date_from,
           date_to
         })
+        console.log('[AnalyticsView] Received data:', {
+          total: newData.summary.total,
+          timeSeriesPoints: newData.time_series.length
+        })
         setData(newData)
       } catch (error) {
-        console.error('Failed to fetch analytics:', error)
+        console.error('[AnalyticsView] Failed to fetch analytics:', error)
       } finally {
         setIsLoading(false)
       }

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 
 const TIME_RANGES = [
   { label: 'Last hour', value: '1h', fn: () => subHours(new Date(), 1) },
@@ -88,6 +89,12 @@ export function TimeRangeFilter() {
       const from = preset.fn()
       const to = new Date()
 
+      console.log('[TimeRangeFilter] Setting query:', {
+        preset: preset.value,
+        date_from: from.toISOString(),
+        date_to: to.toISOString()
+      })
+
       setQuery({
         date_from: from.toISOString(),
         date_to: to.toISOString()
@@ -97,7 +104,10 @@ export function TimeRangeFilter() {
   }
 
   const handleApplyCustom = () => {
+    console.log('[TimeRangeFilter] Applying custom range:', { customFrom, customTo })
+
     if (!customFrom || !customTo) {
+      toast.error('Please select both start and end dates')
       return
     }
 
@@ -105,17 +115,26 @@ export function TimeRangeFilter() {
     const toDate = new Date(customTo)
 
     if (!isValid(fromDate) || !isValid(toDate)) {
+      toast.error('Invalid date format')
       return
     }
 
     if (fromDate >= toDate) {
+      toast.error('Start date must be before end date')
       return
     }
+
+    console.log('[TimeRangeFilter] Setting custom query:', {
+      date_from: fromDate.toISOString(),
+      date_to: toDate.toISOString()
+    })
 
     setQuery({
       date_from: fromDate.toISOString(),
       date_to: toDate.toISOString()
     })
+
+    toast.success('Custom date range applied')
   }
 
   return (
