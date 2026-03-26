@@ -36,12 +36,6 @@ export default function RootLayout({
                 >
                   Analytics
                 </Link>
-                <Link
-                  href="/create"
-                  className="block px-4 py-2 rounded hover:bg-slate-200 transition-colors"
-                >
-                  Create Log
-                </Link>
               </nav>
             </aside>
 
