@@ -9,11 +9,17 @@ import { useLogFilters } from '@/hooks/use-log-filters'
 
 interface LogListProps {
   initialData: LogListResponse
+  onRefetch?: (refetch: () => void) => void
 }
 
-export function LogList({ initialData }: LogListProps) {
+export function LogList({ initialData, onRefetch }: LogListProps) {
   const [filters, setFilters] = useLogFilters()
   const { logs, hasMore, isLoading, loadMore, refetch } = useInfiniteScroll(initialData)
+
+  // Expose refetch function to parent
+  if (onRefetch) {
+    onRefetch(refetch)
+  }
 
   if (logs.length === 0 && !isLoading) {
     return (

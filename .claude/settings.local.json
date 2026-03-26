@@ -158,7 +158,16 @@
       "Bash(then echo \"✓ FOUND: 0dce15c (feat commit)\")",
       "Bash(else echo \"✗ MISSING: 0dce15c\")",
       "Bash(fi echo \"\" echo \"=== Self-Check Result: PASSED ===\")",
-      "Bash(if [ -f \".planning/phases/05.1.1-add-chart-drill-down-with-brush-selection-click-and-drag-time-ranges-on-log-volume-chart-to-filter-logs-page/05.1.1-02-SUMMARY.md\" ])"
+      "Bash(if [ -f \".planning/phases/05.1.1-add-chart-drill-down-with-brush-selection-click-and-drag-time-ranges-on-log-volume-chart-to-filter-logs-page/05.1.1-02-SUMMARY.md\" ])",
+      "SlashCommand(/gsd:insert-phase 5.1 Implement Update and Delete CRUD operations - add PUT/PATCH and DELETE endpoints for logs with frontend detail page featuring edit and delete functionality)",
+      "Bash([ -f \"/Users/tuyen.tranba/Documents/Code/logs-dashboard/backend/tests/test_logs_crud.py\" ])",
+      "Bash([ -f \"/Users/tuyen.tranba/Documents/Code/logs-dashboard/frontend/src/app/logs/_components/edit-form.tsx\" ])",
+      "Bash(timeout 60 npm run build:*)",
+      "Bash(__NEW_LINE__ ls -la)",
+      "Bash(env)",
+      "Bash(! test -d /Users/tuyen.tranba/Documents/Code/logs-dashboard/frontend/src/app/create)",
+      "Bash(! grep -q 'href=\"\"/create\"\"' /Users/tuyen.tranba/Documents/Code/logs-dashboard/frontend/src/app/layout.tsx)",
+      "Bash(then echo '✗ FAILED marker found' else echo '✓ No FAILED marker' fi)"
     ],
     "deny": [],
     "ask": []

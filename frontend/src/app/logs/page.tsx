@@ -1,10 +1,7 @@
 import { Suspense } from 'react'
-import { LogList } from './_components/log-list'
+import { LogsPageContent } from './_components/logs-page-content'
 import { LogFilters as LogFiltersComponent } from './_components/log-filters'
 import { SkeletonRows } from './_components/skeleton-rows'
-import { ExportButton } from './_components/export-button'
-import { CreateButton } from './_components/create-button'
-import { CreateLogModal } from './_components/create-log-modal'
 import { fetchLogs } from '@/lib/api'
 import { LogFilters, Severity } from '@/lib/types'
 
@@ -38,24 +35,8 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
       {/* Filter Sidebar */}
       <LogFiltersComponent />
 
-      {/* Main Content */}
-      <div className="flex-1 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-semibold">Logs</h1>
-          <div className="flex gap-2">
-            <CreateButton />
-            <ExportButton />
-          </div>
-        </div>
-
-        <Suspense fallback={<SkeletonRows count={10} />}>
-          {/* LogList reads filters directly from URL, only needs initial data */}
-          <LogList initialData={initialData} />
-        </Suspense>
-
-        {/* Create Log Modal */}
-        <CreateLogModal />
-      </div>
+      {/* Main Content - Client component handles refetch coordination */}
+      <LogsPageContent initialData={initialData} />
     </div>
   )
 }

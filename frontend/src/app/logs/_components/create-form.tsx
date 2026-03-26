@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { LogCreate, Severity } from '@/lib/types'
 import { SEVERITY_OPTIONS } from '@/lib/constants'
 import { createLog } from '@/lib/api'
+import { toDatetimeLocalString } from '@/lib/date-utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -31,10 +32,11 @@ interface CreateFormProps {
 
 export function CreateForm({ onSuccess, onCancel }: CreateFormProps = {}) {
   const router = useRouter()
+
   const form = useForm<LogCreate>({
     resolver: zodResolver(logCreateSchema),
     defaultValues: {
-      timestamp: new Date().toISOString(),
+      timestamp: toDatetimeLocalString(),
       message: '',
       severity: 'INFO' as Severity,
       source: '',

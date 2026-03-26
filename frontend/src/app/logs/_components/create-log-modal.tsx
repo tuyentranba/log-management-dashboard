@@ -4,11 +4,16 @@ import { useQueryState, parseAsBoolean } from 'nuqs'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { CreateForm } from './create-form'
 
-export function CreateLogModal() {
+interface CreateLogModalProps {
+  onRefetch: () => void
+}
+
+export function CreateLogModal({ onRefetch }: CreateLogModalProps) {
   const [isCreating, setIsCreating] = useQueryState('create', parseAsBoolean)
 
   const handleCreateSuccess = () => {
-    setIsCreating(false)  // Close modal - LogList auto-refreshes on URL change
+    setIsCreating(false)  // Close modal
+    onRefetch()  // Refresh log list
   }
 
   return (

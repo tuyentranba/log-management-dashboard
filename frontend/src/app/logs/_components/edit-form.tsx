@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { LogCreate, LogResponse, Severity } from '@/lib/types'
 import { SEVERITY_OPTIONS } from '@/lib/constants'
 import { updateLog } from '@/lib/api'
+import { toDatetimeLocalString } from '@/lib/date-utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -30,21 +31,10 @@ interface EditFormProps {
 }
 
 export function EditForm({ log, onSuccess, onCancel }: EditFormProps) {
-  // Convert ISO timestamp to datetime-local format in user's local timezone
-  // datetime-local expects: YYYY-MM-DDTHH:mm:ss (no timezone, interpreted as local)
-  const date = new Date(log.timestamp)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  const hours = String(date.getHours()).padStart(2, '0')
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-  const seconds = String(date.getSeconds()).padStart(2, '0')
-  const timestampLocal = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
-
   const form = useForm<LogCreate>({
     resolver: zodResolver(logCreateSchema),
     defaultValues: {
-      timestamp: timestampLocal,
+      timestamp: toDatetimeLocalString(new Date(log.timestamp)),
       message: log.message,
       severity: log.severity,
       source: log.source,
