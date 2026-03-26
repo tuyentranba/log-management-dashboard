@@ -263,6 +263,50 @@ async def get_log(
     return log
 
 
+@router.put("/logs/{log_id}", response_model=LogResponse)
+async def update_log(
+    log_id: int,
+    log_data: LogCreate,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Update an existing log entry with full replacement.
+
+    Args:
+        log_id: Log primary key from URL path
+        log_data: Complete log data (all fields required)
+        db: Database session (injected)
+
+    Returns:
+        Updated log object with all fields
+
+    Raises:
+        404: Log with given id does not exist
+        422: Validation error (invalid timestamp, severity, etc.)
+    """
+    # Query database by primary key
+    log = await db.get(Log, log_id)
+
+    # Return 404 if not found
+    if not log:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Log with id {log_id} not found"
+        )
+
+    # Update all fields (full replacement per CONTEXT.md decision 3)
+    log.timestamp = log_data.timestamp
+    log.message = log_data.message
+    log.severity = log_data.severity
+    log.source = log_data.source
+
+    # Persist changes
+    await db.commit()
+    await db.refresh(log)
+
+    return log
+
+
 @router.get("/export")
 async def export_logs_csv(
     # Same filter parameters as list_logs
