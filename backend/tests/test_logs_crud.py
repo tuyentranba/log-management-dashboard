@@ -266,3 +266,109 @@ async def test_get_log_timezone_preserved(client: AsyncClient):
     data = response.json()
     # Timestamp should have timezone indicator (Z or offset)
     assert "Z" in data["timestamp"] or "+" in data["timestamp"] or "-" in data["timestamp"]
+
+
+# ==================== UPDATE TESTS ====================
+
+@pytest.mark.asyncio
+async def test_update_log_success(client, test_db):
+    """Test successful log update with all fields changed."""
+    # Create initial log
+    create_data = {
+        "timestamp": "2024-03-20T10:00:00Z",
+        "message": "Original message",
+        "severity": "INFO",
+        "source": "original-service"
+    }
+    create_response = await client.post("/api/logs", json=create_data)
+    assert create_response.status_code == 201
+    log_id = create_response.json()["id"]
+
+    # Update log
+    update_data = {
+        "timestamp": "2024-03-21T15:30:00Z",
+        "message": "Updated message",
+        "severity": "ERROR",
+        "source": "updated-service"
+    }
+    response = await client.put(f"/api/logs/{log_id}", json=update_data)
+
+    # Verify response
+    assert response.status_code == 200
+    updated = response.json()
+    assert updated["id"] == log_id
+    assert updated["timestamp"] == "2024-03-21T15:30:00+00:00"
+    assert updated["message"] == "Updated message"
+    assert updated["severity"] == "ERROR"
+    assert updated["source"] == "updated-service"
+
+
+@pytest.mark.asyncio
+async def test_update_log_not_found(client):
+    """Test update with non-existent log ID returns 404."""
+    update_data = {
+        "timestamp": "2024-03-20T10:00:00Z",
+        "message": "Test message",
+        "severity": "INFO",
+        "source": "test-service"
+    }
+    response = await client.put("/api/logs/99999", json=update_data)
+
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_update_log_invalid_severity(client, test_db):
+    """Test update with invalid severity returns 422."""
+    # Create log first
+    create_data = {
+        "timestamp": "2024-03-20T10:00:00Z",
+        "message": "Test",
+        "severity": "INFO",
+        "source": "test"
+    }
+    create_response = await client.post("/api/logs", json=create_data)
+    log_id = create_response.json()["id"]
+
+    # Attempt update with invalid severity
+    update_data = {
+        "timestamp": "2024-03-20T10:00:00Z",
+        "message": "Test",
+        "severity": "INVALID",
+        "source": "test"
+    }
+    response = await client.put(f"/api/logs/{log_id}", json=update_data)
+
+    assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_update_log_persisted(client, test_db):
+    """Test updated log values persist in database."""
+    # Create log
+    create_data = {
+        "timestamp": "2024-03-20T10:00:00Z",
+        "message": "Original",
+        "severity": "INFO",
+        "source": "orig"
+    }
+    create_response = await client.post("/api/logs", json=create_data)
+    log_id = create_response.json()["id"]
+
+    # Update log
+    update_data = {
+        "timestamp": "2024-03-21T12:00:00Z",
+        "message": "Persisted",
+        "severity": "WARNING",
+        "source": "pers"
+    }
+    await client.put(f"/api/logs/{log_id}", json=update_data)
+
+    # Verify via GET
+    get_response = await client.get(f"/api/logs/{log_id}")
+    assert get_response.status_code == 200
+    log = get_response.json()
+    assert log["message"] == "Persisted"
+    assert log["severity"] == "WARNING"
+    assert log["source"] == "pers"
