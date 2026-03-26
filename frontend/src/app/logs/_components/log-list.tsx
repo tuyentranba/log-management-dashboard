@@ -13,7 +13,7 @@ interface LogListProps {
 
 export function LogList({ initialData }: LogListProps) {
   const [filters, setFilters] = useLogFilters()
-  const { logs, hasMore, isLoading, loadMore } = useInfiniteScroll(initialData)
+  const { logs, hasMore, isLoading, loadMore, refetch } = useInfiniteScroll(initialData)
 
   if (logs.length === 0 && !isLoading) {
     return (
@@ -68,6 +68,7 @@ export function LogList({ initialData }: LogListProps) {
           isLoading={isLoading}
           sort={filters.sort || 'timestamp'}
           order={filters.order || 'desc'}
+          onRefetch={refetch}
         />
 
         {/* Loading overlay - shown during filter updates */}

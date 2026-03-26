@@ -111,5 +111,35 @@ export function useInfiniteScroll(initialData: LogListResponse) {
     }
   }, [cursor, hasMore, isLoading, filters])
 
-  return { logs, hasMore, isLoading, loadMore }
+  const refetch = useCallback(async () => {
+    console.log('[useInfiniteScroll] Manual refetch triggered')
+    setIsLoading(true)
+    const startTime = Date.now()
+
+    try {
+      const apiFilters = convertFiltersForAPI(filters)
+      console.log('[useInfiniteScroll] Fetching with filters:', apiFilters)
+
+      // Fetch data and ensure minimum 500ms loading display
+      const [response] = await Promise.all([
+        fetchLogs(apiFilters, null, 50),
+        new Promise(resolve => setTimeout(resolve, 500))
+      ])
+
+      console.log('[useInfiniteScroll] Received', response.data.length, 'logs')
+      setLogs(response.data)
+      setCursor(response.next_cursor)
+      setHasMore(response.has_more)
+    } catch (error) {
+      console.error('[useInfiniteScroll] Failed to refetch logs:', error)
+      const elapsed = Date.now() - startTime
+      if (elapsed < 500) {
+        await new Promise(resolve => setTimeout(resolve, 500 - elapsed))
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }, [filters])
+
+  return { logs, hasMore, isLoading, loadMore, refetch }
 }

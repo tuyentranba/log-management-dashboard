@@ -30,10 +30,21 @@ interface EditFormProps {
 }
 
 export function EditForm({ log, onSuccess, onCancel }: EditFormProps) {
+  // Convert ISO timestamp to datetime-local format in user's local timezone
+  // datetime-local expects: YYYY-MM-DDTHH:mm:ss (no timezone, interpreted as local)
+  const date = new Date(log.timestamp)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+  const timestampLocal = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+
   const form = useForm<LogCreate>({
     resolver: zodResolver(logCreateSchema),
     defaultValues: {
-      timestamp: log.timestamp,
+      timestamp: timestampLocal,
       message: log.message,
       severity: log.severity,
       source: log.source,

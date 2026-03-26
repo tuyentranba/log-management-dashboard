@@ -12,7 +12,11 @@ import { format } from 'date-fns'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 
-export function LogDetailModal() {
+interface LogDetailModalProps {
+  onRefetch: () => void
+}
+
+export function LogDetailModal({ onRefetch }: LogDetailModalProps) {
   const [selectedLogId, setSelectedLogId] = useQueryState('log')
   const [log, setLog] = useState<LogResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -52,7 +56,8 @@ export function LogDetailModal() {
 
   const handleUpdateSuccess = () => {
     toast.success('Log updated successfully')
-    setSelectedLogId(null)  // Close modal, triggers list refresh
+    setSelectedLogId(null)  // Close modal
+    onRefetch()  // Trigger list refresh
   }
 
   const handleDeleteClick = async () => {
@@ -69,7 +74,8 @@ export function LogDetailModal() {
     try {
       await deleteLog(log.id)
       toast.success('Log deleted successfully')
-      setSelectedLogId(null)  // Close modal, triggers list refresh
+      setSelectedLogId(null)  // Close modal
+      onRefetch()  // Trigger list refresh
     } catch (error) {
       toast.error('Failed to delete log. Please try again.')
       console.error('Delete log error:', error)

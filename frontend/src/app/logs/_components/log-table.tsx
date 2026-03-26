@@ -16,9 +16,10 @@ interface LogTableProps {
   isLoading: boolean
   sort: string
   order: string
+  onRefetch: () => void
 }
 
-export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order }: LogTableProps) {
+export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order, onRefetch }: LogTableProps) {
   const parentRef = useRef<HTMLDivElement>(null)
   const [, setSort] = useQueryStates({
     sort: parseAsString,
@@ -127,7 +128,7 @@ export function LogTable({ logs, onLoadMore, hasMore, isLoading, sort, order }: 
           })}
         </div>
       </div>
-      <LogDetailModal />
+      <LogDetailModal onRefetch={onRefetch} />
     </div>
   )
 }
