@@ -374,3 +374,61 @@ async def test_update_log_persisted(client, test_db):
     assert log["message"] == "Persisted"
     assert log["severity"] == "WARNING"
     assert log["source"] == "pers"
+
+
+# ==================== DELETE TESTS ====================
+
+@pytest.mark.asyncio
+async def test_delete_log_success(client, test_db):
+    """Test successful log deletion returns 204."""
+    # Create log
+    create_data = {
+        "timestamp": "2024-03-20T10:00:00Z",
+        "message": "To be deleted",
+        "severity": "INFO",
+        "source": "test"
+    }
+    create_response = await client.post("/api/logs", json=create_data)
+    log_id = create_response.json()["id"]
+
+    # Delete log
+    response = await client.delete(f"/api/logs/{log_id}")
+
+    # Verify 204 response
+    assert response.status_code == 204
+    assert response.text == ""  # No content
+
+
+@pytest.mark.asyncio
+async def test_delete_log_not_found(client):
+    """Test delete with non-existent log ID returns 404."""
+    response = await client.delete("/api/logs/99999")
+
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_delete_log_verify_removed(client, test_db):
+    """Test deleted log is actually removed from database."""
+    # Create log
+    create_data = {
+        "timestamp": "2024-03-20T10:00:00Z",
+        "message": "Delete me",
+        "severity": "INFO",
+        "source": "test"
+    }
+    create_response = await client.post("/api/logs", json=create_data)
+    log_id = create_response.json()["id"]
+
+    # Verify log exists
+    get_before = await client.get(f"/api/logs/{log_id}")
+    assert get_before.status_code == 200
+
+    # Delete log
+    delete_response = await client.delete(f"/api/logs/{log_id}")
+    assert delete_response.status_code == 204
+
+    # Verify log no longer exists
+    get_after = await client.get(f"/api/logs/{log_id}")
+    assert get_after.status_code == 404
