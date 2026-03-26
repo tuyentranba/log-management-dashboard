@@ -307,6 +307,42 @@ async def update_log(
     return log
 
 
+@router.delete("/logs/{log_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_log(
+    log_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Delete a log entry permanently.
+
+    Args:
+        log_id: Log primary key from URL path
+        db: Database session (injected)
+
+    Returns:
+        204 No Content on successful deletion
+
+    Raises:
+        404: Log with given id does not exist
+    """
+    # Query database by primary key
+    log = await db.get(Log, log_id)
+
+    # Return 404 if not found
+    if not log:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Log with id {log_id} not found"
+        )
+
+    # Delete from database (hard delete per CONTEXT.md decision 4)
+    await db.delete(log)
+    await db.commit()
+
+    # 204 No Content - no response body needed
+    return None
+
+
 @router.get("/export")
 async def export_logs_csv(
     # Same filter parameters as list_logs
