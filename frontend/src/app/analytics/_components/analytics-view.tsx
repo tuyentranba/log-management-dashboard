@@ -32,10 +32,12 @@ export function AnalyticsView({ initialData }: Props) {
 
     console.log('[AnalyticsView] Refetching with:', { date_from, date_to })
 
+    // Show loading immediately for better UX
+    setIsLoading(true)
+
     // Add slight delay to batch rapid clicks
     const timeoutId = setTimeout(() => {
       const refetch = async () => {
-        setIsLoading(true)
         try {
           const newData = await fetchAnalytics({
             date_from,
@@ -57,7 +59,10 @@ export function AnalyticsView({ initialData }: Props) {
     }, 300) // 300ms debounce
 
     // Cleanup timeout on unmount or param change
-    return () => clearTimeout(timeoutId)
+    return () => {
+      clearTimeout(timeoutId)
+      setIsLoading(false)
+    }
   }, [date_from, date_to])
 
   return (
