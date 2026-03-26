@@ -63,6 +63,44 @@ export async function createLog(data: LogCreate): Promise<LogResponse> {
   return response.json()
 }
 
+export async function updateLog(id: number, data: LogCreate): Promise<LogResponse> {
+  const url = `${API_URL}/api/logs/${id}`
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }))
+    if (response.status === 404) {
+      throw new Error('Log not found')
+    }
+    throw new Error(error.detail || `Failed to update log: ${response.status}`)
+  }
+
+  return response.json()
+}
+
+export async function deleteLog(id: number): Promise<void> {
+  const url = `${API_URL}/api/logs/${id}`
+  const response = await fetch(url, {
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Unknown error' }))
+    if (response.status === 404) {
+      throw new Error('Log not found')
+    }
+    throw new Error(error.detail || `Failed to delete log: ${response.status}`)
+  }
+
+  // DELETE returns 204 No Content, no response body to parse
+}
+
 export async function exportLogs(filters: LogFilters): Promise<void> {
   const params = new URLSearchParams()
 
