@@ -15,7 +15,8 @@
 - [x] **Phase 04.1: Add search logic in backend** - Message search with ILIKE filtering (URGENT) (completed 2026-03-23)
 - [x] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations (completed 2026-03-25)
 - [x] **Phase 05.1: Analytics Dashboard UX Polish** - Spacing/padding refinement and visual time range filtering (URGENT) (completed 2026-03-25)
-- [ ] **Phase 05.2: Update and Delete CRUD Operations** - PUT/DELETE endpoints with frontend edit/delete UI (URGENT)
+- [x] **Phase 05.2: Update and Delete CRUD Operations** - PUT/DELETE endpoints with frontend edit/delete UI (URGENT) (completed 2026-03-26)
+- [ ] **Phase 05.3: Migrate Create to Modal** - Modal-based create form matching edit/delete pattern (URGENT)
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
 - [ ] **Phase 7: Documentation** - README, design decisions, setup instructions
 
@@ -32,6 +33,7 @@
 | 5. Analytics Dashboard | 2/2 | Complete   | 2026-03-25 |
 | 05.1 Analytics UX Polish | 1/1 | Complete   | 2026-03-25 |
 | 05.2 Update/Delete CRUD | 2/2 | Complete   | 2026-03-26 |
+| 05.3 Migrate Create Modal | 0/1 | Not started | - |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
@@ -262,13 +264,28 @@ Plans:
 
 ### Phase 05.3: Migrate create log form to modal design matching edit/delete pattern (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Requirements**: TBD
-**Depends on:** Phase 5.1.1
-**Plans:** 0 plans
+**Goal:** Move create log form from standalone /create page to modal accessible from /logs header, matching edit/delete modal UX pattern
+
+**Depends on:** Phase 05.2 (requires modal pattern established)
+
+**Requirements:** None (urgent UX consolidation - no formal requirement IDs)
+
+**Success Criteria** (what must be TRUE):
+1. User can click "+ Create Log" button in logs page header to open create modal
+2. Create modal displays CreateForm with all fields (timestamp, message, severity, source)
+3. User can close modal via outside click or Escape without warning
+4. Successful creation closes modal, shows toast, and refreshes log list
+5. /create route returns 404 (completely removed)
+6. Sidebar navigation has no Create Log link
+7. Create operation preserves log list filter state (no page reload)
+8. Modal follows Phase 05.2 pattern (Dialog component, URL state, toast notifications)
+
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 05.2.1 to break down)
+- [ ] 05.3-01-PLAN.md — Adapt CreateForm, add modal to logs page, remove /create route (3 tasks)
+
+---
 
 ### Phase 6: Testing
 **Goal:** Comprehensive test coverage validates correctness and performance of backend logic, API endpoints, and database queries
