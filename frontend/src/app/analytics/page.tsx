@@ -3,8 +3,47 @@ import { AnalyticsView } from './_components/analytics-view'
 import { fetchAnalytics } from '@/lib/api'
 import { AnalyticsFilters } from '@/lib/types'
 import { subDays } from 'date-fns'
+import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const dynamic = 'force-dynamic'  // Prevent build-time API calls
+
+function AnalyticsLoadingSkeleton() {
+  return (
+    <div className="space-y-8">
+      {/* Filter skeleton */}
+      <Card className="p-6">
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Skeleton key={i} className="h-10 w-32" />
+          ))}
+        </div>
+      </Card>
+
+      {/* Stats skeleton */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Card key={i} className="p-6">
+            <Skeleton className="h-4 w-20 mb-2" />
+            <Skeleton className="h-8 w-16" />
+          </Card>
+        ))}
+      </div>
+
+      {/* Charts skeleton */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <Skeleton className="h-6 w-48 mb-4" />
+          <Skeleton className="h-[400px] w-full" />
+        </Card>
+        <Card className="p-6">
+          <Skeleton className="h-6 w-48 mb-4" />
+          <Skeleton className="h-[400px] w-full" />
+        </Card>
+      </div>
+    </div>
+  )
+}
 
 interface AnalyticsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -40,7 +79,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
         </a>
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<AnalyticsLoadingSkeleton />}>
         <AnalyticsView initialData={initialData} />
       </Suspense>
     </div>
