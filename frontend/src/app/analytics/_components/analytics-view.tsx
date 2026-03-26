@@ -32,26 +32,32 @@ export function AnalyticsView({ initialData }: Props) {
 
     console.log('[AnalyticsView] Refetching with:', { date_from, date_to })
 
-    const refetch = async () => {
-      setIsLoading(true)
-      try {
-        const newData = await fetchAnalytics({
-          date_from,
-          date_to
-        })
-        console.log('[AnalyticsView] Received data:', {
-          total: newData.summary.total,
-          timeSeriesPoints: newData.time_series.length
-        })
-        setData(newData)
-      } catch (error) {
-        console.error('[AnalyticsView] Failed to fetch analytics:', error)
-      } finally {
-        setIsLoading(false)
+    // Add slight delay to batch rapid clicks
+    const timeoutId = setTimeout(() => {
+      const refetch = async () => {
+        setIsLoading(true)
+        try {
+          const newData = await fetchAnalytics({
+            date_from,
+            date_to
+          })
+          console.log('[AnalyticsView] Received data:', {
+            total: newData.summary.total,
+            timeSeriesPoints: newData.time_series.length
+          })
+          setData(newData)
+        } catch (error) {
+          console.error('[AnalyticsView] Failed to fetch analytics:', error)
+        } finally {
+          setIsLoading(false)
+        }
       }
-    }
 
-    refetch()
+      refetch()
+    }, 300) // 300ms debounce
+
+    // Cleanup timeout on unmount or param change
+    return () => clearTimeout(timeoutId)
   }, [date_from, date_to])
 
   return (
@@ -62,31 +68,32 @@ export function AnalyticsView({ initialData }: Props) {
         {/* Future: Add severity and source dropdowns here */}
       </Card>
 
-      {/* Loading overlay */}
-      {isLoading && (
-        <div className="relative">
-          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-10 flex items-center justify-center">
+      {/* Data section with loading overlay */}
+      <div className="relative space-y-8">
+        {/* Loading overlay */}
+        {isLoading && (
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center rounded-lg">
             <div className="flex flex-col items-center gap-2">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
               <p className="text-sm text-muted-foreground">Updating charts...</p>
             </div>
           </div>
+        )}
+
+        {/* Summary stats cards */}
+        <SummaryStats data={data.summary} />
+
+        {/* Charts grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <TimeSeriesChart
+            data={data.time_series}
+            granularity={data.granularity}
+          />
+          <SeverityDistributionChart
+            data={data.severity_distribution}
+            total={data.summary.total}
+          />
         </div>
-      )}
-
-      {/* Summary stats cards */}
-      <SummaryStats data={data.summary} />
-
-      {/* Charts grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TimeSeriesChart
-          data={data.time_series}
-          granularity={data.granularity}
-        />
-        <SeverityDistributionChart
-          data={data.severity_distribution}
-          total={data.summary.total}
-        />
       </div>
     </div>
   )
