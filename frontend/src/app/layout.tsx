@@ -42,10 +42,6 @@ export default function RootLayout({
                 >
                   Create Log
                 </Link>
-                <Separator className="my-2" />
-                <div className="px-4 py-2 text-slate-400 text-sm">
-                  Dashboard (Phase 5)
-                </div>
               </nav>
             </aside>
 
