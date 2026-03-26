@@ -31,7 +31,7 @@
 | 04.1 Add search logic | 1/1 | Complete | 2026-03-23 |
 | 5. Analytics Dashboard | 2/2 | Complete   | 2026-03-25 |
 | 05.1 Analytics UX Polish | 1/1 | Complete   | 2026-03-25 |
-| 05.1.1 Update/Delete CRUD | 0/2 | Not started | - |
+| 05.1.1 Update/Delete CRUD | 1/2 | In Progress|  |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
@@ -252,7 +252,7 @@ Plans:
 9. All buttons show loading states during operations and are disabled to prevent double-submit
 10. Error handling shows appropriate toast notifications for 404 and validation errors
 
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 05.1.1-01-PLAN.md — Backend PUT and DELETE endpoints with integration tests (2 tasks: PUT with 4 tests, DELETE with 3 tests)
