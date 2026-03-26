@@ -15,6 +15,7 @@
 - [x] **Phase 04.1: Add search logic in backend** - Message search with ILIKE filtering (URGENT) (completed 2026-03-23)
 - [x] **Phase 5: Analytics Dashboard** - Aggregated metrics, charts, time-series visualizations (completed 2026-03-25)
 - [x] **Phase 05.1: Analytics Dashboard UX Polish** - Spacing/padding refinement and visual time range filtering (URGENT) (completed 2026-03-25)
+- [ ] **Phase 05.1.1: Update and Delete CRUD Operations** - PUT/DELETE endpoints with frontend edit/delete UI (URGENT)
 - [ ] **Phase 6: Testing** - Unit and integration tests with performance validation
 - [ ] **Phase 7: Documentation** - README, design decisions, setup instructions
 
@@ -30,6 +31,7 @@
 | 04.1 Add search logic | 1/1 | Complete | 2026-03-23 |
 | 5. Analytics Dashboard | 2/2 | Complete   | 2026-03-25 |
 | 05.1 Analytics UX Polish | 1/1 | Complete   | 2026-03-25 |
+| 05.1.1 Update/Delete CRUD | 0/2 | Not started | - |
 | 6. Testing | 0/? | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
@@ -230,6 +232,34 @@ Plans:
 
 ---
 
+### Phase 05.1.1: Implement Update and Delete CRUD operations - add PUT and DELETE endpoints for logs with frontend edit/delete functionality (INSERTED)
+
+**Goal:** Complete CRUD operations for logs by adding UPDATE (PUT) and DELETE endpoints with frontend modal edit/delete UI
+
+**Depends on:** Phase 5.1 (requires existing modal foundation)
+
+**Requirements:** None (this phase overrides LOG-05 requirement which originally mandated immutability - now supporting full CRUD for demo purposes)
+
+**Success Criteria** (what must be TRUE):
+1. API accepts PUT /api/logs/{id} with complete log data and returns 200 with updated log or 404 for non-existent
+2. API accepts DELETE /api/logs/{id} and returns 204 No Content on success or 404 for non-existent
+3. Updated log persists in database with all new field values
+4. Deleted log is permanently removed from database
+5. User can click Edit button in LogDetailModal to enter edit mode with pre-filled form
+6. User can modify log fields and save changes (modal closes, list refreshes, success toast)
+7. User can click Delete button to see confirmation dialog with log details
+8. User confirms deletion → log deleted, modal closes, list refreshes, success toast
+9. All buttons show loading states during operations and are disabled to prevent double-submit
+10. Error handling shows appropriate toast notifications for 404 and validation errors
+
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05.1.1-01-PLAN.md — Backend PUT and DELETE endpoints with integration tests (2 tasks: PUT with 4 tests, DELETE with 3 tests)
+- [ ] 05.1.1-02-PLAN.md — Frontend edit/delete modal UI with API integration (3 tasks: API functions, EditForm, modal extension)
+
+---
+
 ### Phase 6: Testing
 **Goal:** Comprehensive test coverage validates correctness and performance of backend logic, API endpoints, and database queries
 
@@ -276,4 +306,4 @@ All v1 requirements mapped to phases. No orphaned requirements.
 
 ---
 *Roadmap created: 2026-03-20*
-*Last updated: 2026-03-25*
+*Last updated: 2026-03-26*
