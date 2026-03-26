@@ -50,8 +50,19 @@ export function CreateForm() {
   const isSubmitting = form.formState.isSubmitting
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
-      {/* Timestamp Field */}
+    <div className="relative">
+      {/* Submission overlay - matches analytics loading style */}
+      {isSubmitting && (
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center rounded z-50">
+          <div className="bg-white px-6 py-3 rounded-lg shadow-lg border flex items-center gap-3">
+            <div className="animate-spin h-5 w-5 border-2 border-slate-300 border-t-slate-600 rounded-full" />
+            <span className="text-sm font-medium text-slate-700">Creating log...</span>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
+        {/* Timestamp Field */}
       <div className="space-y-2">
         <Label htmlFor="timestamp">Timestamp</Label>
         <Input
@@ -125,11 +136,12 @@ export function CreateForm() {
         )}
       </div>
 
-      {/* Submit Button */}
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isSubmitting ? 'Creating...' : 'Create Log'}
-      </Button>
-    </form>
+        {/* Submit Button */}
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isSubmitting ? 'Creating...' : 'Create Log'}
+        </Button>
+      </form>
+    </div>
   )
 }
