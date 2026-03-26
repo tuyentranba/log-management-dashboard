@@ -70,12 +70,12 @@ export function AnalyticsView({ initialData }: Props) {
 
       {/* Data section with loading overlay */}
       <div className="relative space-y-8">
-        {/* Loading overlay */}
+        {/* Loading overlay - matches log list style */}
         {isLoading && (
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center rounded-lg">
-            <div className="flex flex-col items-center gap-2">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-              <p className="text-sm text-muted-foreground">Updating charts...</p>
+          <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center rounded z-50">
+            <div className="bg-white px-6 py-3 rounded-lg shadow-lg border flex items-center gap-3">
+              <div className="animate-spin h-5 w-5 border-2 border-slate-300 border-t-slate-600 rounded-full" />
+              <span className="text-sm font-medium text-slate-700">Updating charts...</span>
             </div>
           </div>
         )}
