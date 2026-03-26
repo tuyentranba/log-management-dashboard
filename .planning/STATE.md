@@ -30,7 +30,7 @@ Phase 3 started! Wave 0 foundation complete - Jest and React Testing Library con
 
 ## Current Position
 
-**Phase:** 05.1.1 - CRUD Operations
+**Phase:** 05.2 - CRUD Operations
 **Plan:** 02 (Complete)
 **Status:** Ready to plan
 
@@ -44,7 +44,7 @@ Phase 4: [████████████████████] 100% (2/
 Phase 4.1: [████████████████████] 100% (1/1 plans complete)
 Phase 5: [████████████████████] 100% (2/2 plans complete)
 Phase 5.1: [████████████████████] 100% (1/1 plans complete)
-Phase 5.1.1: [████████████████████] 100% (2/2 plans complete)
+Phase 5.2: [████████████████████] 100% (2/2 plans complete)
 Phase 6: [..................] 0% (0/? plans complete)
 Phase 7: [..................] 0% (0/? plans complete)
 ```
@@ -69,7 +69,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Phase 4.1 progress: 1/1 plans (100%)
 - Phase 5 progress: 2/2 plans (100%)
 - Phase 5.1 progress: 1/1 plans (100%)
-- Phase 5.1.1 progress: 2/2 plans (100%)
+- Phase 5.2 progress: 2/2 plans (100%)
 - Plan 01-01 duration: 239 seconds
 - Plan 01-02 duration: 183 seconds
 - Plan 01-03 duration: 332 seconds
@@ -90,8 +90,8 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Plan 05-01 duration: 301 seconds
 - Plan 05-02 duration: 1168 seconds
 - Plan 05.1-01 duration: 209 seconds
-- Plan 05.1.1-01 duration: 432 seconds
-- Plan 05.1.1-02 duration: 294 seconds
+- Plan 05.2-01 duration: 432 seconds
+- Plan 05.2-02 duration: 294 seconds
 
 ## Accumulated Context
 
@@ -238,14 +238,14 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Removed Separator component in favor of consistent space-y-8 gaps for cleaner visual flow
 - nuqs URL state management for time range filters enables shareable links
 
-**Backend update/delete endpoints (Plan 05.1.1-01):**
+**Backend update/delete endpoints (Plan 05.2-01):**
 - PUT /api/logs/{id} for full log replacement using LogCreate schema (all fields required)
 - DELETE /api/logs/{id} with hard delete returning 204 No Content
 - Added LogUpdate schema (same as LogCreate) for explicit update contract
 - Return 404 for non-existent logs, 422 for validation errors
 - TDD approach with RED-GREEN-REFACTOR cycle
 
-**Frontend CRUD UI (Plan 05.1.1-02):**
+**Frontend CRUD UI (Plan 05.2-02):**
 - Separate EditForm component instead of reusing CreateForm (different props and behavior)
 - Modal extension with view/edit mode toggle using state management
 - Native confirm() for delete confirmation showing log details (simple, zero overhead)
@@ -277,7 +277,8 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Phase 03.1 inserted after Phase 3: Improve UX for log filtering - color severity tags, loading states, source display (URGENT)
 - Phase 04.1 inserted after Phase 4: Add search logic in backend (URGENT)
 - Phase 05.1 inserted after Phase 5: Re-design analytics dashboard with aggregated data filtering and trend charts in datalog-like style (URGENT)
-- Phase 05.1.1 inserted after Phase 5.1: Implement Update and Delete CRUD operations - add PUT/PATCH and DELETE endpoints for logs with frontend detail page featuring edit and delete functionality (URGENT)
+- Phase 05.2 inserted after Phase 5.1: Implement Update and Delete CRUD operations - add PUT/PATCH and DELETE endpoints for logs with frontend detail page featuring edit and delete functionality (URGENT)
+- Phase 05.3 inserted after Phase 5.2: Migrate create log form to modal design matching edit/delete pattern (URGENT)
 
 ### Current TODOs
 
@@ -301,8 +302,8 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 05-01: Backend Analytics API (Complete)
 - [x] Plan 05-02: Frontend Analytics Dashboard (Complete)
 - [x] Plan 05.1-01: Analytics Dashboard UX Polish (Complete)
-- [x] Plan 05.1.1-01: Backend Update/Delete Endpoints (Complete)
-- [x] Plan 05.1.1-02: Frontend Update/Delete UI (Complete)
+- [x] Plan 05.2-01: Backend Update/Delete Endpoints (Complete)
+- [x] Plan 05.2-02: Frontend Update/Delete UI (Complete)
 - [ ] Phase 6: Performance Optimization (Next)
 
 ### Active Blockers
@@ -451,8 +452,8 @@ None. Roadmap approved and ready for planning.
   - Removed Separator component for cleaner visual flow with space-y-8 gaps
 
 **2026-03-26:**
-- Phase 05.1.1 inserted after Phase 5.1 to implement missing UPDATE and DELETE CRUD operations
-- Completed context discussion for Phase 05.1.1 via /gsd:discuss-phase workflow
+- Phase 05.2 inserted after Phase 5.1 to implement missing UPDATE and DELETE CRUD operations
+- Completed context discussion for Phase 05.2 via /gsd:discuss-phase workflow
 - Key design decisions captured:
   - Break immutability constraint for demo purposes (update PROJECT.md)
   - Keep modal pattern with edit/delete buttons inside (extend LogDetailModal)
@@ -464,12 +465,12 @@ None. Roadmap approved and ready for planning.
   - Return 404 for non-existent logs, 422 for validation errors
 - CONTEXT.md created with 8 resolved gray areas and technical implementation plan
 - Ready for planning phase
-- Completed Plan 05.1.1-01: Backend Update/Delete CRUD Endpoints (2 tasks, 2 files, 4 commits, 432 seconds)
+- Completed Plan 05.2-01: Backend Update/Delete CRUD Endpoints (2 tasks, 2 files, 4 commits, 432 seconds)
   - Added PUT /api/logs/{id} endpoint with full replacement pattern
   - Added DELETE /api/logs/{id} endpoint with hard delete pattern
   - Created 7 integration tests (4 update + 3 delete) following TDD RED-GREEN cycle
   - All tests passing, endpoints follow existing FastAPI patterns
-- Completed Plan 05.1.1-02: Frontend Update/Delete UI (3 tasks, 3 files, 3 commits, 294 seconds)
+- Completed Plan 05.2-02: Frontend Update/Delete UI (3 tasks, 3 files, 3 commits, 294 seconds)
   - Added updateLog and deleteLog API functions to frontend/src/lib/api.ts
   - Created EditForm component with validation based on CreateForm pattern
   - Extended LogDetailModal with view/edit mode toggle and delete confirmation
@@ -482,13 +483,13 @@ None. Roadmap approved and ready for planning.
 ## Session Continuity
 
 **What just happened:**
-Completed Plan 05.1.1-02 execution. Frontend now has complete CRUD UI with edit/delete functionality in LogDetailModal. Users can click Edit to modify log fields with validation, or Delete with confirmation dialog. Operations trigger toast notifications and automatic list refresh. All 3 tasks completed (updateLog/deleteLog API functions, EditForm component, modal extension). TypeScript and Next.js build passing. Phase 05.1.1 complete!
+Completed Plan 05.2-02 execution. Frontend now has complete CRUD UI with edit/delete functionality in LogDetailModal. Users can click Edit to modify log fields with validation, or Delete with confirmation dialog. Operations trigger toast notifications and automatic list refresh. All 3 tasks completed (updateLog/deleteLog API functions, EditForm component, modal extension). TypeScript and Next.js build passing. Phase 05.2 complete!
 
 **What's next:**
-Phase 05.1.1 complete! Ready to proceed to Phase 6 (Performance Optimization) or other phases as defined in ROADMAP.md.
+Phase 05.2 complete! Ready to proceed to Phase 6 (Performance Optimization) or other phases as defined in ROADMAP.md.
 
 **Context for next session:**
-- Phase 05.1.1 complete: Full CRUD operations implemented (Create, Read, Update, Delete)
+- Phase 05.2 complete: Full CRUD operations implemented (Create, Read, Update, Delete)
 - Backend: PUT /api/logs/{id} and DELETE /api/logs/{id} endpoints with TDD tests
 - Frontend: EditForm component, extended LogDetailModal with view/edit modes
 - UX flow: Click log → View details → Edit/Delete buttons → Form/Confirmation → Success toast → Auto-refresh
