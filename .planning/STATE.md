@@ -5,20 +5,20 @@ milestone_name: milestone
 current_phase: 07
 current_plan: 01 (Complete)
 status: executing
-last_updated: "2026-03-27T08:42:01.654Z"
+last_updated: "2026-03-27T08:57:56.973Z"
 progress:
   total_phases: 12
   completed_phases: 11
   total_plans: 32
-  completed_plans: 30
-  percent: 94
+  completed_plans: 31
+  percent: 97
 ---
 
 # Project State: Logs Dashboard
 
 **Last Updated:** 2026-03-27
 **Current Phase:** 07
-**Current Plan:** 01 (Complete)
+**Current Plan:** 05 (Complete)
 
 ## Project Reference
 
@@ -31,11 +31,11 @@ Phase 07 Plan 01 complete! Created ADR-002 (cursor pagination) and ADR-003 (data
 ## Current Position
 
 **Phase:** 07 - Documentation
-**Plan:** 04 (Complete)
+**Plan:** 05 (Complete)
 **Status:** In progress
 
 **Progress:**
-[█████████░] 94%
+[██████████] 97%
 Phase 1: [████████████████████] 100% (5/5 plans complete)
 Phase 2: [████████████████████] 100% (3/3 plans complete)
 Phase 3: [████████████████████] 100% (5/5 plans complete)
@@ -47,7 +47,7 @@ Phase 5.1: [████████████████████] 100% (
 Phase 5.2: [████████████████████] 100% (2/2 plans complete)
 Phase 05.3: [████████████████████] 100% (1/1 plans complete)
 Phase 6: [██████░░░░░░░░░░░░░░] 33% (1/3 plans complete)
-Phase 7: [███░░░░░░░░░░░░░░░░░] 33% (2/6 plans complete)
+Phase 7: [████████████████░░░░] 83% (5/6 plans complete)
 ```
 
 **Overall:** 9/12 phases complete (75%)
@@ -97,6 +97,7 @@ Phase 7: [███░░░░░░░░░░░░░░░░░] 33% (2/6
 - Plan 06-01 duration: 739 seconds
 - Plan 07-01 duration: 272 seconds
 - Plan 07-04 duration: 167 seconds
+- Plan 07-05 duration: 347 seconds
 
 ## Accumulated Context
 
@@ -293,6 +294,14 @@ Phase 7: [███░░░░░░░░░░░░░░░░░] 33% (2/6
 - Performance validation data included in Consequences (not just claims)
 - ADR-002 documents cursor pagination vs offset (constant 10ms vs linear degradation)
 - ADR-003 documents hybrid BRIN + composite B-tree (0.1% + 5% storage overhead)
+
+**README structure (Plan 07-05):**
+- Refactored README from 255 to 143 lines (44% reduction, within 120-150 target)
+- Extracted testing details (100 lines) to docs/TESTING.md, replaced with brief summary + link
+- Extracted architecture highlights to docs/ARCHITECTURE.md, replaced with key patterns + link
+- Added Related Documentation section as navigation hub (links to all docs/)
+- README serves as entry point and navigation hub, detailed content in docs/
+- Progressive disclosure pattern: README (getting started) → docs/*.md (deep dives) → docs/decisions/*.md (ADRs)
 
 **Technology stack:**
 - Backend: FastAPI 0.135.1 + SQLAlchemy 2.0.48 + PostgreSQL 18
@@ -522,7 +531,22 @@ None. Roadmap approved and ready for planning.
   - Deleted entire frontend/src/app/create/ directory including page.tsx and old create-form.tsx
   - All CRUD operations now consolidated in /logs page with consistent modal-based interface
 
-**2026-03-27:**
+**2026-03-27 (continued):**
+- Completed Plan 07-05: Refactor README to Focused Entry Point (1 task, 1 file, 1 commit, 347 seconds)
+  - Refactored README from 255 lines to 143 lines (44% reduction, within 120-150 target)
+  - Extracted testing details (100 lines) to docs/TESTING.md with brief summary + link
+  - Extracted architecture highlights to docs/ARCHITECTURE.md with key patterns + link
+  - Added link to docs/TECHNOLOGY.md after Technology Stack section
+  - Condensed Getting Started section (merged Prerequisites + Installation)
+  - Simplified Development commands (removed subsections)
+  - Simplified Testing section (condensed commands)
+  - Updated Project Structure to include docs/ directory with subdirectories
+  - Added Related Documentation section with 5 links (TESTING, ARCHITECTURE, TECHNOLOGY, decisions/, README)
+  - README now serves as focused entry point and navigation hub
+  - All essential commands preserved (make start, test, seed, etc.)
+  - DOC-01 requirement fully addressed (README documents running application)
+  - DOC-02 requirement fully addressed (README documents running tests)
+
 - Completed Plan 07-01: Create ADRs for Cursor Pagination and Database Indexing (2 tasks, 2 files, 2 commits, 272 seconds)
   - Created ADR-002 for cursor pagination decision (337 lines)
   - Documented cursor vs offset pagination with performance trade-offs (page 100: 10ms vs 500ms)
@@ -570,21 +594,23 @@ None. Roadmap approved and ready for planning.
 ## Session Continuity
 
 **What just happened:**
-Completed Plan 07-01 execution. Created two comprehensive ADRs (002-cursor-pagination.md and 003-database-indexing.md) documenting critical performance decisions. Both follow extended template pattern with explicit requirements mapping (LOG-02, LOG-04, DB-03, DB-04, DB-05, NFR-Performance, TEST-03, ANALYTICS-06), honest alternatives analysis (4 options each), and performance validation data. ADR-002 explains cursor vs offset pagination trade-offs. ADR-003 explains hybrid BRIN + composite B-tree indexing strategy. 2 tasks completed in 4.5 minutes.
+Completed Plan 07-05 execution. Refactored README.md from 255 lines to 143 lines (44% reduction, within 120-150 target). Extracted 100 lines of testing details to docs/TESTING.md and ~20 lines of architecture highlights to docs/ARCHITECTURE.md. README now serves as focused entry point and navigation hub with links to all detailed documentation. Added Related Documentation section listing all docs/ files. 1 task completed in 5.8 minutes.
 
 **What's next:**
-Phase 07 Plan 02 will create ADR-004 for timezone handling decisions (timestamptz usage, UTC normalization in analytics).
+Phase 07 Plan 06 will create docs/README.md as documentation index and navigation file.
 
 **Context for next session:**
-- Phase 07 Plan 01 complete: ADR-002 and ADR-003 created
-- ADR-002: Cursor pagination (337 lines, maps to LOG-02/LOG-04/NFR-Performance/TEST-03)
-- ADR-003: Database indexing (368 lines, maps to DB-03/DB-04/DB-05/NFR-Performance/TEST-03/ANALYTICS-06)
-- Both ADRs follow extended template with Requirements Addressed section
-- Performance validation data included from test_logs_performance.py
-- ADRs cross-reference each other in Related Decisions sections
-- DOC-03 requirement partially addressed (2 of 4 ADRs complete)
+- Phase 07 Plan 05 complete: README refactored to focused entry point
+- README: 255 lines → 143 lines (within 120-150 target, 44% reduction)
+- Extracted testing details to docs/TESTING.md with link
+- Extracted architecture highlights to docs/ARCHITECTURE.md with key patterns + link
+- Added link to docs/TECHNOLOGY.md after Technology Stack
+- Added Related Documentation section with 5 links (TESTING, ARCHITECTURE, TECHNOLOGY, decisions/, README)
+- Progressive disclosure pattern established: README → docs/*.md → docs/decisions/*.md
+- DOC-01 requirement fully addressed (README documents running application)
+- DOC-02 requirement fully addressed (README documents running tests)
 - All builds passing, no blockers
-- 28 plans completed across 10 phases (Phase 7: 2/6 complete)
+- 31 plans completed across 10 phases (Phase 7: 5/6 complete)
 
 ---
 *State tracking started: 2026-03-20*
