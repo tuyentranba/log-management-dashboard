@@ -3,6 +3,11 @@ Analytics aggregation endpoints.
 
 Provides GET /api/analytics with required date range filter,
 optional severity/source filters, and aggregated log metrics.
+
+Key design decisions:
+- date_trunc() with UTC normalization for timezone-correct aggregations (see ADR-004)
+- Auto-adjusted granularity (hour/day/week) for optimal chart readability
+- Three-query pattern (summary, time-series, distribution) using base filters
 """
 from datetime import datetime, timedelta
 from typing import Annotated, Optional
@@ -39,10 +44,22 @@ def determine_granularity(date_from: datetime, date_to: datetime) -> str:
         'hour', 'day', or 'week' for date_trunc() function
     """
     delta = date_to - date_from
+
+    # Hourly buckets for ranges <3 days (max 72 data points)
+    # Prevents chart overcrowding while maintaining detail for short time ranges
+    # 72 points is sweet spot for line charts - readable without overwhelming
     if delta < timedelta(days=3):
         return 'hour'
+
+    # Daily buckets for 3-30 days (max 30 data points)
+    # Sweet spot between detail and readability for typical dashboard usage
+    # Most users query "last week" or "last month" - daily granularity is natural
     elif delta <= timedelta(days=30):
         return 'day'
+
+    # Weekly buckets for >30 days
+    # Reduces long-range charts to manageable point count without losing trend visibility
+    # 52 weeks = 1 year remains readable, longer ranges compress naturally
     else:
         return 'week'
 
@@ -93,6 +110,8 @@ async def get_analytics(
         )
 
     # Build base WHERE clause for all queries (consistent filtering)
+    # Applying same filters to all three queries (summary, time-series, distribution)
+    # ensures data consistency - summary total matches sum of time-series points
     base_filters = [
         Log.timestamp >= date_from,
         Log.timestamp <= date_to
@@ -102,8 +121,12 @@ async def get_analytics(
     if source:
         base_filters.append(Log.source.ilike(f"%{source}%"))
 
-    # Query 1: Summary statistics with conditional aggregation
-    # Single query computes total + per-severity counts efficiently
+    # Three-query pattern for analytics dashboard
+    # Could use single query with window functions, but separate queries are clearer
+    # and PostgreSQL query planner can optimize each independently
+
+    # Query 1: Summary stats using conditional aggregation (COUNT FILTER)
+    # Single query with multiple COUNT FILTER clauses is faster than 4 separate COUNT queries
     summary_query = select(
         func.count().label('total'),
         func.count().filter(Log.severity == 'INFO').label('info_count'),
@@ -115,8 +138,10 @@ async def get_analytics(
     summary_result = await db.execute(summary_query)
     summary_row = summary_result.one()
 
-    # Query 2: Time-series data with auto-adjusted granularity
-    # Uses PostgreSQL date_trunc() for efficient time bucketing
+    # Query 2: Time-series with auto-adjusted granularity
+    # date_trunc() buckets timestamps into hour/day/week based on date range
+    # AT TIME ZONE 'UTC' ensures consistent bucketing regardless of server timezone
+    # See ADR-004 for timezone handling rationale
     granularity = determine_granularity(date_from, date_to)
     time_series_query = select(
         func.date_trunc(granularity, Log.timestamp).label('bucket'),
@@ -131,8 +156,9 @@ async def get_analytics(
         for row in time_series_result
     ]
 
-    # Query 3: Severity distribution with GROUP BY
-    # Shows count per severity level for histogram
+    # Query 3: Severity distribution (simple GROUP BY)
+    # Separate from time-series to avoid Cartesian product
+    # Returns 4 rows max (INFO, WARNING, ERROR, CRITICAL) - always fast
     severity_query = select(
         Log.severity,
         func.count().label('count')
