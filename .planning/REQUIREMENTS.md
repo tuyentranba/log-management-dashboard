@@ -93,7 +93,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **DOC-01**: README documents how to run the application
 - [ ] **DOC-02**: README documents how to run tests
-- [ ] **DOC-03**: README documents design decisions and rationale
+- [x] **DOC-03**: README documents design decisions and rationale
 - [ ] **DOC-04**: README explains technology choices
 - [x] **DOC-05**: Code includes inline comments for complex logic
 
@@ -201,7 +201,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-05 | Phase 6 | Complete |
 | DOC-01 | Phase 7 | Pending |
 | DOC-02 | Phase 7 | Pending |
-| DOC-03 | Phase 7 | Pending |
+| DOC-03 | Phase 7 | Complete |
 | DOC-04 | Phase 7 | Pending |
 | DOC-05 | Phase 7 | Complete |
 
