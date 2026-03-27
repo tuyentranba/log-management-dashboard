@@ -34,7 +34,7 @@
 | 05.1 Analytics UX Polish | 1/1 | Complete   | 2026-03-25 |
 | 05.2 Update/Delete CRUD | 2/2 | Complete   | 2026-03-26 |
 | 05.3 Migrate Create Modal | 1/1 | Complete   | 2026-03-26 |
-| 6. Testing | 0/? | Not started | - |
+| 6. Testing | 0/3 | Not started | - |
 | 7. Documentation | 0/? | Not started | - |
 
 ## Phase Details
@@ -301,7 +301,12 @@ Plans:
 4. Performance tests verify query execution time (list queries under 500ms, analytics under 2s) with 100k+ logs
 5. All tests can be run with single command (e.g., `pytest` or `docker-compose run test`) and pass consistently
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Backend test coverage expansion with pytest-cov (3 tasks: configure pytest-cov, expand performance tests for analytics/CSV, verify 80%+ coverage)
+- [ ] 06-02-PLAN.md — Frontend critical path testing (4 tasks: configure jest-axe, create form tests, modal/API tests, verify 80%+ coverage)
+- [ ] 06-03-PLAN.md — Makefile test commands and README documentation (3 tasks: update Makefile test targets, document testing in README, verify unified execution)
 
 ---
 
@@ -333,4 +338,4 @@ All v1 requirements mapped to phases. No orphaned requirements.
 
 ---
 *Roadmap created: 2026-03-20*
-*Last updated: 2026-03-26*
+*Last updated: 2026-03-27*
