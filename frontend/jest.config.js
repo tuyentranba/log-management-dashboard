@@ -22,6 +22,18 @@ const customJestConfig = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/*.stories.tsx',
+    '!src/components/ui/**',  // Exclude shadcn/ui components
+  ],
+  coverageThreshold: {
+    global: {
+      lines: 80,
+      statements: 80,
+    },
+  },
+  coverageReporters: [
+    'text',              // Terminal summary
+    'html',              // HTML report in coverage/ directory
+    'lcov',              // LCOV for tooling integration
   ],
   modulePathIgnorePatterns: ['<rootDir>/.next/'],
 }
