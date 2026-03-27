@@ -31,169 +31,53 @@ A production-ready log management system demonstrating technical excellence acro
 - Docker Compose - Container orchestration
 - Alembic - Database migrations
 
+For detailed technology rationale, see [docs/TECHNOLOGY.md](./docs/TECHNOLOGY.md).
+
 ## Getting Started
 
-### Prerequisites
+**Prerequisites:** Docker Desktop, Make
 
-- Docker Desktop installed and running
-- Make (included on macOS/Linux, available for Windows)
-
-### Installation
-
-1. Clone the repository:
+**Quick start:**
 ```bash
 git clone <repository-url>
 cd logs-dashboard
-```
-
-2. Copy the environment configuration:
-```bash
 cp .env.example .env
+make start       # Start all services
+make seed        # Populate with 100k sample logs
 ```
 
-3. Edit `.env` with your configuration (optional - defaults work out of the box)
-
-4. Start all services:
-```bash
-make start
-```
-
-The application will be available at:
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/api/health
-
-### Seeding Data
-
-Populate the database with 100,000 sample logs (completes in <60 seconds):
-
-```bash
-make seed
-```
+**Access the application:**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
 
 ## Testing
 
-The project has comprehensive test coverage for both backend and frontend components, demonstrating production-ready quality with automated validation.
-
-### Test Coverage
-
-**Backend:**
-- Unit tests for business logic (cursor utilities, schemas, configuration)
-- Integration tests for all API endpoints (CRUD, list, analytics, export)
-- Performance tests validating query execution times with 100k logs
-- Target: 80%+ line coverage (measured by pytest-cov)
-
-**Frontend:**
-- Component tests for forms and modals (CreateForm, EditForm, LogDetailModal)
-- API integration tests with mocked responses
-- Accessibility validation with jest-axe
-- Target: 80%+ line coverage (measured by Jest)
-
-### Running Tests
-
-**All tests (backend + frontend):**
+**Quick commands:**
 ```bash
-make test
+make test         # Run all tests
+make test-quick   # Skip slow performance tests
+make coverage     # Generate coverage reports
 ```
 
-**Quick tests (skip slow performance tests):**
-```bash
-make test-quick
-```
-Useful for fast feedback during development. Skips tests marked with `@pytest.mark.slow` (~5-10 second run time).
+**Coverage targets:** 80%+ line coverage for backend (pytest-cov) and frontend (Jest).
 
-**Tests with coverage reports:**
-```bash
-make coverage
-```
-
-Coverage reports are generated in:
-- Backend: `backend/htmlcov/index.html`
-- Frontend: `frontend/coverage/lcov-report/index.html`
-
-Open these HTML files in a browser for detailed line-by-line coverage analysis.
-
-### Running Tests Individually
-
-**Backend only:**
-```bash
-docker-compose exec backend pytest tests/ -v
-```
-
-**Frontend only:**
-```bash
-docker-compose exec frontend npm test -- --passWithNoTests
-```
-
-**Specific test file:**
-```bash
-# Backend
-docker-compose exec backend pytest tests/test_logs_crud.py -v
-
-# Frontend
-docker-compose exec frontend npm test -- --testPathPattern=create-form.test.tsx
-```
-
-### Test Organization
-
-**Backend (`backend/tests/`):**
-- `test_config.py` - Configuration loading and validation
-- `test_cursor.py` - Cursor pagination utilities
-- `test_schemas.py` - Pydantic schema validation
-- `test_health.py` - Health endpoint integration tests
-- `test_logs_crud.py` - CRUD operations (POST, GET, PUT, DELETE)
-- `test_logs_list.py` - List endpoint with filtering and sorting
-- `test_export.py` - CSV export streaming
-- `test_analytics.py` - Analytics aggregations
-- `test_logs_performance.py` - Performance validation with 100k logs (marked `@pytest.mark.slow`)
-
-**Frontend (`frontend/__tests__/`):**
-- `components/create-form.test.tsx` - Create log form validation and submission
-- `components/edit-form.test.tsx` - Edit log form pre-population and updates
-- `components/log-detail-modal.test.tsx` - Modal view/edit mode toggle
-- `api/api-integration.test.tsx` - API client functions with mocked fetch
-
-### Test Philosophy
-
-- **Integration over unit:** Tests validate real behavior with real database and API calls (mocking only external dependencies)
-- **Minimal mocking:** Backend tests use real PostgreSQL database for accurate validation
-- **User-focused frontend tests:** Tests validate user interactions and accessibility (not implementation details)
-- **Performance validation:** Hard thresholds ensure queries meet production requirements (<500ms pagination, <2s analytics)
-- **Coverage as visibility:** 80% target demonstrates quality without over-testing trivial code
-
-### Performance Test Thresholds
-
-Performance tests (`test_logs_performance.py`) validate query execution times with 100k logs:
-
-| Endpoint | Threshold | Validates |
-|----------|-----------|-----------|
-| Pagination (page 100+) | <500ms | Cursor pagination efficiency |
-| Analytics aggregations | <2000ms | date_trunc and GROUP BY performance |
-| CSV export with filters | <3000ms | Streaming response memory efficiency |
-| Multi-filter queries | <500ms | Composite index utilization |
-
-Tests fail if thresholds are exceeded, preventing performance regressions.
+For detailed testing documentation, see [docs/TESTING.md](./docs/TESTING.md).
 
 ## Development
 
-### Available Commands
-
-Run `make help` to see all available commands:
-
+**Common commands:**
 ```bash
-make help
+make start     # Start all services
+make stop      # Stop all services
+make restart   # Restart all services
+make logs      # View logs from all services
+make test      # Run all tests
+make seed      # Populate database with sample data
+make migrate   # Run database migrations
+make clean     # Remove all containers and volumes (fresh start)
+make help      # See all available commands
 ```
-
-Common commands:
-- `make start` - Start all services
-- `make stop` - Stop all services
-- `make restart` - Restart all services
-- `make logs` - View logs from all services
-- `make test` - Run all tests
-- `make seed` - Populate database with sample data
-- `make migrate` - Run database migrations
-- `make clean` - Remove all containers and volumes (fresh start)
 
 ### Project Structure
 
@@ -201,41 +85,37 @@ Common commands:
 logs-dashboard/
 ├── backend/              # FastAPI backend
 │   ├── app/
-│   │   ├── config.py     # Configuration management
-│   │   ├── database.py   # SQLAlchemy setup
 │   │   ├── models/       # Database models
 │   │   ├── routers/      # API endpoints
 │   │   └── schemas/      # Pydantic schemas
-│   ├── tests/            # Backend tests
-│   └── scripts/          # Utility scripts (seed.py)
+│   └── tests/            # Backend tests
 ├── frontend/             # Next.js frontend
 │   ├── src/
 │   │   ├── app/          # Next.js pages
 │   │   ├── components/   # React components
 │   │   └── lib/          # Utilities and API client
 │   └── __tests__/        # Frontend tests
+├── docs/                 # Documentation
+│   ├── TESTING.md        # Testing guide
+│   ├── ARCHITECTURE.md   # System design
+│   ├── TECHNOLOGY.md     # Technology choices
+│   └── decisions/        # Architecture Decision Records (ADRs)
 ├── docker-compose.yml    # Container orchestration
 ├── Makefile              # Command shortcuts
 └── .env                  # Environment configuration
 ```
 
-## Architecture Highlights
+## Architecture
 
-### Backend
+The system uses a three-tier architecture with cursor-based pagination, streaming CSV export, and timezone-aware aggregations.
 
-- **Cursor-based pagination**: Prevents OFFSET performance degradation with large datasets
-- **Composite indexes**: Optimized for multi-column filtering (timestamp, severity, source)
-- **Streaming CSV export**: Memory-efficient with FastAPI StreamingResponse
-- **Timezone-aware timestamps**: UTC-normalized aggregations with PostgreSQL timestamptz
-- **Async SQLAlchemy**: Non-blocking database operations with async/await
+**Key patterns:**
+- Cursor-based pagination for constant-time queries
+- BRIN + composite B-tree indexes for time-series optimization
+- Server Components for SSR performance
+- URL state management for shareable links
 
-### Frontend
-
-- **Server Components**: SSR performance with Next.js 15
-- **Client Islands**: Interactive components only where needed
-- **Virtual scrolling**: Efficient rendering of large lists with @tanstack/react-virtual
-- **URL state management**: Shareable links with nuqs for filters and modals
-- **Type safety**: Full TypeScript coverage mirroring backend schemas
+For detailed architecture documentation, see [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
 ## API Documentation
 
@@ -249,6 +129,14 @@ Key endpoints:
 - `DELETE /api/logs/{id}` - Delete a log entry
 - `GET /api/analytics` - Get analytics data with time-series and distribution
 - `GET /api/export` - Export logs as CSV with streaming
+
+## Related Documentation
+
+- [docs/TESTING.md](./docs/TESTING.md) - Comprehensive testing guide
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) - System design and component interactions
+- [docs/TECHNOLOGY.md](./docs/TECHNOLOGY.md) - Technology choices and rationale
+- [docs/decisions/](./docs/decisions/) - Architecture Decision Records (ADRs)
+- [docs/README.md](./docs/README.md) - Documentation index
 
 ## License
 
