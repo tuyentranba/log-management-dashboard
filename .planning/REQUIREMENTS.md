@@ -95,7 +95,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **DOC-02**: README documents how to run tests
 - [ ] **DOC-03**: README documents design decisions and rationale
 - [ ] **DOC-04**: README explains technology choices
-- [ ] **DOC-05**: Code includes inline comments for complex logic
+- [x] **DOC-05**: Code includes inline comments for complex logic
 
 ## v2 Requirements
 
@@ -203,7 +203,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOC-02 | Phase 7 | Pending |
 | DOC-03 | Phase 7 | Pending |
 | DOC-04 | Phase 7 | Pending |
-| DOC-05 | Phase 7 | Pending |
+| DOC-05 | Phase 7 | Complete |
 
 **Coverage:**
 - v1 requirements: 55 total

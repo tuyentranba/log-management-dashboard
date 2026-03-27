@@ -5,20 +5,20 @@ milestone_name: milestone
 current_phase: 6
 current_plan: Not started
 status: executing
-last_updated: "2026-03-27T06:11:47.046Z"
+last_updated: "2026-03-27T08:33:37.246Z"
 progress:
   total_phases: 12
   completed_phases: 11
-  total_plans: 26
-  completed_plans: 26
-  percent: 100
+  total_plans: 32
+  completed_plans: 27
+  percent: 84
 ---
 
 # Project State: Logs Dashboard
 
-**Last Updated:** 2026-03-25
-**Current Phase:** 6
-**Current Plan:** Not started
+**Last Updated:** 2026-03-27
+**Current Phase:** 07
+**Current Plan:** 04 (Complete)
 
 ## Project Reference
 
@@ -26,16 +26,16 @@ progress:
 Demonstrate technical excellence across all dimensions - clean architecture, performant database queries, accurate analytics, comprehensive error handling, thorough testing, and clear documentation.
 
 **Current Focus:**
-Phase 05.3 complete! Create log form successfully migrated to modal pattern matching Phase 05.2 edit/delete UX. All CRUD operations now consolidated in /logs page with consistent modal-based interface.
+Phase 07 Plan 04 complete! Added 50 lines of inline comments to 3 complex backend files (cursor.py, analytics.py, logs.py) explaining algorithm rationale and design decisions with ADR references.
 
 ## Current Position
 
-**Phase:** 06 - Testing
-**Plan:** 01 (Complete)
+**Phase:** 07 - Documentation
+**Plan:** 04 (Complete)
 **Status:** In progress
 
 **Progress:**
-[██████████] 100%
+[████████░░] 84%
 Phase 1: [████████████████████] 100% (5/5 plans complete)
 Phase 2: [████████████████████] 100% (3/3 plans complete)
 Phase 3: [████████████████████] 100% (5/5 plans complete)
@@ -47,7 +47,7 @@ Phase 5.1: [████████████████████] 100% (
 Phase 5.2: [████████████████████] 100% (2/2 plans complete)
 Phase 05.3: [████████████████████] 100% (1/1 plans complete)
 Phase 6: [██████░░░░░░░░░░░░░░] 33% (1/3 plans complete)
-Phase 7: [..................] 0% (0/? plans complete)
+Phase 7: [███░░░░░░░░░░░░░░░░] 17% (1/6 plans complete)
 ```
 
 **Overall:** 9/12 phases complete (75%)
@@ -95,6 +95,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Plan 05.2-02 duration: 294 seconds
 - Plan 05.3-01 duration: 501 seconds
 - Plan 06-01 duration: 739 seconds
+- Plan 07-04 duration: 167 seconds
 
 ## Accumulated Context
 
@@ -277,6 +278,13 @@ Phase 7: [..................] 0% (0/? plans complete)
 - URL-encode datetime parameters in test URLs (quote() handles + in ISO 8601 format)
 - Use monkeypatch.setenv() for config tests to inject environment variables cleanly
 
+**Inline code comments (Plan 07-04):**
+- Focus on "why" not "what" in comments - explain rationale beyond what code shows
+- Comment complex algorithms only (assume readers know Python/TypeScript basics)
+- Reference ADRs in module docstrings for full decision context
+- Explain non-obvious thresholds and magic numbers (72 points, 1000 row batches)
+- Total 50 lines of inline comments across 3 backend files (cursor.py, analytics.py, logs.py)
+
 **Technology stack:**
 - Backend: FastAPI 0.135.1 + SQLAlchemy 2.0.48 + PostgreSQL 18
 - Frontend: Next.js 15.5.14 + React 19.2.4 + TypeScript 5.9.3
@@ -319,6 +327,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 06-01: Backend Test Coverage Expansion (Complete)
 - [ ] Plan 06-02: Frontend Component Tests (In Progress - Parallel)
 - [ ] Plan 06-03: E2E Testing with Playwright (Next - Wave 2)
+- [x] Plan 07-04: Inline Comments for Complex Algorithms (Complete)
 
 ### Active Blockers
 
@@ -518,25 +527,41 @@ None. Roadmap approved and ready for planning.
   - Achieved exactly 80.00% backend line coverage (335 statements, 67 missed)
   - All 111 tests passing, 1 skipped, HTML coverage report generated at backend/htmlcov/
 
+**2026-03-27:**
+- Completed Plan 07-04: Inline Comments for Complex Algorithms (3 tasks, 3 files, 3 commits, 167 seconds)
+  - Enhanced cursor.py with 13 lines of inline comments explaining pagination algorithm
+  - Module docstring references ADR-002 for detailed rationale
+  - Comments explain composite cursor for stable ordering
+  - Comments explain base64 encoding for client opacity
+  - Comments explain error handling strategy for consistent 400 responses
+  - Enhanced analytics.py with 19 lines of inline comments explaining aggregation logic
+  - Module docstring references ADR-004 and describes three-query pattern
+  - Comments explain granularity thresholds (72/30 point sweet spots)
+  - Comments explain date_trunc with UTC normalization
+  - Enhanced logs.py with 18 lines of inline comments explaining CSV streaming
+  - Module docstring references ADR-002 and ADR-003
+  - Comments explain truncate/seek memory management pattern
+  - Comments explain WYSIWYG principle and yield_per batching
+  - Total 50 lines of inline comments focusing on "why" not "what"
+  - DOC-05 requirement fully addressed
+
 ## Session Continuity
 
 **What just happened:**
-Completed Plan 06-01 execution. Backend test coverage expanded to 80.00% with pytest-cov integration. Added 3 comprehensive performance tests validating analytics queries (<2s), CSV export (<3s), and multi-filter pagination (<500ms avg) with 100k log datasets. Fixed URL encoding bug in datetime parameters and config test pydantic validation issues. All 111 tests passing with HTML coverage report generated. 3 tasks completed in 12.3 minutes.
+Completed Plan 07-04 execution. Added 50 lines of inline comments to 3 complex backend files (cursor.py, analytics.py, logs.py) explaining algorithm rationale and design decisions. Comments reference ADRs for full context and explain non-obvious thresholds. All Python syntax valid, existing tests pass. 3 tasks completed in 2.8 minutes.
 
 **What's next:**
-Phase 06 Plan 02 (Frontend Component Tests) running in parallel. Plan 06-03 (E2E Testing with Playwright) depends on completion of both 06-01 and 06-02.
+Phase 07 Plan 05 or other documentation plans. DOC-05 requirement complete.
 
 **Context for next session:**
-- Phase 06 Plan 01 complete: Backend test coverage at 80.00% (335 statements, 67 missed)
-- pytest-cov 6.0.0 configured with terminal and HTML reports
-- Performance tests validate all major endpoints with 100k log datasets
-- Coverage gaps identified: dependencies.py (50%), main.py (69%), logs.py (75%)
-- All tests use bulk_insert_mappings for efficient test data generation
-- URL encoding required for datetime parameters in test URLs
-- Config tests use monkeypatch.setenv() for environment variable injection
-- HTML coverage report available at backend/htmlcov/index.html
-- All builds passing, no blockers
-- 24 plans completed across 9 phases (Phase 6: 1/3 complete)
+- Phase 07 Plan 04 complete: Inline comments added to complex algorithms
+- 50 lines of explanatory comments across cursor.py, analytics.py, logs.py
+- Comments explain "why" not "what" - rationale beyond code
+- ADR references in module docstrings (ADR-002, ADR-003, ADR-004)
+- DOC-05 requirement fully addressed
+- All Python syntax valid, tests passing
+- No code changes beyond comments
+- 27 plans completed across phases (Phase 7: 1/6 complete)
 
 ---
 *State tracking started: 2026-03-20*
