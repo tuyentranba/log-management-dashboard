@@ -30,9 +30,9 @@ Phase 05.3 complete! Create log form successfully migrated to modal pattern matc
 
 ## Current Position
 
-**Phase:** 05.3 - Migrate Create to Modal
+**Phase:** 06 - Testing
 **Plan:** 01 (Complete)
-**Status:** Phase complete
+**Status:** In progress
 
 **Progress:**
 [█████████░] 92%
@@ -46,7 +46,7 @@ Phase 5: [████████████████████] 100% (2/
 Phase 5.1: [████████████████████] 100% (1/1 plans complete)
 Phase 5.2: [████████████████████] 100% (2/2 plans complete)
 Phase 05.3: [████████████████████] 100% (1/1 plans complete)
-Phase 6: [..................] 0% (0/? plans complete)
+Phase 6: [██████░░░░░░░░░░░░░░] 33% (1/3 plans complete)
 Phase 7: [..................] 0% (0/? plans complete)
 ```
 
@@ -55,7 +55,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 ## Performance Metrics
 
 **Execution:**
-- Plans completed: 23
+- Plans completed: 24
 - Plans failed: 0
 - Phases completed: 9/12
 
@@ -94,6 +94,7 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Plan 05.2-01 duration: 432 seconds
 - Plan 05.2-02 duration: 294 seconds
 - Plan 05.3-01 duration: 501 seconds
+- Plan 06-01 duration: 739 seconds
 
 ## Accumulated Context
 
@@ -268,10 +269,18 @@ Phase 7: [..................] 0% (0/? plans complete)
 - Repeatable Read transaction isolation for analytics consistency
 - Next.js Server Components with Client Islands pattern
 
+**Backend test coverage (Plan 06-01):**
+- Use pytest-cov 6.0.0 for coverage measurement with --cov=app flag
+- Exclude tests, migrations, conftest.py from coverage calculation (focus on app code)
+- Target 80% line coverage as balance between comprehensive testing and development velocity
+- Use bulk_insert_mappings for performance test data generation (100k logs in <2s)
+- URL-encode datetime parameters in test URLs (quote() handles + in ISO 8601 format)
+- Use monkeypatch.setenv() for config tests to inject environment variables cleanly
+
 **Technology stack:**
 - Backend: FastAPI 0.135.1 + SQLAlchemy 2.0.48 + PostgreSQL 18
 - Frontend: Next.js 15.5.14 + React 19.2.4 + TypeScript 5.9.3
-- Testing: pytest (backend) + Jest 29.7.0 + React Testing Library 16.3.2 (frontend)
+- Testing: pytest + pytest-cov 6.0.0 (backend) + Jest 29.7.0 + React Testing Library 16.3.2 (frontend)
 - Deployment: Docker Compose
 
 ### Roadmap Evolution
@@ -307,7 +316,9 @@ Phase 7: [..................] 0% (0/? plans complete)
 - [x] Plan 05.2-01: Backend Update/Delete Endpoints (Complete)
 - [x] Plan 05.2-02: Frontend Update/Delete UI (Complete)
 - [x] Plan 05.3-01: Migrate Create to Modal (Complete)
-- [ ] Phase 6: Performance Optimization (Next)
+- [x] Plan 06-01: Backend Test Coverage Expansion (Complete)
+- [ ] Plan 06-02: Frontend Component Tests (In Progress - Parallel)
+- [ ] Plan 06-03: E2E Testing with Playwright (Next - Wave 2)
 
 ### Active Blockers
 
@@ -492,23 +503,40 @@ None. Roadmap approved and ready for planning.
   - Deleted entire frontend/src/app/create/ directory including page.tsx and old create-form.tsx
   - All CRUD operations now consolidated in /logs page with consistent modal-based interface
 
+**2026-03-27:**
+- Completed Plan 06-01: Backend Test Coverage Expansion (3 tasks, 5 files, 3 commits, 739 seconds)
+  - Configured pytest-cov 6.0.0 with --cov=app flag and coverage reports (terminal + HTML)
+  - Added [tool.coverage.run] with omit patterns for tests, migrations, conftest.py
+  - Added [tool.coverage.report] with skip_empty=true and precision=2
+  - Expanded test_logs_performance.py with 3 new performance tests (135 lines added)
+  - test_analytics_query_performance_with_100k_logs validates <2s query time
+  - test_csv_export_performance_with_large_filtered_dataset validates <3s export time
+  - test_pagination_with_multi_filter_combination validates <500ms avg pagination
+  - Fixed URL encoding bug in performance tests (added urllib.parse.quote for datetime params)
+  - Fixed config tests to use monkeypatch.setenv() for environment variable injection
+  - Added extra='ignore' to Settings model config for test compatibility
+  - Achieved exactly 80.00% backend line coverage (335 statements, 67 missed)
+  - All 111 tests passing, 1 skipped, HTML coverage report generated at backend/htmlcov/
+
 ## Session Continuity
 
 **What just happened:**
-Completed Plan 05.3-01 execution. Create log form successfully migrated from standalone /create page to modal accessible from logs page header. Created reusable CreateForm component with optional callback props enabling context-aware behavior (modal vs page). Added "+ Create Log" button and modal using URL state management via nuqs. Removed /create route and sidebar link completely. All CRUD operations now consolidated in /logs page with consistent modal-based interface. 3 tasks completed in 8 minutes. Phase 05.3 complete!
+Completed Plan 06-01 execution. Backend test coverage expanded to 80.00% with pytest-cov integration. Added 3 comprehensive performance tests validating analytics queries (<2s), CSV export (<3s), and multi-filter pagination (<500ms avg) with 100k log datasets. Fixed URL encoding bug in datetime parameters and config test pydantic validation issues. All 111 tests passing with HTML coverage report generated. 3 tasks completed in 12.3 minutes.
 
 **What's next:**
-Phase 05.3 complete! Ready to proceed to Phase 6 (Performance Optimization) or other phases as defined in ROADMAP.md.
+Phase 06 Plan 02 (Frontend Component Tests) running in parallel. Plan 06-03 (E2E Testing with Playwright) depends on completion of both 06-01 and 06-02.
 
 **Context for next session:**
-- Phase 05.3 complete: Create form migrated to modal pattern matching Phase 05.2 edit/delete UX
-- All CRUD operations now consolidated in /logs page with consistent modal-based interface
-- CreateForm component with optional callback props enables context-aware behavior
-- "+ Create Log" button in logs header opens modal via URL state (?create=true)
-- /create route completely removed, sidebar shows only Logs and Analytics links
-- UX pattern: Modal opens → Form submission → Close modal → Toast → Auto-refresh list
+- Phase 06 Plan 01 complete: Backend test coverage at 80.00% (335 statements, 67 missed)
+- pytest-cov 6.0.0 configured with terminal and HTML reports
+- Performance tests validate all major endpoints with 100k log datasets
+- Coverage gaps identified: dependencies.py (50%), main.py (69%), logs.py (75%)
+- All tests use bulk_insert_mappings for efficient test data generation
+- URL encoding required for datetime parameters in test URLs
+- Config tests use monkeypatch.setenv() for environment variable injection
+- HTML coverage report available at backend/htmlcov/index.html
 - All builds passing, no blockers
-- 23 plans completed across 9 phases (75% complete)
+- 24 plans completed across 9 phases (Phase 6: 1/3 complete)
 
 ---
 *State tracking started: 2026-03-20*
