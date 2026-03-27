@@ -35,7 +35,7 @@
 | 05.2 Update/Delete CRUD | 2/2 | Complete   | 2026-03-26 |
 | 05.3 Migrate Create Modal | 1/1 | Complete   | 2026-03-26 |
 | 6. Testing | 0/3 | Not started | - |
-| 7. Documentation | 0/? | Not started | - |
+| 7. Documentation | 0/6 | Not started | - |
 
 ## Phase Details
 
@@ -324,7 +324,15 @@ Plans:
 4. README explains technology choices (FastAPI, PostgreSQL, Next.js) with rationale
 5. Code includes inline comments for complex logic (pagination cursor generation, aggregation queries, CSV streaming)
 
-**Plans:** TBD
+**Plans:** 6 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Create ADRs for cursor pagination and database indexing (2 tasks: ADR-002, ADR-003)
+- [ ] 07-02-PLAN.md — Create ADRs for timezone handling and frontend architecture (2 tasks: ADR-004, ADR-005)
+- [ ] 07-03-PLAN.md — Create comprehensive docs (TESTING.md, ARCHITECTURE.md, TECHNOLOGY.md)
+- [ ] 07-04-PLAN.md — Add inline comments to complex algorithms (cursor.py, analytics.py, logs.py)
+- [ ] 07-05-PLAN.md — Refactor README to focused entry point (~120-150 lines)
+- [ ] 07-06-PLAN.md — Create docs navigation hub (docs/README.md, update ADR index)
 
 ---
 
