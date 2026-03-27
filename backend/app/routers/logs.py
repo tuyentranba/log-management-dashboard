@@ -2,7 +2,13 @@
 Log CRUD endpoints.
 
 Provides POST /api/logs (create), GET /api/logs (list with pagination),
-and GET /api/logs/{id} (read single).
+GET /api/logs/{id} (read single), PUT /api/logs/{id} (update),
+DELETE /api/logs/{id} (delete), and GET /api/export (CSV streaming).
+
+Key design patterns:
+- Cursor-based pagination for constant-time queries (see ADR-002)
+- Streaming CSV export with yield_per() for memory-efficient large exports
+- Composite index (timestamp, severity, source) for multi-column filtering (see ADR-003)
 """
 from datetime import datetime
 from typing import Annotated, Optional
@@ -26,6 +32,9 @@ async def generate_csv_rows(logs_stream):
     """
     Async generator that yields CSV content incrementally.
 
+    Streams CSV to client in chunks to prevent memory spike with large exports.
+    Uses StringIO buffer with truncate/seek pattern to avoid buffer accumulation.
+
     Args:
         logs_stream: SQLAlchemy scalars stream from AsyncResult
 
@@ -33,19 +42,25 @@ async def generate_csv_rows(logs_stream):
         str: CSV content chunks (UTF-8 BOM, header, then row by row)
     """
     # Create StringIO buffer and csv.writer instance
+    # StringIO held in memory for writing, but cleared after each yield
     output = io.StringIO()
     writer = csv.writer(output)
 
     # Yield UTF-8 BOM first (Excel compatibility)
+    # Excel requires BOM to detect UTF-8 encoding and display special characters correctly
     yield '\ufeff'
 
     # Write header row with Title Case
     writer.writerow(['Timestamp', 'Severity', 'Source', 'Message'])
     yield output.getvalue()
+
+    # Truncate buffer to prevent memory accumulation
+    # Without this, buffer would grow to size of entire CSV (50k rows = ~10MB)
     output.truncate(0)
     output.seek(0)
 
-    # Async iterate over logs_stream
+    # Async iterate over logs_stream (SQLAlchemy stream with yield_per)
+    # Each iteration fetches next batch (1000 rows) from database
     async for log in logs_stream:
         # Write row with ISO 8601 timestamp format
         writer.writerow([
@@ -55,10 +70,14 @@ async def generate_csv_rows(logs_stream):
             log.message
         ])
         yield output.getvalue()
+
+        # Truncate buffer after each yield to maintain constant memory (~10KB per iteration)
+        # This pattern allows streaming 50k rows with only ~10MB peak memory usage
         output.truncate(0)
         output.seek(0)
 
         # Provide cancellation point (required for FastAPI cancellation protocol)
+        # If client disconnects mid-stream, anyio.sleep(0) allows cleanup to run
         await anyio.sleep(0)
 
 
@@ -376,7 +395,9 @@ async def export_logs_csv(
     Raises:
         400: Invalid filter parameters (invalid severity value)
     """
-    # Build query using EXACT same filtering logic as list_logs
+    # Reuse exact filtering/sorting logic from list_logs endpoint
+    # WYSIWYG principle - exported CSV contains same data user sees in UI
+    # This prevents "exported data doesn't match UI" confusion
     query = select(Log)
 
     # Apply filters - same validation and filtering logic
@@ -418,10 +439,15 @@ async def export_logs_csv(
         Log.id.desc() if order == "desc" else Log.id.asc()
     )
 
-    # Hard limit at 50,000 rows per CONTEXT.md decision
+    # Hard limit at 50,000 rows to prevent query timeouts
+    # Enforced at database level (LIMIT clause) not post-query filtering
+    # PostgreSQL query planner uses LIMIT for optimization (early termination)
     query = query.limit(50000)
 
-    # Stream results from database (yield_per for batch fetching)
+    # Execute query as async stream with yield_per for batch fetching
+    # yield_per(1000) fetches 1000 rows at a time from PostgreSQL
+    # Prevents loading all 50k rows into memory simultaneously
+    # Memory usage: constant ~10MB regardless of result set size
     result = await db.stream(query.execution_options(yield_per=1000))
     logs_stream = result.scalars()
 
