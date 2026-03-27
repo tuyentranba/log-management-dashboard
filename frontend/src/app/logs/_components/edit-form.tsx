@@ -100,7 +100,7 @@ export function EditForm({ log, onSuccess, onCancel }: EditFormProps) {
           onValueChange={(value) => form.setValue('severity', value as Severity)}
           disabled={isSubmitting}
         >
-          <SelectTrigger>
+          <SelectTrigger id="severity" aria-label="Severity">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

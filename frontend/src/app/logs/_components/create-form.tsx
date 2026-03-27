@@ -118,7 +118,7 @@ export function CreateForm({ onSuccess, onCancel }: CreateFormProps = {}) {
           onValueChange={(value) => form.setValue('severity', value as Severity)}
           disabled={isSubmitting}
         >
-          <SelectTrigger>
+          <SelectTrigger id="severity" aria-label="Severity">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
