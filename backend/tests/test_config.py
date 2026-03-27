@@ -7,11 +7,12 @@ Validates:
 - Default values are applied
 """
 import pytest
+import os
 from app.config import Settings
 
 
 @pytest.mark.unit
-def test_settings_load_defaults():
+def test_settings_load_defaults(monkeypatch):
     """
     Test Settings class applies default values.
 
@@ -20,10 +21,9 @@ def test_settings_load_defaults():
     - log_level defaults to INFO
     - cors_origins has default value
     """
-    # Create Settings without environment variables
-    settings = Settings(
-        database_url="postgresql+psycopg://test:test@localhost/test"
-    )
+    # Create Settings with environment variable
+    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://test:test@localhost/test")
+    settings = Settings()
 
     assert settings.debug is False
     assert settings.log_level == "INFO"
@@ -31,16 +31,15 @@ def test_settings_load_defaults():
 
 
 @pytest.mark.unit
-def test_cors_origins_parsing():
+def test_cors_origins_parsing(monkeypatch):
     """
     Test CORS origins comma-separated parsing.
 
     Validates cors_origins_list property splits string correctly.
     """
-    settings = Settings(
-        database_url="postgresql+psycopg://test:test@localhost/test",
-        cors_origins="http://localhost:3000,http://localhost:8080,https://example.com"
-    )
+    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://test:test@localhost/test")
+    monkeypatch.setenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:8080,https://example.com")
+    settings = Settings()
 
     origins_list = settings.cors_origins_list
     assert len(origins_list) == 3
@@ -50,16 +49,15 @@ def test_cors_origins_parsing():
 
 
 @pytest.mark.unit
-def test_cors_origins_single_value():
+def test_cors_origins_single_value(monkeypatch):
     """
     Test CORS origins parsing with single value.
 
     Validates parsing works when only one origin is provided.
     """
-    settings = Settings(
-        database_url="postgresql+psycopg://test:test@localhost/test",
-        cors_origins="http://localhost:3000"
-    )
+    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://test:test@localhost/test")
+    monkeypatch.setenv("CORS_ORIGINS", "http://localhost:3000")
+    settings = Settings()
 
     origins_list = settings.cors_origins_list
     assert len(origins_list) == 1
@@ -67,15 +65,14 @@ def test_cors_origins_single_value():
 
 
 @pytest.mark.unit
-def test_database_url_field():
+def test_database_url_field(monkeypatch):
     """
     Test database_url field is required and loaded.
 
     Validates Settings requires DATABASE_URL.
     """
-    settings = Settings(
-        database_url="postgresql+psycopg://user:pass@host:5432/db"
-    )
+    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://user:pass@host:5432/db")
+    settings = Settings()
 
     assert settings.database_url.startswith("postgresql+psycopg://")
     assert "user" in settings.database_url

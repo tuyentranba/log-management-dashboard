@@ -10,6 +10,7 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from app.models import Log
 import time
+from urllib.parse import quote
 
 pytestmark = pytest.mark.slow  # Mark all tests in this file as slow
 
@@ -156,8 +157,8 @@ async def test_analytics_query_performance_with_100k_logs(client: AsyncClient, t
     await test_db.commit()
 
     # Measure analytics query time with 30-day date range
-    date_from = base_time.isoformat()
-    date_to = (base_time + timedelta(days=30)).isoformat()
+    date_from = quote(base_time.isoformat())
+    date_to = quote((base_time + timedelta(days=30)).isoformat())
 
     start = time.perf_counter()
     response = await client.get(f"/api/analytics?date_from={date_from}&date_to={date_to}")
@@ -231,8 +232,8 @@ async def test_pagination_with_multi_filter_combination(client: AsyncClient, tes
     await test_db.commit()
 
     # Apply date range + severity + source filters simultaneously
-    date_from = base_time.isoformat()
-    date_to = (base_time + timedelta(days=30)).isoformat()
+    date_from = quote(base_time.isoformat())
+    date_to = quote((base_time + timedelta(days=30)).isoformat())
     filter_params = f"date_from={date_from}&date_to={date_to}&severity=ERROR&severity=WARNING&source=service-2"
 
     # Paginate through first 5 pages (50 logs each)
