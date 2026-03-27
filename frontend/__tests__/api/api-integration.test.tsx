@@ -187,5 +187,80 @@ describe('API Integration', () => {
 
       await expect(fetchLogById(999)).rejects.toThrow()
     })
+
+    it('handles error in createLog', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 400,
+        json: async () => ({ detail: 'Invalid data' }),
+      })
+
+      await expect(createLog({
+        timestamp: '2024-01-15T10:30:00Z',
+        message: 'Test',
+        severity: 'INFO',
+        source: 'test'
+      })).rejects.toThrow('Invalid data')
+    })
+
+    it('handles 404 error in updateLog', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        json: async () => ({ detail: 'Not found' }),
+      })
+
+      await expect(updateLog(999, {
+        timestamp: '2024-01-15T10:30:00Z',
+        message: 'Test',
+        severity: 'INFO',
+        source: 'test'
+      })).rejects.toThrow('Log not found')
+    })
+
+    it('handles generic error in updateLog', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        json: async () => ({ detail: 'Server error' }),
+      })
+
+      await expect(updateLog(1, {
+        timestamp: '2024-01-15T10:30:00Z',
+        message: 'Test',
+        severity: 'INFO',
+        source: 'test'
+      })).rejects.toThrow('Server error')
+    })
+
+    it('handles 404 error in deleteLog', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        json: async () => ({ detail: 'Not found' }),
+      })
+
+      await expect(deleteLog(999)).rejects.toThrow('Log not found')
+    })
+
+    it('handles generic error in deleteLog', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        json: async () => ({ detail: 'Server error' }),
+      })
+
+      await expect(deleteLog(1)).rejects.toThrow('Server error')
+    })
+
+    it('handles error in exportLogs', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        json: async () => ({ detail: 'Export failed' }),
+      })
+
+      await expect(exportLogs({})).rejects.toThrow('Export failed')
+    })
   })
 })
