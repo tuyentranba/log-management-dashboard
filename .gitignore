@@ -24,3 +24,4 @@ postgres_data/
 *.temp
 
 # Note: frontend/ and backend/ have their own .gitignore files
+fetch_and_join.sh
