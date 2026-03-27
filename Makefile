@@ -1,4 +1,4 @@
-.PHONY: help start stop restart logs logs-backend logs-frontend logs-db test seed migrate clean ps
+.PHONY: help start stop restart logs logs-backend logs-frontend logs-db test test-quick coverage seed migrate clean ps
 
 help:
 	@echo "Logs Dashboard - Available Commands"
@@ -11,7 +11,9 @@ help:
 	@echo "  make logs-backend - Follow backend logs only"
 	@echo "  make logs-frontend - Follow frontend logs only"
 	@echo "  make logs-db     - Follow database logs only"
-	@echo "  make test        - Run backend tests"
+	@echo "  make test        - Run all tests (backend + frontend)"
+	@echo "  make test-quick  - Run tests excluding slow performance tests (fast feedback)"
+	@echo "  make coverage    - Run all tests with coverage reports (HTML + terminal)"
 	@echo "  make seed        - Populate database with 100k logs"
 	@echo "  make migrate     - Run database migrations"
 	@echo "  make clean       - Stop services and remove volumes (fresh start)"
@@ -54,8 +56,40 @@ logs-db:
 	docker-compose logs -f postgres
 
 test:
-	@echo "Running backend tests..."
+	@echo "Running all tests (backend + frontend)..."
+	@echo ""
+	@echo "=== Backend Tests ==="
 	docker-compose exec backend pytest tests/ -v
+	@echo ""
+	@echo "=== Frontend Tests ==="
+	docker-compose exec frontend npm test -- --passWithNoTests
+	@echo ""
+	@echo "All tests complete!"
+
+test-quick:
+	@echo "Running quick tests (excluding slow performance tests)..."
+	@echo ""
+	@echo "=== Backend Quick Tests ==="
+	docker-compose exec backend pytest tests/ -v -m "not slow"
+	@echo ""
+	@echo "=== Frontend Tests ==="
+	docker-compose exec frontend npm test -- --passWithNoTests
+	@echo ""
+	@echo "Quick tests complete! (Performance tests skipped)"
+
+coverage:
+	@echo "Running tests with coverage reports..."
+	@echo ""
+	@echo "=== Backend Coverage ==="
+	docker-compose exec backend pytest tests/ --cov=app --cov-report=term-missing --cov-report=html:htmlcov
+	@echo ""
+	@echo "=== Frontend Coverage ==="
+	docker-compose exec frontend npm test -- --coverage --passWithNoTests
+	@echo ""
+	@echo "Coverage reports generated:"
+	@echo "  Backend:  backend/htmlcov/index.html"
+	@echo "  Frontend: frontend/coverage/lcov-report/index.html"
+	@echo ""
 
 seed:
 	@echo "Seeding database with 100k logs (target: <60 seconds)..."
