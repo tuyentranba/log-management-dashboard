@@ -43,28 +43,21 @@ For detailed technology rationale, see [docs/TECHNOLOGY.md](./docs/TECHNOLOGY.md
 ```bash
 git clone <repository-url>
 cd logs-dashboard
-cp .env.example .env
+cp .env.example .env    # Copy environment configuration
 ```
 
-**2. Configure environment variables:**
-
-Add this line to your `.env` file (required for Docker networking):
+**2. Start services:**
 ```bash
-API_URL=http://backend:8000
+make start              # Start all Docker containers
 ```
 
-**3. Start services:**
+**3. Initialize database:**
 ```bash
-make start       # Start all Docker containers
+make migrate            # Create database schema and indexes
+make seed               # Populate with 100k sample logs
 ```
 
-**4. Initialize database:**
-```bash
-make migrate     # Create database schema and indexes
-make seed        # Populate with 100k sample logs
-```
-
-**5. Access the application:**
+**4. Access the application:**
 - Frontend: http://localhost:3000 (redirects to http://localhost:3000/logs)
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
@@ -158,7 +151,7 @@ Key endpoints:
 
 **Cause:** Missing `API_URL` environment variable for Docker networking
 
-**Solution:** Add `API_URL=http://backend:8000` to your `.env` file and restart:
+**Solution:** Ensure your `.env` file contains `API_URL=http://backend:8000` (should be present if copied from `.env.example`), then restart:
 ```bash
 docker-compose restart frontend
 ```
