@@ -67,11 +67,37 @@ What other options did we evaluate and why were they rejected?
 - External resources that informed the decision
 ```
 
+## ADR Format (Extended Template)
+
+The project uses an extended ADR template with explicit requirements mapping:
+
+- **Context:** The problem and constraints driving the decision
+- **Requirements Addressed:** Explicit mapping to functional and non-functional requirements
+- **Options Considered:** 3-4 alternatives with honest pros/cons
+- **Decision:** Chosen option with detailed rationale
+- **Consequences:** Trade-offs accepted, benefits gained
+- **Alternatives Rejected:** Why each alternative didn't fit
+
 ## ADR Index
 
-| Number | Title | Status | Date |
-|--------|-------|--------|------|
-| [001](./001-filter-reactivity-refactor.md) | Client-Side Filter State Management | Accepted | 2026-03-22 |
+| ID | Status | Date | Decision | Requirements |
+|----|--------|------|----------|--------------|
+| [ADR-001](./001-filter-reactivity-refactor.md) | Accepted | 2026-03-22 | Client-Side Filter State Management with URL as Source of Truth | FILTER-07 |
+| [ADR-002](./002-cursor-pagination.md) | Accepted | 2026-03-20 | Use Cursor-Based Pagination for Log List | LOG-02, LOG-04, NFR-Performance |
+| [ADR-003](./003-database-indexing.md) | Accepted | 2026-03-20 | Use BRIN + Composite B-tree Indexes for Time-Series Queries | DB-03, DB-04, DB-05, NFR-Performance |
+| [ADR-004](./004-timezone-handling.md) | Accepted | 2026-03-20 | Use timestamptz with UTC Normalization for Timezone Correctness | DB-02, ANALYTICS-07, NFR-Correctness |
+| [ADR-005](./005-frontend-architecture.md) | Accepted | 2026-03-21 | Frontend Architecture Patterns and Design Principles | UI-05, UI-06, FILTER-07, NFR-Maintainability |
+
+## Reading Order
+
+**For new developers:**
+1. Start with [ADR-005 (Frontend Architecture)](./005-frontend-architecture.md) to understand React patterns
+2. Read [ADR-001 (Filter Reactivity)](./001-filter-reactivity-refactor.md) for detailed URL state management
+3. Read [ADR-002 (Cursor Pagination)](./002-cursor-pagination.md) to understand pagination approach
+4. Read [ADR-003 (Database Indexing)](./003-database-indexing.md) and [ADR-004 (Timezone Handling)](./004-timezone-handling.md) for backend patterns
+
+**For evaluators:**
+All ADRs demonstrate decision-making process with alternatives considered and trade-offs explicitly acknowledged.
 
 ## Creating a New ADR
 
@@ -87,3 +113,7 @@ What other options did we evaluate and why were they rejected?
 - **Accepted** - Approved and being/been implemented
 - **Deprecated** - No longer recommended, but still in use
 - **Superseded** - Replaced by a newer decision (link to it)
+
+---
+
+*Last updated: 2026-03-27 (Phase 7 documentation complete)*
