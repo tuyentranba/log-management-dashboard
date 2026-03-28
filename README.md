@@ -37,19 +37,39 @@ For detailed technology rationale, see [docs/TECHNOLOGY.md](./docs/TECHNOLOGY.md
 
 **Prerequisites:** Docker Desktop, Make
 
-**Quick start:**
+### First Time Setup
+
+**1. Clone and configure:**
 ```bash
 git clone <repository-url>
 cd logs-dashboard
 cp .env.example .env
-make start       # Start all services
+```
+
+**2. Configure environment variables:**
+
+Add this line to your `.env` file (required for Docker networking):
+```bash
+API_URL=http://backend:8000
+```
+
+**3. Start services:**
+```bash
+make start       # Start all Docker containers
+```
+
+**4. Initialize database:**
+```bash
+make migrate     # Create database schema and indexes
 make seed        # Populate with 100k sample logs
 ```
 
-**Access the application:**
-- Frontend: http://localhost:3000
+**5. Access the application:**
+- Frontend: http://localhost:3000 (redirects to http://localhost:3000/logs)
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
+
+The application should now be running with 100,000 sample log entries!
 
 ## Testing
 
@@ -129,6 +149,37 @@ Key endpoints:
 - `DELETE /api/logs/{id}` - Delete a log entry
 - `GET /api/analytics` - Get analytics data with time-series and distribution
 - `GET /api/export` - Export logs as CSV with streaming
+
+## Troubleshooting
+
+### "ECONNREFUSED" error when accessing frontend
+
+**Symptom:** Frontend shows "fetch failed" with ECONNREFUSED error
+
+**Cause:** Missing `API_URL` environment variable for Docker networking
+
+**Solution:** Add `API_URL=http://backend:8000` to your `.env` file and restart:
+```bash
+docker-compose restart frontend
+```
+
+### "relation 'logs' does not exist" error
+
+**Symptom:** Backend shows `sqlalchemy.exc.ProgrammingError: relation "logs" does not exist`
+
+**Cause:** Database migrations haven't been run
+
+**Solution:**
+```bash
+make migrate     # Create database schema
+make seed        # Populate with sample data
+```
+
+### Port already in use
+
+**Symptom:** Error starting services because port 3000, 8000, or 5432 is already in use
+
+**Solution:** Stop other services using those ports, or modify port mappings in `docker-compose.yml`
 
 ## Related Documentation
 
