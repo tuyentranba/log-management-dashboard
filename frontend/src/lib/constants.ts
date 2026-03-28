@@ -1,6 +1,10 @@
 import { Severity } from './types'
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+// Server-side uses API_URL (Docker service name), client-side uses NEXT_PUBLIC_API_URL (localhost)
+// This handles the case where Next.js SSR runs inside Docker container but browser runs on host
+export const API_URL = typeof window === 'undefined'
+  ? (process.env.API_URL || 'http://backend:8000')  // Server-side (inside Docker)
+  : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')  // Client-side (browser)
 
 // Severity badge colors - vibrant colors for better visual distinction
 export const SEVERITY_COLORS = {
