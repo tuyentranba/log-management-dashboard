@@ -25,3 +25,7 @@ postgres_data/
 
 # Note: frontend/ and backend/ have their own .gitignore files
 fetch_and_join.sh
+
+# Internal planning files (existing history preserved, ignore future changes)
+.planning/
+.claude/
