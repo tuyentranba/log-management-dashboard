@@ -2,6 +2,10 @@
 
 A production-ready log management system demonstrating technical excellence across clean architecture, performant database queries, accurate analytics, comprehensive error handling, thorough testing, and clear documentation.
 
+## Engineering Approach
+
+Read [DIRECTION.md](./DIRECTION.md) to understand the systematic engineering methodology and constraint-driven decision-making behind this project. The document explains how I think about technical trade-offs, not just what was built.
+
 ## Features
 
 - **Log Management**: Create, view, edit, and delete logs with real-time filtering and sorting
