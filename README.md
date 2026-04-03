@@ -4,7 +4,11 @@ A production-ready log management system demonstrating technical excellence acro
 
 ## Engineering Approach
 
-Read [DIRECTION.md](./DIRECTION.md) to understand the systematic engineering methodology and constraint-driven decision-making behind this project. The document explains how I think about technical trade-offs, not just what was built.
+Read [Technical Specification](./docs/technical_spec/technical_spec.md) to understand the systematic engineering methodology and constraint-driven decision-making behind this project. The document explains how I think about technical trade-offs, not just what was built.
+
+**Quick links:**
+- [API Contract](./docs/api/contract.md) - REST endpoints and schemas
+- [Database Schema](./docs/sql/schema.md) - PostgreSQL table and index definitions
 
 ## Features
 
