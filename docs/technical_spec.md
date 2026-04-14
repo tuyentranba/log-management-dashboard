@@ -188,25 +188,33 @@ graph LR
     A[Page 100 request] --> B[Scan rows 1-5000]
     B --> C[Discard rows 1-5000]
     C --> D[Return rows 5001-5050]
-    B -.->|"Work scales linearly<br/>with page depth"| E[500ms at page 100<br/>1000ms at page 200]
+    B -.->|"Work scales linearly<br/>with page depth"| E[Performance degrades<br/>as depth increases]
 ```
 
-At page 100, query time reaches 500ms—right at the perceptual threshold where users start noticing lag. Beyond this, the experience feels sluggish.
+The critical issue: **query time increases linearly with page depth**. At some pagination depth (whether page 50, 100, or 200 depending on your hardware and configuration), you will hit the 500ms perceptual threshold where users notice lag. The deeper you paginate, the worse it gets. This degradation is inevitable with offset pagination.
 
 **2. Cursor pagination**
 
 How it works: `SELECT * FROM logs WHERE (timestamp, id) > (cursor_timestamp, cursor_id) ORDER BY timestamp LIMIT 50`
 
-The database uses the index to seek directly to the cursor position, then returns the next 50 rows. No rows are scanned and discarded. Performance stays constant (10ms—imperceptible to users) regardless of page depth because the work doesn't increase—it's always "seek to position, return next 50".
+The database uses the B-tree index to seek directly to the cursor position, then returns the next 50 rows. No rows are scanned and discarded.
+
+**Performance characteristics:**
+- **Complexity:** O(log n) where n is total dataset size
+  - 100k rows → ~17 B-tree comparisons
+  - 10M rows → ~23 B-tree comparisons
+  - Logarithmic growth is imperceptible in practice
+- **Pagination depth independence:** Page 1 and page 1000 perform identically
+- The work is always: "seek via B-tree (log₂ comparisons) + return next 50"
 
 ```mermaid
 graph LR
-    A[Page 100 request] --> B[Index seek to cursor]
+    A[Page 100 request] --> B[B-tree seek to cursor<br/>~17 comparisons for 100k rows]
     B --> C[Return next 50 rows]
-    B -.->|"Work stays constant<br/>regardless of depth"| D[10ms at any page]
+    B -.->|"Work independent of<br/>pagination depth"| D[Same performance at any page]
 ```
 
-More complex implementation because you need to encode/decode cursors and handle composite keys, but achieves constant-time performance.
+More complex implementation because you need to encode/decode cursors and handle composite keys. While technically O(log n) with respect to dataset size, performance remains consistent regardless of pagination depth—which is what users experience.
 
 **3. Elasticsearch search-after**
 
@@ -214,17 +222,9 @@ How it works: Elasticsearch maintains inverted indexes mapping values to documen
 
 Performance is similar to cursor pagination (constant time), but requires running an Elasticsearch cluster alongside PostgreSQL. This adds operational overhead: cluster management, data synchronization, monitoring, backup strategy. For a demo project, this infrastructure complexity isn't justified.
 
-**4. Window functions (ROW_NUMBER)**
+**Decision:** I chose cursor pagination because it was the only SQL-based option meeting the <500ms constraint at any pagination depth. Its O(log n) complexity with respect to dataset size means performance remains consistent regardless of how deep you paginate, staying well below the perceptual threshold.
 
-How it works: `SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY timestamp) as rn FROM logs) WHERE rn BETWEEN 5001 AND 5050`
-
-The database must materialize the entire result set with row numbers before filtering. This is worse than offset pagination because it processes all 100k rows every time, then filters to the desired range. Performance: 2000+ ms (well beyond tolerable threshold—users perceive the system as broken).
-
-**Decision:** I chose cursor pagination because it was the only SQL-based option meeting the <500ms constraint at any depth. Staying below the perceptual threshold at all pagination depths justified the extra implementation complexity.
-
-**Implementation:** Each query uses the last row's (timestamp, id) as the cursor. The WHERE clause seeks directly to that position using the composite index, then returns the next 50 rows. This achieves constant ~10ms query time regardless of pagination depth.
-
-See [ADR-002](./docs/decisions/002-cursor-pagination.md) for benchmark data.
+**Implementation:** Each query uses the last row's (timestamp, id) as the cursor. The WHERE clause uses the composite B-tree index to seek directly to that position (log₂ comparisons), then returns the next 50 rows sequentially. This achieves pagination-depth-independent performance—page 1 and page 1000 perform identically, both requiring the same ~17 B-tree traversal steps for a 100k-row dataset.
 
 ### Performance - Database Indexing
 
@@ -242,7 +242,7 @@ graph LR
     B --> C[Scan 10k rows in time range]
     C --> D[Filter severity in memory]
     D --> E[Return 1k matching rows]
-    C -.->|"Can't use index for severity"| F[300-400ms]
+    C -.->|"Can't use index for severity"| F[Slower performance]
 ```
 
 This works well for simple time-range queries (analytics queries without additional filters). However, when filters combine multiple columns (`WHERE timestamp > x AND severity = 'ERROR'`), the database can only use the timestamp portion of the index. It must then scan all rows in that time range and filter by severity in memory.
@@ -252,7 +252,7 @@ Example multi-column query inefficiency:
 - Matching severity: 1k rows
 - Database must scan: 10k rows (then filter in memory)
 - Database returns: 1k rows
-- Result: 300-400ms query time (approaching 500ms perceptual threshold)
+- Result: Performance degrades proportionally to rows scanned, risking the 500ms perceptual threshold
 
 **2. BRIN + separate B-trees**
 
@@ -285,7 +285,7 @@ How it works: A composite B-tree on (timestamp, severity, source) indexes all th
 graph LR
     A[Query: timestamp > x<br/>AND severity = ERROR] --> B[Composite B-tree<br/>timestamp, severity, source]
     B --> C[Seek directly to first<br/>matching row]
-    C --> D[Return matching rows<br/>Fast: ~100ms]
+    C --> D[Return matching rows<br/>Efficient lookup]
     B -.->|"But indexes every row"| E[5% storage overhead<br/>50x larger than BRIN]
 ```
 
@@ -330,9 +330,7 @@ Total storage calculation:
 
 - **Composite B-tree on (timestamp, severity, source)** - Filtered pagination needs multi-column seeks. This index enables direct lookup for any filter combination. Storage overhead: 5%.
 
-Total storage: ~5%, query performance: <150ms for any filter combination (well within the 500ms perceptual threshold, feels instant to users).
-
-See [ADR-003](./docs/decisions/003-database-indexing.md) for performance validation.
+Total storage: ~5%. Query performance stays well within the 500ms perceptual threshold for any filter combination, making the UI feel instant to users.
 
 ### Performance - CSV Export
 
